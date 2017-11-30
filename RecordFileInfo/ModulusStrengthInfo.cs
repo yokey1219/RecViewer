@@ -64,8 +64,8 @@ namespace RecordFileUtil
                 hour = (int)((bytes[idx++] << 8) | bytes[idx++]);
                 minute = (int)((bytes[idx++] << 8) | bytes[idx++]);
                 thedate = String.Format("{0}年{1}月{2}日{3}时{4}分", year, month, day, hour, minute);
-                height = (int)((bytes[idx++] << 8) | bytes[idx++]);
                 width = (int)((bytes[idx++] << 8) | bytes[idx++]);
+                height = (int)((bytes[idx++] << 8) | bytes[idx++]);
                 temp = Convert.ToInt32(Convert.ToInt16(String.Format("{0:X}{1:X}", bytes[idx++], bytes[idx++]), 16));//Convert.ToInt32((int)((bytes[idx++] << 8) | bytes[idx++]));
                 loadspeed = (int)((bytes[idx++] << 8) | bytes[idx++]);
                 nodecnt = (int)((bytes[idx++] << 8) | bytes[idx++]);
@@ -166,7 +166,7 @@ namespace RecordFileUtil
 
             //EB
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
-            this.eb = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("με", "")) * 10);
+            this.eb = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("×10\u207b\u2076 με", "")) * 10);
 
             //SB
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
@@ -266,7 +266,7 @@ namespace RecordFileUtil
 
             dr = dt.NewRow();
             dr[0] = "EB";
-            dr[1] = String.Format("{0:f1}με", this.eb / 10f);
+            dr[1] = String.Format("{0:f1} ×10\u207b\u2076 με", this.eb / 10f);
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();

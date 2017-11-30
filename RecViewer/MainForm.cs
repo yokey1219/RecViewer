@@ -725,7 +725,7 @@ namespace RecViewer
             printDocument1.OriginAtMargins = true;
             pageSetupDialog1.EnableMetric = true;
 
-            printDocument1.DefaultPageSettings.Landscape = false;// true;
+            printDocument1.DefaultPageSettings.Landscape =  true;
             Clear();
             /*
             lbldate.Text = "";
