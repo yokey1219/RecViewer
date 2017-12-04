@@ -8,6 +8,7 @@ namespace RecordFileUtil
 {
     public class ModulusStrengthInfo:AbstractRecordInfo
     {
+        protected  const String KUAZHONGNAODU = "跨中挠度";
         protected List<IXYNode> nodes;
         protected List<IXYNode> specialnodes;
         protected int rb;
@@ -21,6 +22,8 @@ namespace RecordFileUtil
         public int MaxOffset { get { return maxoffset; } }
         public int EB { get { return eb; } }
         public int SB { get { return sb; } }
+
+    
 
         public override List<IXYNode> getXYNodes()
         {
@@ -307,7 +310,7 @@ namespace RecordFileUtil
         {
 
             //this.sensor
-            if (p.Equals("跨中挠度"))
+            if (p.Equals(KUAZHONGNAODU))
             {
                 newvalue = newvalue.Replace("mm", "");
                 int newmaxoff = Convert.ToInt32(Convert.ToDouble(newvalue) * 100);
@@ -335,6 +338,23 @@ namespace RecordFileUtil
                 specialnodes.Add(new ModulusStengthNodeInfo(maxoffset, maxstrength));
 
             }
+        }
+
+        public override List<EditableItem> GetEditableList()
+        {
+            List<EditableItem> list = new List<EditableItem>();
+            list.Add(new EditableItem("挠度修正", KUAZHONGNAODU));
+            return list;
+        }
+
+        public override string GetEditableValuStr(string valuename)
+        {
+            if (valuename.Equals(KUAZHONGNAODU))
+            {
+                return String.Format("{0:f2}mm", this.maxoffset / 100f);
+            }
+            else
+                return base.GetEditableValuStr(valuename);
         }
     }
 

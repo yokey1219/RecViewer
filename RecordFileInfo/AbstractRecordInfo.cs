@@ -190,5 +190,29 @@ namespace RecordFileUtil
         {
             throw new NotImplementedException();
         }
+
+        public virtual List<EditableItem> GetEditableList()
+        {
+            return new List<EditableItem>();
+        }
+
+        public virtual String GetEditableValuStr(String valuename)
+        {
+            return String.Empty;
+        }
+    }
+
+    public class EditableItem
+    {
+        protected String actionanme;
+        protected String valuename;
+        public String ActionName { get { return actionanme; } }
+        public String ValueName { get { return valuename; } }
+        public EditableItem(String action, String value)
+        {
+            this.actionanme = action;
+            this.valuename = value;
+        }
+
     }
 }

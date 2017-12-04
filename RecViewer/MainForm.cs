@@ -159,6 +159,15 @@ namespace RecViewer
             this.Text = info.RecordName;
             this.lblrecordname.Text = info.RecordName;
             currentInfo = info;
+            List<EditableItem> _list=info.GetEditableList();
+            if (_list.Count == 0)
+                tbnaodu.Visible = false;
+            else
+            {
+                tbnaodu.Visible = true;
+                tbnaodu.Text = _list[0].ActionName;
+                tbnaodu.Tag = _list[0].ValueName;
+            }
             if (info is CBRRecordFileInfo)
             {
                 FillData(info as CBRRecordFileInfo);
@@ -1204,7 +1213,20 @@ namespace RecViewer
 
         private void tbnaodu_Click(object sender, EventArgs e)
         {
-            EditNaodu();
+            //EditNaodu();
+            ToolStripItem tsi = sender as ToolStripItem;
+            if (tsi == null) return;
+            String valuename = tsi.Tag as String;
+            if (valuename == null) return;
+            if (currentInfo == null) return;
+            EditForm ef = new EditForm();
+            String oldvalue = currentInfo.GetEditableValuStr(valuename);//lblinfo4.Text;
+            String newvalue = ef.EditValue(oldvalue);
+            if (oldvalue.Equals(newvalue)) return;
+            currentInfo.EditValue(valuename, newvalue);
+            FillData(currentInfo);
+            ReRenderChart(currentInfo);
+            ef.Close();
         }
        
     }
