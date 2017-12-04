@@ -358,7 +358,7 @@ namespace RecordFileUtil
         }
     }
 
-    public class ModulusStengthNodeInfo:IXYNode
+    public class ModulusStengthNodeInfo : IXYNode
     {
         internal int kn;
         internal int offset;

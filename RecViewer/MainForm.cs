@@ -123,9 +123,9 @@ namespace RecViewer
                 //    info.LoadData(buffer);
                     //FillData(info as CBRRecordFileInfo);
                 //    break;
-                case 3:
+                case 0:
                     //this.recordname = "回弹模量-强度仪法";
-                    info = new ModulusStrengthInfo();
+                    info = new LIQIHanliangInfo();
                     info.LoadData(buffer);
                     //FillData(info as ModulusStrengthInfo);
                     break;
@@ -183,6 +183,10 @@ namespace RecViewer
             else if (info is ModulusStrengthInfo)
             {
                 FillData(info as ModulusStrengthInfo);
+            }
+            else if (info is LIQIHanliangInfo)
+            {
+                FillData(info as LIQIHanliangInfo);
             }
             else
             {
@@ -267,6 +271,39 @@ namespace RecViewer
             //lblinfo6.Text = String.Format(fmt2, info.getXYNodes()[i++].getNodeY());
             //lbldis7.Text = "";
             //lblinfo7.Text = "";
+        }
+
+        private void FillData(LIQIHanliangInfo info)
+        {
+            lbldate.Text = info.TheDate;
+            lblno.Text = info.No.ToString();
+            lblnodecnt.Text = info.Nodecnt.ToString();
+            DataTable dt = info.getDataTable();
+            int _idx = 3;
+
+            lblheightdis.Text = "试验温度";
+            lblheight.Text = dt.Rows[_idx++][1].ToString();
+            lbldiameterdis.Text = "试件质量";
+            lbldiameter.Text = dt.Rows[_idx++][1].ToString();
+            _idx++;//加载速度
+            _idx++;//记录点数
+            _idx++;
+            lbldis1.Text = "油石比";
+            lblinfo1.Text = dt.Rows[_idx++][1].ToString();
+            
+            lbldis2.Text = "含油比";
+            lblinfo2.Text = dt.Rows[_idx++][1].ToString();
+            lbldis5.Text = "试验用时";
+            lblinfo5.Text = dt.Rows[_idx++][1].ToString();
+            lbldis3.Text = "结束温度";
+            lblinfo3.Text = dt.Rows[_idx++][1].ToString();
+            lbldis4.Text = "结束质量";
+            lblinfo4.Text = dt.Rows[_idx++][1].ToString();
+
+            lbldis6.Text = "";
+            lblinfo6.Text = "";// dt.Rows[_idx++][1].ToString();
+            lbldis7.Text = "";
+            lblinfo7.Text = "";// dt.Rows[_idx++][1].ToString();
         }
 
         void lblinfo4_DoubleClick(object sender, EventArgs e)
@@ -849,9 +886,9 @@ namespace RecViewer
             printDocument1.OriginAtMargins = true;
             pageSetupDialog1.EnableMetric = true;
 
-            printDocument1.DefaultPageSettings.Landscape =  true;
+            printDocument1.DefaultPageSettings.Landscape =  false;
             Clear();
-            lblinfo4.DoubleClick += new EventHandler(lblinfo4_DoubleClick);
+           // lblinfo4.DoubleClick += new EventHandler(lblinfo4_DoubleClick);
             /*
             lbldate.Text = "";
             lblno.Text = "";
@@ -1038,7 +1075,7 @@ namespace RecViewer
 
                 int txtxmargin = targetwidth / 3;
                 int txtmargin = 40;
-                int txtheight = (targetheight - 80 - Convert.ToInt32(size.Height)-20 - height) / 5 - txtmargin;
+                int txtheight = (targetheight - 80 - Convert.ToInt32(size.Height)-20 - height) / 5- txtmargin;
                 if (txtheight < 40)
                 {
                     txtmargin = txtheight;
@@ -1052,17 +1089,17 @@ namespace RecViewer
                 PointF firstpoint = new PointF(headpoint.X, headpoint.Y+size.Height+20);
 
                 e.Graphics.DrawString(String.Format("{0}:{1}",lbldatedis.Text,lbldate.Text), new Font(Font.SystemFontName, 10), Brushes.Black, firstpoint);
-                e.Graphics.DrawString(String.Format("{0}:{1}", lblnodis.Text, lblno.Text), new Font(Font.SystemFontName, 10), Brushes.Black, new PointF(firstpoint.X + txtxmargin+20,firstpoint.Y));
-                e.Graphics.DrawString(String.Format("{0}:{1}", lblheightdis.Text, lblheight.Text), new Font(Font.SystemFontName, 10), Brushes.Black, new PointF(firstpoint.X + txtxmargin * 2, firstpoint.Y));
-                e.Graphics.DrawString(String.Format("{0}:{1}", lbldiameterdis.Text, lbldiameter.Text), new Font(Font.SystemFontName, 10), Brushes.Black, new PointF(firstpoint.X, firstpoint.Y + (txtmargin+txtheight)));
-                e.Graphics.DrawString(String.Format("{0}:{1}", lblnodecntdis.Text, lblnodecnt.Text), new Font(Font.SystemFontName, 10), Brushes.Black, new PointF(firstpoint.X + txtxmargin+20, firstpoint.Y + (txtmargin+txtheight)));
-                e.Graphics.DrawString(String.Format("{0}:{1}", lbldis1.Text, lblinfo1.Text), new Font(Font.SystemFontName, 10), Brushes.Black, new PointF(firstpoint.X + txtxmargin * 2, firstpoint.Y + (txtmargin+txtheight)));
-                e.Graphics.DrawString(String.Format("{0}:{1}", lbldis2.Text, lblinfo2.Text), new Font(Font.SystemFontName, 10), Brushes.Black, new PointF(firstpoint.X , firstpoint.Y + (txtmargin+txtheight)*2));
-                e.Graphics.DrawString(String.Format("{0}:{1}", lbldis3.Text, lblinfo3.Text), new Font(Font.SystemFontName, 10), Brushes.Black, new PointF(firstpoint.X + txtxmargin+20, firstpoint.Y + (txtmargin+txtheight) * 2));
-                e.Graphics.DrawString(String.Format("{0}:{1}", lbldis4.Text, lblinfo4.Text), new Font(Font.SystemFontName, 10), Brushes.Black, new PointF(firstpoint.X + txtxmargin * 2, firstpoint.Y + (txtmargin+txtheight) * 2));
-                e.Graphics.DrawString(String.Format("{0}:{1}", lbldis5.Text, lblinfo5.Text), new Font(Font.SystemFontName, 10), Brushes.Black, new PointF(firstpoint.X, firstpoint.Y + (txtmargin+txtheight) * 3));
-                e.Graphics.DrawString(String.Format("{0}:{1}", lbldis6.Text, lblinfo6.Text), new Font(Font.SystemFontName, 10), Brushes.Black, new PointF(firstpoint.X + txtxmargin+20, firstpoint.Y + (txtmargin+txtheight) * 3));
-                e.Graphics.DrawString(String.Format("{0}:{1}", lbldis7.Text, lblinfo7.Text), new Font(Font.SystemFontName, 10), Brushes.Black, new PointF(firstpoint.X + txtxmargin * 2, firstpoint.Y + (txtmargin+txtheight) * 3));
+                e.Graphics.DrawString(String.Format("{0}:{1}", lblnodis.Text, lblno.Text), new Font(Font.SystemFontName, 10), Brushes.Black, new PointF(firstpoint.X, firstpoint.Y + (txtmargin + txtheight)));
+                e.Graphics.DrawString(String.Format("{0}:{1}", lblheightdis.Text, lblheight.Text), new Font(Font.SystemFontName, 10), Brushes.Black, new PointF(firstpoint.X + txtxmargin, firstpoint.Y + (txtmargin + txtheight)));
+                e.Graphics.DrawString(String.Format("{0}:{1}", lbldiameterdis.Text, lbldiameter.Text), new Font(Font.SystemFontName, 10), Brushes.Black, new PointF(firstpoint.X+txtxmargin*2, firstpoint.Y + (txtmargin+txtheight)));
+                e.Graphics.DrawString(String.Format("{0}:{1}", lblnodecntdis.Text, lblnodecnt.Text), new Font(Font.SystemFontName, 10), Brushes.Black, new PointF(firstpoint.X , firstpoint.Y + (txtmargin+txtheight)*2));
+                e.Graphics.DrawString(String.Format("{0}:{1}", lbldis1.Text, lblinfo1.Text), new Font(Font.SystemFontName, 10), Brushes.Black, new PointF(firstpoint.X + txtxmargin, firstpoint.Y + (txtmargin+txtheight)*2));
+                e.Graphics.DrawString(String.Format("{0}:{1}", lbldis2.Text, lblinfo2.Text), new Font(Font.SystemFontName, 10), Brushes.Black, new PointF(firstpoint.X + txtxmargin * 2, firstpoint.Y + (txtmargin + txtheight) * 2));
+                e.Graphics.DrawString(String.Format("{0}:{1}", lbldis3.Text, lblinfo3.Text), new Font(Font.SystemFontName, 10), Brushes.Black, new PointF(firstpoint.X , firstpoint.Y + (txtmargin+txtheight) * 3));
+                e.Graphics.DrawString(String.Format("{0}:{1}", lbldis4.Text, lblinfo4.Text), new Font(Font.SystemFontName, 10), Brushes.Black, new PointF(firstpoint.X + txtxmargin, firstpoint.Y + (txtmargin + txtheight) * 3));
+                e.Graphics.DrawString(String.Format("{0}:{1}", lbldis5.Text, lblinfo5.Text), new Font(Font.SystemFontName, 10), Brushes.Black, new PointF(firstpoint.X + txtxmargin * 2, firstpoint.Y + (txtmargin + txtheight) * 3));
+                e.Graphics.DrawString(String.Format("{0}:{1}", lbldis6.Text, lblinfo6.Text), new Font(Font.SystemFontName, 10), Brushes.Black, new PointF(firstpoint.X, firstpoint.Y + (txtmargin+txtheight) * 4));
+                e.Graphics.DrawString(String.Format("{0}:{1}", lbldis7.Text, lblinfo7.Text), new Font(Font.SystemFontName, 10), Brushes.Black, new PointF(firstpoint.X + txtxmargin , firstpoint.Y + (txtmargin+txtheight) * 4));
 
 
 

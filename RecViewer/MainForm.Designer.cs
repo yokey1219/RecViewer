@@ -30,10 +30,19 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.pnltop = new System.Windows.Forms.Panel();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.tbxzoomout = new System.Windows.Forms.ToolStripButton();
+            this.tbxzommin = new System.Windows.Forms.ToolStripButton();
+            this.tbyzoomout = new System.Windows.Forms.ToolStripButton();
+            this.tbyzoomin = new System.Windows.Forms.ToolStripButton();
+            this.tbzoomreset = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.tbnaodu = new System.Windows.Forms.ToolStripButton();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.tsm_uploaddata = new System.Windows.Forms.ToolStripMenuItem();
             this.tsm_openfile = new System.Windows.Forms.ToolStripMenuItem();
@@ -47,12 +56,6 @@
             this.tsmiprintset = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiprintpreview = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmabout = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.tbxzoomout = new System.Windows.Forms.ToolStripButton();
-            this.tbxzommin = new System.Windows.Forms.ToolStripButton();
-            this.tbyzoomout = new System.Windows.Forms.ToolStripButton();
-            this.tbyzoomin = new System.Windows.Forms.ToolStripButton();
-            this.tbzoomreset = new System.Windows.Forms.ToolStripButton();
             this.pnlfill = new System.Windows.Forms.Panel();
             this.groupboxinfo = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
@@ -89,18 +92,15 @@
             this.printDialog1 = new System.Windows.Forms.PrintDialog();
             this.pageSetupDialog1 = new System.Windows.Forms.PageSetupDialog();
             this.printPreviewDialog1 = new System.Windows.Forms.PrintPreviewDialog();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.tbnaodu = new System.Windows.Forms.ToolStripButton();
             this.pnltop.SuspendLayout();
-            this.menuStrip1.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.pnlfill.SuspendLayout();
             this.groupboxinfo.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.groupboxchart.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
-            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // pnltop
@@ -112,6 +112,97 @@
             this.pnltop.Name = "pnltop";
             this.pnltop.Size = new System.Drawing.Size(1002, 58);
             this.pnltop.TabIndex = 1;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.toolStrip1);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(0, 29);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(1002, 29);
+            this.panel1.TabIndex = 2;
+            // 
+            // toolStrip1
+            // 
+            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tbxzoomout,
+            this.tbxzommin,
+            this.tbyzoomout,
+            this.tbyzoomin,
+            this.tbzoomreset,
+            this.toolStripSeparator1,
+            this.tbnaodu});
+            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(1002, 29);
+            this.toolStrip1.TabIndex = 1;
+            this.toolStrip1.Text = "toolStrip1";
+            // 
+            // tbxzoomout
+            // 
+            this.tbxzoomout.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tbxzoomout.Image = ((System.Drawing.Image)(resources.GetObject("tbxzoomout.Image")));
+            this.tbxzoomout.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tbxzoomout.Name = "tbxzoomout";
+            this.tbxzoomout.Size = new System.Drawing.Size(56, 26);
+            this.tbxzoomout.Text = "X轴放大";
+            this.tbxzoomout.Click += new System.EventHandler(this.tbxzoomout_Click);
+            // 
+            // tbxzommin
+            // 
+            this.tbxzommin.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tbxzommin.Image = ((System.Drawing.Image)(resources.GetObject("tbxzommin.Image")));
+            this.tbxzommin.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tbxzommin.Name = "tbxzommin";
+            this.tbxzommin.Size = new System.Drawing.Size(56, 26);
+            this.tbxzommin.Text = "X轴缩小";
+            this.tbxzommin.Click += new System.EventHandler(this.tbxzommin_Click);
+            // 
+            // tbyzoomout
+            // 
+            this.tbyzoomout.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tbyzoomout.Image = ((System.Drawing.Image)(resources.GetObject("tbyzoomout.Image")));
+            this.tbyzoomout.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tbyzoomout.Name = "tbyzoomout";
+            this.tbyzoomout.Size = new System.Drawing.Size(55, 26);
+            this.tbyzoomout.Text = "Y轴放大";
+            this.tbyzoomout.Click += new System.EventHandler(this.tbyzoomout_Click);
+            // 
+            // tbyzoomin
+            // 
+            this.tbyzoomin.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tbyzoomin.Image = ((System.Drawing.Image)(resources.GetObject("tbyzoomin.Image")));
+            this.tbyzoomin.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tbyzoomin.Name = "tbyzoomin";
+            this.tbyzoomin.Size = new System.Drawing.Size(55, 26);
+            this.tbyzoomin.Text = "Y轴缩小";
+            this.tbyzoomin.Click += new System.EventHandler(this.tbyzoomin_Click);
+            // 
+            // tbzoomreset
+            // 
+            this.tbzoomreset.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tbzoomreset.Image = ((System.Drawing.Image)(resources.GetObject("tbzoomreset.Image")));
+            this.tbzoomreset.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tbzoomreset.Name = "tbzoomreset";
+            this.tbzoomreset.Size = new System.Drawing.Size(36, 26);
+            this.tbzoomreset.Text = "还原";
+            this.tbzoomreset.Click += new System.EventHandler(this.tbzoomreset_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 29);
+            // 
+            // tbnaodu
+            // 
+            this.tbnaodu.Image = ((System.Drawing.Image)(resources.GetObject("tbnaodu.Image")));
+            this.tbnaodu.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tbnaodu.Name = "tbnaodu";
+            this.tbnaodu.Size = new System.Drawing.Size(76, 26);
+            this.tbnaodu.Text = "挠度修正";
+            this.tbnaodu.Visible = false;
+            this.tbnaodu.Click += new System.EventHandler(this.tbnaodu_Click);
             // 
             // menuStrip1
             // 
@@ -201,21 +292,21 @@
             // tsmiprint
             // 
             this.tsmiprint.Name = "tsmiprint";
-            this.tsmiprint.Size = new System.Drawing.Size(152, 26);
+            this.tsmiprint.Size = new System.Drawing.Size(144, 26);
             this.tsmiprint.Text = "打印";
             this.tsmiprint.Click += new System.EventHandler(this.tsmiprint_Click);
             // 
             // tsmiprintset
             // 
             this.tsmiprintset.Name = "tsmiprintset";
-            this.tsmiprintset.Size = new System.Drawing.Size(152, 26);
+            this.tsmiprintset.Size = new System.Drawing.Size(144, 26);
             this.tsmiprintset.Text = "打印设置";
             this.tsmiprintset.Click += new System.EventHandler(this.tsmiprintset_Click);
             // 
             // tsmiprintpreview
             // 
             this.tsmiprintpreview.Name = "tsmiprintpreview";
-            this.tsmiprintpreview.Size = new System.Drawing.Size(152, 26);
+            this.tsmiprintpreview.Size = new System.Drawing.Size(144, 26);
             this.tsmiprintpreview.Text = "打印预览";
             this.tsmiprintpreview.Click += new System.EventHandler(this.tsmiprintpreview_Click);
             // 
@@ -226,73 +317,6 @@
             this.tsmabout.Size = new System.Drawing.Size(86, 25);
             this.tsmabout.Text = "关于版本";
             this.tsmabout.Click += new System.EventHandler(this.tsmabout_Click);
-            // 
-            // toolStrip1
-            // 
-            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tbxzoomout,
-            this.tbxzommin,
-            this.tbyzoomout,
-            this.tbyzoomin,
-            this.tbzoomreset,
-            this.toolStripSeparator1,
-            this.tbnaodu});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1002, 29);
-            this.toolStrip1.TabIndex = 1;
-            this.toolStrip1.Text = "toolStrip1";
-            // 
-            // tbxzoomout
-            // 
-            this.tbxzoomout.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tbxzoomout.Image = ((System.Drawing.Image)(resources.GetObject("tbxzoomout.Image")));
-            this.tbxzoomout.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tbxzoomout.Name = "tbxzoomout";
-            this.tbxzoomout.Size = new System.Drawing.Size(56, 26);
-            this.tbxzoomout.Text = "X轴放大";
-            this.tbxzoomout.Click += new System.EventHandler(this.tbxzoomout_Click);
-            // 
-            // tbxzommin
-            // 
-            this.tbxzommin.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tbxzommin.Image = ((System.Drawing.Image)(resources.GetObject("tbxzommin.Image")));
-            this.tbxzommin.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tbxzommin.Name = "tbxzommin";
-            this.tbxzommin.Size = new System.Drawing.Size(56, 26);
-            this.tbxzommin.Text = "X轴缩小";
-            this.tbxzommin.Click += new System.EventHandler(this.tbxzommin_Click);
-            // 
-            // tbyzoomout
-            // 
-            this.tbyzoomout.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tbyzoomout.Image = ((System.Drawing.Image)(resources.GetObject("tbyzoomout.Image")));
-            this.tbyzoomout.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tbyzoomout.Name = "tbyzoomout";
-            this.tbyzoomout.Size = new System.Drawing.Size(55, 26);
-            this.tbyzoomout.Text = "Y轴放大";
-            this.tbyzoomout.Click += new System.EventHandler(this.tbyzoomout_Click);
-            // 
-            // tbyzoomin
-            // 
-            this.tbyzoomin.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tbyzoomin.Image = ((System.Drawing.Image)(resources.GetObject("tbyzoomin.Image")));
-            this.tbyzoomin.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tbyzoomin.Name = "tbyzoomin";
-            this.tbyzoomin.Size = new System.Drawing.Size(55, 26);
-            this.tbyzoomin.Text = "Y轴缩小";
-            this.tbyzoomin.Click += new System.EventHandler(this.tbyzoomin_Click);
-            // 
-            // tbzoomreset
-            // 
-            this.tbzoomreset.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tbzoomreset.Image = ((System.Drawing.Image)(resources.GetObject("tbzoomreset.Image")));
-            this.tbzoomreset.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tbzoomreset.Name = "tbzoomreset";
-            this.tbzoomreset.Size = new System.Drawing.Size(36, 26);
-            this.tbzoomreset.Text = "还原";
-            this.tbzoomreset.Click += new System.EventHandler(this.tbzoomreset_Click);
             // 
             // pnlfill
             // 
@@ -653,17 +677,17 @@
             // 
             // chart1
             // 
-            chartArea3.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea3);
+            chartArea1.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea1);
             this.chart1.Dock = System.Windows.Forms.DockStyle.Fill;
-            legend3.Name = "Legend1";
-            this.chart1.Legends.Add(legend3);
+            legend1.Name = "Legend1";
+            this.chart1.Legends.Add(legend1);
             this.chart1.Location = new System.Drawing.Point(3, 17);
             this.chart1.Name = "chart1";
-            series3.ChartArea = "ChartArea1";
-            series3.Legend = "Legend1";
-            series3.Name = "Series1";
-            this.chart1.Series.Add(series3);
+            series1.ChartArea = "ChartArea1";
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            this.chart1.Series.Add(series1);
             this.chart1.Size = new System.Drawing.Size(691, 623);
             this.chart1.TabIndex = 0;
             this.chart1.Text = "chart1";
@@ -696,29 +720,6 @@
             this.printPreviewDialog1.Name = "printPreviewDialog1";
             this.printPreviewDialog1.Visible = false;
             // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.toolStrip1);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(0, 29);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1002, 29);
-            this.panel1.TabIndex = 2;
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 29);
-            // 
-            // tbnaodu
-            // 
-            this.tbnaodu.Image = ((System.Drawing.Image)(resources.GetObject("tbnaodu.Image")));
-            this.tbnaodu.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tbnaodu.Name = "tbnaodu";
-            this.tbnaodu.Size = new System.Drawing.Size(76, 26);
-            this.tbnaodu.Text = "挠度修正";
-            this.tbnaodu.Click += new System.EventHandler(this.tbnaodu_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -732,10 +733,12 @@
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.pnltop.ResumeLayout(false);
             this.pnltop.PerformLayout();
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.pnlfill.ResumeLayout(false);
             this.groupboxinfo.ResumeLayout(false);
             this.groupboxinfo.PerformLayout();
@@ -743,8 +746,6 @@
             this.tableLayoutPanel1.PerformLayout();
             this.groupboxchart.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             this.ResumeLayout(false);
 
         }

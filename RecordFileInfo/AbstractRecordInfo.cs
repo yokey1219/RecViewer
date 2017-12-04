@@ -26,6 +26,7 @@ namespace RecordFileUtil
         protected int day;
         protected int hour;
         protected int minute;
+        protected int second;
         protected String thedate;//日期
         protected int width;//直径
         protected int height;//高度

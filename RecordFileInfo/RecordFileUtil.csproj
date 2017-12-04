@@ -49,6 +49,7 @@
     <Compile Include="ChartFormat.cs" />
     <Compile Include="ExcelHelper.cs" />
     <Compile Include="IXYNode.cs" />
+    <Compile Include="LIQIHanliangInfo.cs" />
     <Compile Include="ModulusRecordInfo.cs" />
     <Compile Include="ModulusStrengthInfo.cs" />
     <Compile Include="RecordFileInfo.cs" />
