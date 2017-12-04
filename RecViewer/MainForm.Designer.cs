@@ -30,9 +30,9 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.pnltop = new System.Windows.Forms.Panel();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.tsm_uploaddata = new System.Windows.Forms.ToolStripMenuItem();
@@ -89,6 +89,9 @@
             this.printDialog1 = new System.Windows.Forms.PrintDialog();
             this.pageSetupDialog1 = new System.Windows.Forms.PageSetupDialog();
             this.printPreviewDialog1 = new System.Windows.Forms.PrintPreviewDialog();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.tbnaodu = new System.Windows.Forms.ToolStripButton();
             this.pnltop.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -97,12 +100,13 @@
             this.tableLayoutPanel1.SuspendLayout();
             this.groupboxchart.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // pnltop
             // 
+            this.pnltop.Controls.Add(this.panel1);
             this.pnltop.Controls.Add(this.menuStrip1);
-            this.pnltop.Controls.Add(this.toolStrip1);
             this.pnltop.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnltop.Location = new System.Drawing.Point(0, 0);
             this.pnltop.Name = "pnltop";
@@ -111,7 +115,6 @@
             // 
             // menuStrip1
             // 
-            this.menuStrip1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsm_uploaddata,
             this.tsm_openfile,
@@ -121,7 +124,7 @@
             this.tsmabout});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1002, 33);
+            this.menuStrip1.Size = new System.Drawing.Size(1002, 29);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -129,7 +132,7 @@
             // 
             this.tsm_uploaddata.Font = new System.Drawing.Font("Microsoft YaHei UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.tsm_uploaddata.Name = "tsm_uploaddata";
-            this.tsm_uploaddata.Size = new System.Drawing.Size(86, 29);
+            this.tsm_uploaddata.Size = new System.Drawing.Size(86, 25);
             this.tsm_uploaddata.Text = "读取记录";
             this.tsm_uploaddata.Click += new System.EventHandler(this.tsm_uploaddata_Click);
             // 
@@ -137,7 +140,7 @@
             // 
             this.tsm_openfile.Font = new System.Drawing.Font("Microsoft YaHei UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.tsm_openfile.Name = "tsm_openfile";
-            this.tsm_openfile.Size = new System.Drawing.Size(86, 29);
+            this.tsm_openfile.Size = new System.Drawing.Size(86, 25);
             this.tsm_openfile.Text = "调用记录";
             this.tsm_openfile.Click += new System.EventHandler(this.tsm_openfile_Click);
             // 
@@ -149,7 +152,7 @@
             this.tsmitoxml});
             this.tsm_saveinfo.Font = new System.Drawing.Font("Microsoft YaHei UI", 12F);
             this.tsm_saveinfo.Name = "tsm_saveinfo";
-            this.tsm_saveinfo.Size = new System.Drawing.Size(118, 29);
+            this.tsm_saveinfo.Size = new System.Drawing.Size(118, 25);
             this.tsm_saveinfo.Text = "保存当前记录";
             this.tsm_saveinfo.Click += new System.EventHandler(this.tsm_saveinfo_Click);
             // 
@@ -179,7 +182,7 @@
             // 
             this.tsmclear.Font = new System.Drawing.Font("Microsoft YaHei UI", 12F);
             this.tsmclear.Name = "tsmclear";
-            this.tsmclear.Size = new System.Drawing.Size(86, 29);
+            this.tsmclear.Size = new System.Drawing.Size(86, 25);
             this.tsmclear.Text = "清除显示";
             this.tsmclear.Click += new System.EventHandler(this.tsmclear_Click);
             // 
@@ -191,28 +194,28 @@
             this.tsmiprintpreview});
             this.tsmprint.Font = new System.Drawing.Font("Microsoft YaHei UI", 12F);
             this.tsmprint.Name = "tsmprint";
-            this.tsmprint.Size = new System.Drawing.Size(54, 29);
+            this.tsmprint.Size = new System.Drawing.Size(54, 25);
             this.tsmprint.Text = "打印";
             this.tsmprint.Click += new System.EventHandler(this.tsmprint_Click);
             // 
             // tsmiprint
             // 
             this.tsmiprint.Name = "tsmiprint";
-            this.tsmiprint.Size = new System.Drawing.Size(144, 26);
+            this.tsmiprint.Size = new System.Drawing.Size(152, 26);
             this.tsmiprint.Text = "打印";
             this.tsmiprint.Click += new System.EventHandler(this.tsmiprint_Click);
             // 
             // tsmiprintset
             // 
             this.tsmiprintset.Name = "tsmiprintset";
-            this.tsmiprintset.Size = new System.Drawing.Size(144, 26);
+            this.tsmiprintset.Size = new System.Drawing.Size(152, 26);
             this.tsmiprintset.Text = "打印设置";
             this.tsmiprintset.Click += new System.EventHandler(this.tsmiprintset_Click);
             // 
             // tsmiprintpreview
             // 
             this.tsmiprintpreview.Name = "tsmiprintpreview";
-            this.tsmiprintpreview.Size = new System.Drawing.Size(144, 26);
+            this.tsmiprintpreview.Size = new System.Drawing.Size(152, 26);
             this.tsmiprintpreview.Text = "打印预览";
             this.tsmiprintpreview.Click += new System.EventHandler(this.tsmiprintpreview_Click);
             // 
@@ -220,22 +223,24 @@
             // 
             this.tsmabout.Font = new System.Drawing.Font("Microsoft YaHei UI", 12F);
             this.tsmabout.Name = "tsmabout";
-            this.tsmabout.Size = new System.Drawing.Size(86, 29);
+            this.tsmabout.Size = new System.Drawing.Size(86, 25);
             this.tsmabout.Text = "关于版本";
             this.tsmabout.Click += new System.EventHandler(this.tsmabout_Click);
             // 
             // toolStrip1
             // 
-            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tbxzoomout,
             this.tbxzommin,
             this.tbyzoomout,
             this.tbyzoomin,
-            this.tbzoomreset});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 33);
+            this.tbzoomreset,
+            this.toolStripSeparator1,
+            this.tbnaodu});
+            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1002, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(1002, 29);
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -245,7 +250,7 @@
             this.tbxzoomout.Image = ((System.Drawing.Image)(resources.GetObject("tbxzoomout.Image")));
             this.tbxzoomout.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tbxzoomout.Name = "tbxzoomout";
-            this.tbxzoomout.Size = new System.Drawing.Size(56, 22);
+            this.tbxzoomout.Size = new System.Drawing.Size(56, 26);
             this.tbxzoomout.Text = "X轴放大";
             this.tbxzoomout.Click += new System.EventHandler(this.tbxzoomout_Click);
             // 
@@ -255,7 +260,7 @@
             this.tbxzommin.Image = ((System.Drawing.Image)(resources.GetObject("tbxzommin.Image")));
             this.tbxzommin.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tbxzommin.Name = "tbxzommin";
-            this.tbxzommin.Size = new System.Drawing.Size(56, 22);
+            this.tbxzommin.Size = new System.Drawing.Size(56, 26);
             this.tbxzommin.Text = "X轴缩小";
             this.tbxzommin.Click += new System.EventHandler(this.tbxzommin_Click);
             // 
@@ -265,7 +270,7 @@
             this.tbyzoomout.Image = ((System.Drawing.Image)(resources.GetObject("tbyzoomout.Image")));
             this.tbyzoomout.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tbyzoomout.Name = "tbyzoomout";
-            this.tbyzoomout.Size = new System.Drawing.Size(55, 22);
+            this.tbyzoomout.Size = new System.Drawing.Size(55, 26);
             this.tbyzoomout.Text = "Y轴放大";
             this.tbyzoomout.Click += new System.EventHandler(this.tbyzoomout_Click);
             // 
@@ -275,7 +280,7 @@
             this.tbyzoomin.Image = ((System.Drawing.Image)(resources.GetObject("tbyzoomin.Image")));
             this.tbyzoomin.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tbyzoomin.Name = "tbyzoomin";
-            this.tbyzoomin.Size = new System.Drawing.Size(55, 22);
+            this.tbyzoomin.Size = new System.Drawing.Size(55, 26);
             this.tbyzoomin.Text = "Y轴缩小";
             this.tbyzoomin.Click += new System.EventHandler(this.tbyzoomin_Click);
             // 
@@ -285,7 +290,7 @@
             this.tbzoomreset.Image = ((System.Drawing.Image)(resources.GetObject("tbzoomreset.Image")));
             this.tbzoomreset.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tbzoomreset.Name = "tbzoomreset";
-            this.tbzoomreset.Size = new System.Drawing.Size(36, 22);
+            this.tbzoomreset.Size = new System.Drawing.Size(36, 26);
             this.tbzoomreset.Text = "还原";
             this.tbzoomreset.Click += new System.EventHandler(this.tbzoomreset_Click);
             // 
@@ -648,17 +653,17 @@
             // 
             // chart1
             // 
-            chartArea1.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea1);
+            chartArea3.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea3);
             this.chart1.Dock = System.Windows.Forms.DockStyle.Fill;
-            legend1.Name = "Legend1";
-            this.chart1.Legends.Add(legend1);
+            legend3.Name = "Legend1";
+            this.chart1.Legends.Add(legend3);
             this.chart1.Location = new System.Drawing.Point(3, 17);
             this.chart1.Name = "chart1";
-            series1.ChartArea = "ChartArea1";
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
-            this.chart1.Series.Add(series1);
+            series3.ChartArea = "ChartArea1";
+            series3.Legend = "Legend1";
+            series3.Name = "Series1";
+            this.chart1.Series.Add(series3);
             this.chart1.Size = new System.Drawing.Size(691, 623);
             this.chart1.TabIndex = 0;
             this.chart1.Text = "chart1";
@@ -691,6 +696,29 @@
             this.printPreviewDialog1.Name = "printPreviewDialog1";
             this.printPreviewDialog1.Visible = false;
             // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.toolStrip1);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(0, 29);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(1002, 29);
+            this.panel1.TabIndex = 2;
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 29);
+            // 
+            // tbnaodu
+            // 
+            this.tbnaodu.Image = ((System.Drawing.Image)(resources.GetObject("tbnaodu.Image")));
+            this.tbnaodu.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tbnaodu.Name = "tbnaodu";
+            this.tbnaodu.Size = new System.Drawing.Size(76, 26);
+            this.tbnaodu.Text = "挠度修正";
+            this.tbnaodu.Click += new System.EventHandler(this.tbnaodu_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -715,6 +743,8 @@
             this.tableLayoutPanel1.PerformLayout();
             this.groupboxchart.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -777,6 +807,9 @@
         private System.Windows.Forms.ToolStripButton tbyzoomout;
         private System.Windows.Forms.ToolStripButton tbyzoomin;
         private System.Windows.Forms.ToolStripButton tbzoomreset;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripButton tbnaodu;
         
     }
 }

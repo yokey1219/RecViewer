@@ -215,8 +215,11 @@ namespace RecViewer
             lblnodecnt.Text = info.Nodecnt.ToString();
             DataTable dt = info.getDataTable();
             int _idx = 3;
-            lbldiameter.Text=dt.Rows[_idx++][1].ToString();
+            
+            lblheightdis.Text = "试件宽度";
             lblheight.Text=dt.Rows[_idx++][1].ToString();
+            lbldiameterdis.Text = "试件高度";
+            lbldiameter.Text = dt.Rows[_idx++][1].ToString();
             lbldis1.Text = "温度";
             lblinfo1.Text = dt.Rows[_idx++][1].ToString();
             _idx++;//加载速度
@@ -229,6 +232,7 @@ namespace RecViewer
             lblinfo3.Text = dt.Rows[_idx++][1].ToString();
             lbldis4.Text = "跨中挠度";
             lblinfo4.Text = dt.Rows[_idx++][1].ToString();
+            
             lbldis6.Text = "EB";
             lblinfo6.Text = dt.Rows[_idx++][1].ToString();
             lbldis7.Text = "SB";
@@ -254,6 +258,87 @@ namespace RecViewer
             //lblinfo6.Text = String.Format(fmt2, info.getXYNodes()[i++].getNodeY());
             //lbldis7.Text = "";
             //lblinfo7.Text = "";
+        }
+
+        void lblinfo4_DoubleClick(object sender, EventArgs e)
+        {
+            EditNaodu();
+        }
+
+        protected void EditNaodu()
+        {
+            if (currentInfo == null) return;
+            EditForm ef = new EditForm();
+            String oldvalue = lblinfo4.Text;
+            String newvalue = ef.EditValue(oldvalue);
+            if (oldvalue.Equals(newvalue)) return;
+            currentInfo.EditValue(lbldis4.Text, newvalue);
+            FillData(currentInfo);
+            ReRenderChart(currentInfo);
+            ef.Close();
+        }
+
+        private void ReRenderChart(AbstractRecordInfo info)
+        {
+            if (info == null) return;
+            chart1.Series.Clear();
+
+            Series series1 = new Series();//chart1.Series.Add("CBR");
+            series1.ChartType = SeriesChartType.Line;
+            //线条宽度
+            series1.BorderWidth = 1;
+            //阴影宽度
+            series1.ShadowOffset = 0;
+            //是否显示在图例集合Legends
+            series1.IsVisibleInLegend = false;
+            //线条上数据点上是否有数据显示
+            series1.IsValueShownAsLabel = false;
+            //线条颜色
+            series1.Color = Color.Black;// Color.Yellow;
+            //设置曲线X轴的显示类型
+            series1.XValueType = info.Chartformat.Xtype == 0 ? ChartValueType.Int32 : ChartValueType.Double;//ChartValueType.Int32;
+            //设置数据点的类型
+            series1.MarkerStyle = MarkerStyle.None;
+            //线条数据点的大小
+            series1.MarkerSize = 5;
+            series1.YValueType = info.Chartformat.Ytype == 0 ? ChartValueType.Int32 : ChartValueType.Double;// ChartValueType.Double;
+
+            double x = Double.MinValue;
+            foreach (IXYNode ninfo in info.getXYNodes())
+            {
+                double nodex, nodey;
+                nodex = ninfo.getNodeX();
+                nodey = ninfo.getNodeY();
+                if (nodex < x) nodex = x;
+                else
+                    x = nodex;
+                series1.Points.AddXY(nodex, nodey);//series1.Points.AddXY(ninfo.getNodeX(), ninfo.getNodeY());
+            }
+
+
+
+            chart1.Series.Add(series1);
+
+            if (info.getSpecialNodes() != null)
+            {
+                foreach (IXYNode ninfo in info.getSpecialNodes())
+                {
+                    Series series50 = new Series();
+                    series50.ChartType = SeriesChartType.Line;
+                    series50.BorderWidth = 1;
+                    series50.ShadowOffset = 0;
+                    series50.IsVisibleInLegend = true;
+                    series50.IsValueShownAsLabel = false;
+                    series50.Color = Color.Red;
+                    series50.XValueType = info.Chartformat.Xtype == 0 ? ChartValueType.Int32 : ChartValueType.Double;// ChartValueType.Int32;
+                    series50.YValueType = info.Chartformat.Ytype == 0 ? ChartValueType.Int32 : ChartValueType.Double;// ChartValueType.Double;
+                    series50.MarkerStyle = MarkerStyle.None;
+                    chart1.Series.Add(series50);
+                    series50.Points.AddXY(0, ninfo.getNodeY());
+                    series50.Points.AddXY(ninfo.getNodeX(), ninfo.getNodeY());
+                    series50.Points.AddXY(ninfo.getNodeX(), 0);
+                }
+            }
         }
 
         protected void FillData(CBRRecordFileInfo info)
@@ -348,6 +433,15 @@ namespace RecViewer
             //设置坐标轴刻度线不延长出来
             chartArea.AxisX.MajorTickMark.Enabled = false;
             chartArea.AxisY.MajorTickMark.Enabled = false;
+
+            chartArea.AxisX.MinorGrid.Enabled = true;
+            chartArea.AxisY.MinorGrid.Enabled = true;
+            chartArea.AxisX.MinorGrid.LineColor = Color.FromArgb(64, 64, 64, 64);
+            chartArea.AxisY.MinorGrid.LineColor = Color.FromArgb(64, 64, 64, 64);
+            chartArea.AxisX.MinorGrid.LineDashStyle = ChartDashStyle.Dash;
+            chartArea.AxisY.MinorGrid.LineDashStyle = ChartDashStyle.Dash;
+
+
             //开启下面两句能够隐藏网格线条
             //chartArea.AxisX.MajorGrid.Enabled = false;
             //chartArea.AxisY.MajorGrid.Enabled = false;
@@ -452,9 +546,17 @@ namespace RecViewer
             //    float y = ninfo.Offset / 1000f;
             //    series1.Points.AddXY(ninfo.KPa, y);
             //}
+            double x = Double.MinValue;
+            
             foreach (IXYNode ninfo in info.getXYNodes())
             {
-                series1.Points.AddXY(ninfo.getNodeX(), ninfo.getNodeY());
+                double nodex, nodey;
+                nodex = ninfo.getNodeX();
+                nodey = ninfo.getNodeY();
+                if (nodex < x) nodex = x;
+                else
+                    x = nodex;
+                series1.Points.AddXY(nodex,nodey);//series1.Points.AddXY(ninfo.getNodeX(), ninfo.getNodeY());
             }
 
             
@@ -497,6 +599,11 @@ namespace RecViewer
             chartArea.AxisY.Maximum = info.Chartformat.Ymax * y;//10;
             chartArea.AxisX.Interval = info.Chartformat.Xinterval * x;//4000; //设置为0表示由控件自动分配
             chartArea.AxisX.Maximum = info.Chartformat.Xmax * x;//20000;
+            info.Chartformat.Yinterval = chartArea.AxisY.Interval;
+            info.Chartformat.Ymax = chartArea.AxisY.Maximum;
+            info.Chartformat.Xinterval = chartArea.AxisX.Interval;
+            info.Chartformat.Xmax = chartArea.AxisX.Maximum;
+            
         }
 
         private void _RenderChart(AbstractRecordInfo info,double x,double y)
@@ -547,6 +654,14 @@ namespace RecViewer
             //开启下面两句能够隐藏网格线条
             //chartArea.AxisX.MajorGrid.Enabled = false;
             //chartArea.AxisY.MajorGrid.Enabled = false;
+
+            chartArea.AxisX.MinorGrid.Enabled = true;
+            chartArea.AxisY.MinorGrid.Enabled = true;
+            chartArea.AxisX.MinorGrid.LineColor = Color.FromArgb(64, 64, 64, 64);
+            chartArea.AxisY.MinorGrid.LineColor = Color.FromArgb(64, 64, 64, 64);
+            chartArea.AxisX.MinorGrid.LineDashStyle = ChartDashStyle.Dash;
+            chartArea.AxisY.MinorGrid.LineDashStyle = ChartDashStyle.Dash;
+
             //设置X轴的显示类型及显示方式
             chartArea.AxisX.Interval = info.Chartformat.Xinterval*x;//4000; //设置为0表示由控件自动分配
             chartArea.AxisX.IsStartedFromZero = true;
@@ -727,6 +842,7 @@ namespace RecViewer
 
             printDocument1.DefaultPageSettings.Landscape =  true;
             Clear();
+            lblinfo4.DoubleClick += new EventHandler(lblinfo4_DoubleClick);
             /*
             lbldate.Text = "";
             lblno.Text = "";
@@ -1043,7 +1159,7 @@ namespace RecViewer
             if (currentInfo != null)
             {
                 currentx *= 0.5;
-                RenderChart(currentInfo, currentx, currenty);
+                RenderChart(currentInfo, 0.5,1);//RenderChart(currentInfo, currentx, currenty);
             }
         }
 
@@ -1052,7 +1168,7 @@ namespace RecViewer
             if (currentInfo != null)
             {
                 currentx *= 2;
-                RenderChart(currentInfo, currentx, currenty);
+                RenderChart(currentInfo, 2, 1);//RenderChart(currentInfo, currentx, currenty);
             }
         }
 
@@ -1061,7 +1177,7 @@ namespace RecViewer
             if (currentInfo != null)
             {
                 currenty *= 0.5;
-                RenderChart(currentInfo, currentx, currenty);
+                RenderChart(currentInfo, 1, 0.5);//RenderChart(currentInfo, currentx, currenty);
             }
         }
 
@@ -1070,7 +1186,7 @@ namespace RecViewer
             if (currentInfo != null)
             {
                 currenty *= 2;
-                RenderChart(currentInfo, currentx, currenty);
+                RenderChart(currentInfo, 1, 2);//RenderChart(currentInfo, currentx, currenty);
             }
         }
 
@@ -1078,10 +1194,17 @@ namespace RecViewer
         {
             if (currentInfo != null)
             {
-                currentx =1;
+                //currentx =1;
+                //currenty = 1;
+                RenderChart(currentInfo, 1/currentx, 1/currenty);
+                currentx = 1;
                 currenty = 1;
-                RenderChart(currentInfo, currentx, currenty);
             }
+        }
+
+        private void tbnaodu_Click(object sender, EventArgs e)
+        {
+            EditNaodu();
         }
        
     }

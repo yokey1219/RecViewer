@@ -185,5 +185,10 @@ namespace RecordFileUtil
             //}
         }
 
+
+        public  virtual void EditValue(string p, string newvalue)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -166,7 +166,7 @@ namespace RecordFileUtil
 
             //EB
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
-            this.eb = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("×10\u207b\u2076 με", "")) * 10);
+            this.eb = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("με", "")) /100);
 
             //SB
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
@@ -249,9 +249,11 @@ namespace RecordFileUtil
             dr[1] = String.Format("{0:f1}mm", this.sensor/10f);
             dt.Rows.Add(dr);
 
+            double _rb;
+            _rb = (double)3 * (this.sensor / 10f) * (this.maxstrength) / (this.width / 10f) / (this.height / 10f) / (this.height / 10f)/2;
             dr = dt.NewRow();
             dr[0] = "RB";
-            dr[1] = String.Format("{0:f3}MPa", this.rb/1000f);
+            dr[1] = String.Format("{0:f1}MPa", _rb);// String.Format("{0:f3}MPa", this.rb / 1000f);
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
@@ -264,14 +266,17 @@ namespace RecordFileUtil
             dr[1] = String.Format("{0:f2}mm", this.maxoffset / 100f);
             dt.Rows.Add(dr);
 
+            double _eb;
+            _eb = (double)6 * (this.height / 10f) * (this.maxoffset / 100f) / (this.sensor / 10f) / (this.sensor / 10f);
             dr = dt.NewRow();
-            dr[0] = "EB";
-            dr[1] = String.Format("{0:f1} ×10\u207b\u2076 με", this.eb / 10f);
+            dr[0] = "εB";//"EB";
+            //dr[1] = String.Format("{0:d} ×10\u207b\u2076 με", this.eb *1000);
+            dr[1] = String.Format("{0:f0} με", _eb*1000000);// String.Format("{0:d} με", this.eb * 100);
             dt.Rows.Add(dr);
-
+            
             dr = dt.NewRow();
             dr[0] = "SB";
-            dr[1] = String.Format("{0:f1}MPa", this.sb / 10f);
+            dr[1] = String.Format("{0:f1}MPa", _rb/_eb); // String.Format("{0:f1}MPa", this.sb / 10f);
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
@@ -297,12 +302,46 @@ namespace RecordFileUtil
             }
             return dt;
         }
+
+        public override void EditValue(string p, string newvalue)
+        {
+
+            //this.sensor
+            if (p.Equals("跨中挠度"))
+            {
+                newvalue = newvalue.Replace("mm", "");
+                int newmaxoff = Convert.ToInt32(Convert.ToDouble(newvalue) * 100);
+                int oldmax = this.maxoffset;
+                this.maxoffset = newmaxoff;
+                this.eb = this.eb*1000 * this.maxoffset/oldmax/1000;
+                this.sb = this.sb * oldmax / this.maxoffset;
+
+                int _offset = newmaxoff - oldmax;
+
+                //List<IXYNode> _nodes = new List<IXYNode>();
+                //_nodes.Add(new ModulusStengthNodeInfo(0, 0));
+                foreach (IXYNode node in nodes)
+                {
+                   // if (node.getX() != 0)
+                    //{
+                        ModulusStengthNodeInfo _node = node as ModulusStengthNodeInfo;
+                        if (_node != null)
+                        {
+                            _node.offset += _offset;
+                        }
+                    //}
+                }
+                specialnodes.Clear();
+                specialnodes.Add(new ModulusStengthNodeInfo(maxoffset, maxstrength));
+
+            }
+        }
     }
 
     public class ModulusStengthNodeInfo:IXYNode
     {
-        protected int kn;
-        protected int offset;
+        internal int kn;
+        internal int offset;
 
         public int KN { get { return kn; } }
         public int Offset { get { return offset; } }
