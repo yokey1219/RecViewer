@@ -13,7 +13,7 @@ namespace RecordFileUtil
         {
             Infos = new List<RecordInfoItem>();
             //Infos.Add(new RecordInfoItem(GetRecordName(0), 0)); //Infos.Add(new RecordInfoItem("承载比(CBR)", 0));
-            Infos.Add(new RecordInfoItem(GetRecordName(0), 0)); //Infos.Add(new RecordInfoItem("回弹模量-强度仪法", 1));
+            Infos.Add(new RecordInfoItem(GetRecordName(3), 3)); //Infos.Add(new RecordInfoItem("回弹模量-强度仪法", 1));
             //Infos.Add(new RecordInfoItem(GetRecordName(2), 2)); //Infos.Add(new RecordInfoItem("无侧限抗压强度", 2));
             //Infos.Add(new RecordInfoItem(GetRecordName(3), 3)); //Infos.Add(new RecordInfoItem("回弹模量-顶面法", 3));
         }
@@ -37,8 +37,8 @@ namespace RecordFileUtil
             AbstractRecordInfo info = null;
             switch (type)
             {
-                case 0:
-                    info = new LIQIHanliangInfo();
+                case 3:
+                    info = new ModulusStrengthInfo();
                     break;
                 //case 3:
                 //    info = new ModulusStrengthInfo();
@@ -59,8 +59,8 @@ namespace RecordFileUtil
         {
             switch (type)
             {
-                case 0:
-                    return "沥青含量测试仪";
+                case 3:
+                    return "沥青混合料弯曲试验";
                     //break;
                 //case 1:
                  //   return "回弹模量-强度仪法";

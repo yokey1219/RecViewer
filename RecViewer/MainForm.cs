@@ -123,9 +123,9 @@ namespace RecViewer
                 //    info.LoadData(buffer);
                     //FillData(info as CBRRecordFileInfo);
                 //    break;
-                case 0:
+                case 3:
                     //this.recordname = "回弹模量-强度仪法";
-                    info = new LIQIHanliangInfo();
+                    info = new ModulusStrengthInfo();
                     info.LoadData(buffer);
                     //FillData(info as ModulusStrengthInfo);
                     break;
