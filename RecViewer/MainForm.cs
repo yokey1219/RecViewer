@@ -285,8 +285,8 @@ namespace RecViewer
             lblheight.Text = dt.Rows[_idx++][1].ToString();
             lbldiameterdis.Text = "试件质量";
             lbldiameter.Text = dt.Rows[_idx++][1].ToString();
-            _idx++;//加载速度
-            _idx++;//记录点数
+            int idxxishu1=_idx++;//加载速度
+            int idxxishu2=_idx++;//记录点数
             _idx++;
             lbldis1.Text = "油石比";
             lblinfo1.Text = dt.Rows[_idx++][1].ToString();
@@ -300,10 +300,10 @@ namespace RecViewer
             lbldis4.Text = "结束质量";
             lblinfo4.Text = dt.Rows[_idx++][1].ToString();
 
-            lbldis6.Text = "";
-            lblinfo6.Text = "";// dt.Rows[_idx++][1].ToString();
-            lbldis7.Text = "";
-            lblinfo7.Text = "";// dt.Rows[_idx++][1].ToString();
+            lbldis6.Text = dt.Rows[idxxishu1][0].ToString() ;
+            lblinfo6.Text = dt.Rows[idxxishu1][1].ToString();// dt.Rows[_idx++][1].ToString();
+            lbldis7.Text = dt.Rows[idxxishu2][0].ToString();
+            lblinfo7.Text = dt.Rows[idxxishu2][1].ToString();// dt.Rows[_idx++][1].ToString();
         }
 
         void lblinfo4_DoubleClick(object sender, EventArgs e)
@@ -919,8 +919,11 @@ namespace RecViewer
             lbldate.Text = "";
             lblno.Text = "";
             lbldiameter.Text = "";
+            lbldiameterdis.Text = "试件质量";
             lblheight.Text = "";
+            lblheightdis.Text = "试验温度";
             lblnodecnt.Text = "";
+            lblnodecntdis.Text = "记录点数";
             lbldis1.Text = "";
             lblinfo1.Text = "";
             lbldis2.Text = "";
@@ -1103,7 +1106,7 @@ namespace RecViewer
 
 
 
-                RectangleF imgrect = new RectangleF(firstpoint.X, firstpoint.Y + (txtmargin + txtheight) * 4, width, height);
+                RectangleF imgrect = new RectangleF(firstpoint.X, firstpoint.Y + (txtmargin + txtheight) * 5, width, height);
                 e.Graphics.DrawImage(_newbitmapchart, imgrect);
                 RectangleF txtrect = new RectangleF(imgrect.X, imgrect.Y + imgrect.Height + 40, imgrect.Width, 40);
                 e.Graphics.DrawString("试验员__________________________________", new Font(Font.SystemFontName, 10), Brushes.Black, txtrect);

@@ -134,7 +134,7 @@ namespace RecViewer
                 if (arInfo.DataBuffer.Length > 4)
                 {
                     int toread = Convert.ToInt32((arInfo.DataBuffer[2]<<8)+arInfo.DataBuffer[3]);
-                    if(arInfo.DataBuffer.Length>=(toread+6)&&arInfo.DataBuffer.Length>=2048)
+                    if(arInfo.DataBuffer.Length>=(toread+6))//&&arInfo.DataBuffer.Length>=2048)
                         bWaitread = false;
                 }
             }
