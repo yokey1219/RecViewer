@@ -125,7 +125,7 @@ namespace RecViewer
                 //    break;
                 case 3:
                     //this.recordname = "回弹模量-强度仪法";
-                    info = new ModulusStrengthInfo();
+                    info = new WanquTestInfo();
                     info.LoadData(buffer);
                     //FillData(info as ModulusStrengthInfo);
                     break;
@@ -180,9 +180,9 @@ namespace RecViewer
             {
                 FillData(info as ModulusTopRecordInfo);
             }
-            else if (info is ModulusStrengthInfo)
+            else if (info is WanquTestInfo)
             {
-                FillData(info as ModulusStrengthInfo);
+                FillData(info as WanquTestInfo);
             }
             else if (info is LIQIHanliangInfo)
             {
@@ -221,7 +221,7 @@ namespace RecViewer
             lblinfo7.Text = "";
         }
 
-        private void FillData(ModulusStrengthInfo info)
+        private void FillData(WanquTestInfo info)
         {
             lbldate.Text = info.TheDate;
             lblno.Text = info.No.ToString();

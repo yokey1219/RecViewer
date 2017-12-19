@@ -80,13 +80,13 @@ namespace RecordFileUtil
                 sb = (int)((bytes[idx++] << 8) | bytes[idx++]);
                 
                 //int stime = 0;
-                nodes.Add(new ModulusStengthNodeInfo(0, 0));
+                nodes.Add(new WanquNodeInfo(0, 0));
                 while (idx < (bytes.Length - 2))
                 {
 
                     int kn = (int)((bytes[idx++] << 8) | bytes[idx++]);
                     int offset = (int)((bytes[idx++] << 8) | bytes[idx++]);
-                    nodes.Add(new ModulusStengthNodeInfo(offset,kn));
+                    nodes.Add(new WanquNodeInfo(offset,kn));
                     while (offset > chartformat.Xmax*100)
                     {
                         chartformat.Xmax += chartformat.Xinterval;
@@ -98,7 +98,7 @@ namespace RecordFileUtil
                 }
 
                 specialnodes = new List<IXYNode>();
-                specialnodes.Add(new ModulusStengthNodeInfo(maxoffset, maxstrength));
+                specialnodes.Add(new WanquNodeInfo(maxoffset, maxstrength));
                 
 
             }
@@ -178,13 +178,13 @@ namespace RecordFileUtil
             idx++;
             idx++;
             nodes = new List<IXYNode>();
-            nodes.Add(new ModulusStengthNodeInfo(0, 0));
+            nodes.Add(new WanquNodeInfo(0, 0));
             for (; idx < strs.Length; idx++)
             {
                 strarr = strs[idx].Split(AbstractRecordInfo.csvsepchar);
                 int kpa = Convert.ToInt32(Convert.ToDouble(strarr[0]) * 1000);
                 int off = Convert.ToInt32(Convert.ToDouble(strarr[1]) * 100);
-                nodes.Add(new ModulusStengthNodeInfo(off, kpa));
+                nodes.Add(new WanquNodeInfo(off, kpa));
                 while(off>chartformat.Xmax*100)
                 {
                     chartformat.Xmax += chartformat.Xinterval;
@@ -196,7 +196,7 @@ namespace RecordFileUtil
             }
 
             specialnodes = new List<IXYNode>();
-            specialnodes.Add(new ModulusStengthNodeInfo(maxoffset, maxstrength));
+            specialnodes.Add(new WanquNodeInfo(maxoffset, maxstrength));
 
             thedate = String.Format("{0}年{1}月{2}日{3}时{4}分", year, month, day, hour, minute);
 
@@ -327,7 +327,7 @@ namespace RecordFileUtil
                 {
                    // if (node.getX() != 0)
                     //{
-                        ModulusStengthNodeInfo _node = node as ModulusStengthNodeInfo;
+                        WanquNodeInfo _node = node as WanquNodeInfo;
                         if (_node != null)
                         {
                             _node.offset += _offset;
@@ -335,7 +335,7 @@ namespace RecordFileUtil
                     //}
                 }
                 specialnodes.Clear();
-                specialnodes.Add(new ModulusStengthNodeInfo(maxoffset, maxstrength));
+                specialnodes.Add(new WanquNodeInfo(maxoffset, maxstrength));
 
             }
         }
@@ -358,7 +358,7 @@ namespace RecordFileUtil
         }
     }
 
-    public class ModulusStengthNodeInfo : IXYNode
+    public class WanquNodeInfo : IXYNode
     {
         internal int kn;
         internal int offset;
@@ -366,7 +366,7 @@ namespace RecordFileUtil
         public int KN { get { return kn; } }
         public int Offset { get { return offset; } }
 
-        public ModulusStengthNodeInfo(int offset, int kn)
+        public WanquNodeInfo(int offset, int kn)
         {
             this.kn = kn;
             this.offset = offset;

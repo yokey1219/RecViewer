@@ -47,11 +47,15 @@
   <ItemGroup>
     <Compile Include="AbstractRecordInfo.cs" />
     <Compile Include="ChartFormat.cs" />
+    <Compile Include="DongrongInfo.cs" />
+    <Compile Include="LengzhutiInfo.cs" />
+    <Compile Include="ModulusYuanInfo.cs" />
+    <Compile Include="WendingduTestInfo.cs" />
     <Compile Include="ExcelHelper.cs" />
     <Compile Include="IXYNode.cs" />
     <Compile Include="LIQIHanliangInfo.cs" />
     <Compile Include="ModulusRecordInfo.cs" />
-    <Compile Include="ModulusStrengthInfo.cs" />
+    <Compile Include="WanquTestInfo.cs" />
     <Compile Include="RecordFileInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RecordInfoFactory.cs" />

@@ -6,22 +6,24 @@ using System.Data;
 
 namespace RecordFileUtil
 {
-    public class WanquTestInfo:AbstractRecordInfo
+    public class WendingduTestInfo : AbstractRecordInfo
     {
-        protected  const String KUAZHONGNAODU = "跨中挠度";
+        
         protected List<IXYNode> nodes;
         protected List<IXYNode> specialnodes;
-        protected int rb;
-        protected int maxstrength;
-        protected int maxoffset;
-        protected int eb;
-        protected int sb;
+        protected int maxwendingdu;
+        protected int maxliuzhi;
+        internal int xdiv = 1000;
+        internal int ydiv = 100;
+        internal static float xdivf = 1000f;
+        internal static float ydivf = 100f;
+        //protected int maxoffset;
+        //protected int eb;
+        //protected int sb;
 
-        public int RB { get { return rb; } }
-        public int MaxStrength { get { return maxstrength; } }
-        public int MaxOffset { get { return maxoffset; } }
-        public int EB { get { return eb; } }
-        public int SB { get { return sb; } }
+        public int MaxWendingdu { get { return maxwendingdu; } }
+        public int MaxLiuzhi { get { return maxliuzhi; } }
+        
 
     
 
@@ -43,9 +45,9 @@ namespace RecordFileUtil
             chartformat.Xmin = 0;
             chartformat.Ymin = 0;
             chartformat.Xmax = 10;
-            chartformat.Ymax = 2.5;
+            chartformat.Ymax = 80;
             chartformat.Xinterval = 2;
-            chartformat.Yinterval = 0.5;
+            chartformat.Yinterval = 16;
             chartformat.Xtype = 1;
             chartformat.Ytype = 1;
             chartformat.Xreverse = false;
@@ -73,32 +75,38 @@ namespace RecordFileUtil
                 loadspeed = (int)((bytes[idx++] << 8) | bytes[idx++]);
                 nodecnt = (int)((bytes[idx++] << 8) | bytes[idx++]);
                 sensor = (int)((bytes[idx++] << 8) | bytes[idx++]);
-                rb = (int)((bytes[idx++] << 8) | bytes[idx++]);
-                maxstrength = (int)((bytes[idx++] << 8) | bytes[idx++]);
-                maxoffset = (int)((bytes[idx++] << 8) | bytes[idx++]);
-                eb = (int)((bytes[idx++] << 8) | bytes[idx++]);
-                sb = (int)((bytes[idx++] << 8) | bytes[idx++]);
+                idx++;
+                idx++;
+                maxwendingdu = (int)((bytes[idx++] << 8) | bytes[idx++]);
+                maxliuzhi = (int)((bytes[idx++] << 8) | bytes[idx++]);
+                idx++;
+                idx++;
+                idx++;
+                idx++;
+                //maxoffset = (int)((bytes[idx++] << 8) | bytes[idx++]);
+                //eb = (int)((bytes[idx++] << 8) | bytes[idx++]);
+                //sb = (int)((bytes[idx++] << 8) | bytes[idx++]);
                 
                 //int stime = 0;
-                nodes.Add(new ModulusStengthNodeInfo(0, 0));
+                nodes.Add(new WendingduNodeInfo(0, 0));
                 while (idx < (bytes.Length - 2))
                 {
 
                     int kn = (int)((bytes[idx++] << 8) | bytes[idx++]);
                     int offset = (int)((bytes[idx++] << 8) | bytes[idx++]);
-                    nodes.Add(new ModulusStengthNodeInfo(offset,kn));
-                    while (offset > chartformat.Xmax*100)
+                    nodes.Add(new WendingduNodeInfo(offset, kn));
+                    while (offset > chartformat.Xmax*xdiv)
                     {
                         chartformat.Xmax += chartformat.Xinterval;
                     }
-                    while (kn > chartformat.Ymax*1000)
+                    while (kn > chartformat.Ymax*ydiv)
                     {
                         chartformat.Ymax += chartformat.Yinterval;
                     }
                 }
 
                 specialnodes = new List<IXYNode>();
-                specialnodes.Add(new ModulusStengthNodeInfo(maxoffset, maxstrength));
+                specialnodes.Add(new WendingduNodeInfo(maxliuzhi, maxwendingdu));
                 
 
             }
@@ -155,48 +163,38 @@ namespace RecordFileUtil
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
             this.sensor = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("mm", ""))*10);
             
-            //RB
-            strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
-            this.rb = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("MPa", "")) * 1000);
-
             //最大点压力
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
-            this.maxstrength = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("KN", "")) * 1000);
+            this.maxwendingdu = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("MPa", "")) * 1000);
 
             //最大点位移
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
-            this.maxoffset = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("mm", "")) * 100);
+            this.maxliuzhi = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("KN", "")) * 1000);
 
-            //EB
-            strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
-            this.eb = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("με", "")) /100);
-
-            //SB
-            strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
-            this.sb = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("MPa", "")) * 10);
+           
    
             idx++;
             idx++;
             nodes = new List<IXYNode>();
-            nodes.Add(new ModulusStengthNodeInfo(0, 0));
+            nodes.Add(new WendingduNodeInfo(0, 0));
             for (; idx < strs.Length; idx++)
             {
                 strarr = strs[idx].Split(AbstractRecordInfo.csvsepchar);
-                int kpa = Convert.ToInt32(Convert.ToDouble(strarr[0]) * 1000);
-                int off = Convert.ToInt32(Convert.ToDouble(strarr[1]) * 100);
-                nodes.Add(new ModulusStengthNodeInfo(off, kpa));
-                while(off>chartformat.Xmax*100)
+                int kpa = Convert.ToInt32(Convert.ToDouble(strarr[0]) * ydiv);
+                int off = Convert.ToInt32(Convert.ToDouble(strarr[1]) * xdiv);
+                nodes.Add(new WendingduNodeInfo(off, kpa));
+                while(off>chartformat.Xmax*xdiv)
                 {
                     chartformat.Xmax += chartformat.Xinterval;
                 }
-                while (kpa > chartformat.Ymax * 1000)
+                while (kpa > chartformat.Ymax * ydiv)
                 {
                     chartformat.Ymax += chartformat.Yinterval;
                 }
             }
 
             specialnodes = new List<IXYNode>();
-            specialnodes.Add(new ModulusStengthNodeInfo(maxoffset, maxstrength));
+            specialnodes.Add(new WendingduNodeInfo(maxliuzhi, maxwendingdu));
 
             thedate = String.Format("{0}年{1}月{2}日{3}时{4}分", year, month, day, hour, minute);
 
@@ -248,39 +246,21 @@ namespace RecordFileUtil
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
-            dr[0] = "试件跨径";
-            dr[1] = String.Format("{0:f1}mm", this.sensor/10f);
+            dr[0] = "传感器大小";
+            dr[1] = String.Format("{0}KN", this.sensor);
             dt.Rows.Add(dr);
 
-            double _rb;
-            _rb = (double)3 * (this.sensor / 10f) * (this.maxstrength) / (this.width / 10f) / (this.height / 10f) / (this.height / 10f)/2;
-            dr = dt.NewRow();
-            dr[0] = "RB";
-            dr[1] = String.Format("{0:f1}MPa", _rb);// String.Format("{0:f3}MPa", this.rb / 1000f);
-            dt.Rows.Add(dr);
-
+            
             dr = dt.NewRow();
             dr[0] = "最大点压力";
-            dr[1] = String.Format("{0:f3}KN", this.maxstrength / 1000f);
+            dr[1] = String.Format("{0:f2}KN",this.maxwendingdu/ydivf);// String.Format("{0:f3}MPa", this.rb / 1000f);
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
             dr[0] = "最大点位移";
-            dr[1] = String.Format("{0:f2}mm", this.maxoffset / 100f);
+            dr[1] = String.Format("{0:f3}KN", this.maxliuzhi / xdivf);
             dt.Rows.Add(dr);
 
-            double _eb;
-            _eb = (double)6 * (this.height / 10f) * (this.maxoffset / 100f) / (this.sensor / 10f) / (this.sensor / 10f);
-            dr = dt.NewRow();
-            dr[0] = "εB";//"EB";
-            //dr[1] = String.Format("{0:d} ×10\u207b\u2076 με", this.eb *1000);
-            dr[1] = String.Format("{0:f0} με", _eb*1000000);// String.Format("{0:d} με", this.eb * 100);
-            dt.Rows.Add(dr);
-            
-            dr = dt.NewRow();
-            dr[0] = "SB";
-            dr[1] = String.Format("{0:f1}MPa", _rb/_eb); // String.Format("{0:f1}MPa", this.sb / 10f);
-            dt.Rows.Add(dr);
 
             dr = dt.NewRow();
             dr[0] = "";
@@ -288,8 +268,8 @@ namespace RecordFileUtil
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
-            dr[0] = "压力(KN)";
-            dr[1] = "挠度(mm)";
+            dr[0] = "稳定度(KN)";
+            dr[1] = "流值(mm)";
             dt.Rows.Add(dr);
 
 
@@ -306,48 +286,16 @@ namespace RecordFileUtil
             return dt;
         }
 
-        public override void EditValue(string p, string newvalue)
-        {
+        
 
-            //this.sensor
-            if (p.Equals(KUAZHONGNAODU))
-            {
-                newvalue = newvalue.Replace("mm", "");
-                int newmaxoff = Convert.ToInt32(Convert.ToDouble(newvalue) * 100);
-                int oldmax = this.maxoffset;
-                this.maxoffset = newmaxoff;
-                this.eb = this.eb*1000 * this.maxoffset/oldmax/1000;
-                this.sb = this.sb * oldmax / this.maxoffset;
-
-                int _offset = newmaxoff - oldmax;
-
-                //List<IXYNode> _nodes = new List<IXYNode>();
-                //_nodes.Add(new ModulusStengthNodeInfo(0, 0));
-                foreach (IXYNode node in nodes)
-                {
-                   // if (node.getX() != 0)
-                    //{
-                        ModulusStengthNodeInfo _node = node as ModulusStengthNodeInfo;
-                        if (_node != null)
-                        {
-                            _node.offset += _offset;
-                        }
-                    //}
-                }
-                specialnodes.Clear();
-                specialnodes.Add(new ModulusStengthNodeInfo(maxoffset, maxstrength));
-
-            }
-        }
-
-        public override List<EditableItem> GetEditableList()
+        /*public override List<EditableItem> GetEditableList()
         {
             List<EditableItem> list = new List<EditableItem>();
             list.Add(new EditableItem("挠度修正", KUAZHONGNAODU));
             return list;
-        }
+        }*/
 
-        public override string GetEditableValuStr(string valuename)
+       /* public override string GetEditableValuStr(string valuename)
         {
             if (valuename.Equals(KUAZHONGNAODU))
             {
@@ -355,10 +303,10 @@ namespace RecordFileUtil
             }
             else
                 return base.GetEditableValuStr(valuename);
-        }
+        }*/
     }
 
-    public class ModulusStengthNodeInfo : IXYNode
+    public class WendingduNodeInfo : IXYNode
     {
         internal int kn;
         internal int offset;
@@ -366,7 +314,7 @@ namespace RecordFileUtil
         public int KN { get { return kn; } }
         public int Offset { get { return offset; } }
 
-        public ModulusStengthNodeInfo(int offset, int kn)
+        public WendingduNodeInfo(int offset, int kn)
         {
             this.kn = kn;
             this.offset = offset;
@@ -386,13 +334,13 @@ namespace RecordFileUtil
 
         public double getNodeX()
         {
-            float x = this.offset / 100f;
+            float x = this.offset / WendingduTestInfo.xdivf;
             return x;
         }
 
         public double getNodeY()
         {
-            float y = this.kn / 1000f;
+            float y = this.kn / WendingduTestInfo.ydivf;
             return y;
         }
 

@@ -12,8 +12,11 @@ namespace RecordFileUtil
         static RecordInfoFactory()
         {
             Infos = new List<RecordInfoItem>();
-            //Infos.Add(new RecordInfoItem(GetRecordName(0), 0)); //Infos.Add(new RecordInfoItem("承载比(CBR)", 0));
+            Infos.Add(new RecordInfoItem(GetRecordName(0), 0));
+            Infos.Add(new RecordInfoItem(GetRecordName(1), 1));
+            Infos.Add(new RecordInfoItem(GetRecordName(2), 2));//Infos.Add(new RecordInfoItem("承载比(CBR)", 0));
             Infos.Add(new RecordInfoItem(GetRecordName(3), 3)); //Infos.Add(new RecordInfoItem("回弹模量-强度仪法", 1));
+            Infos.Add(new RecordInfoItem(GetRecordName(5), 5));
             //Infos.Add(new RecordInfoItem(GetRecordName(2), 2)); //Infos.Add(new RecordInfoItem("无侧限抗压强度", 2));
             //Infos.Add(new RecordInfoItem(GetRecordName(3), 3)); //Infos.Add(new RecordInfoItem("回弹模量-顶面法", 3));
         }
@@ -37,18 +40,21 @@ namespace RecordFileUtil
             AbstractRecordInfo info = null;
             switch (type)
             {
-                case 3:
-                    info = new ModulusStrengthInfo();
+                case 0:
+                    info = new WendingduTestInfo();
                     break;
-                //case 3:
-                //    info = new ModulusStrengthInfo();
-                //    break;
-                //case 2:
-                //    info = new StrengthRecordInfo();
-                //    break;
-                //case 3:
-                //    info = new ModulusTopRecordInfo();
-                //    break;
+                case 1:
+                    info = new ModulusYuanInfo();
+                    break;
+                case 2:
+                    info = new LengzhutiInfo();
+                    break;
+                case 3:
+                    info = new WanquTestInfo();
+                    break;
+                case 5:
+                    info = new DongrongInfo();
+                    break;
             }
             if (info != null)
                 info.SetName(GetRecordName(type));
@@ -59,18 +65,16 @@ namespace RecordFileUtil
         {
             switch (type)
             {
+                case 0:
+                    return "稳定度抗压试验";
+                case 1:
+                    return "回弹模量-圆柱体试验";
+                case 2:
+                    return "棱柱体试验";
                 case 3:
                     return "沥青混合料弯曲试验";
-                    //break;
-                //case 1:
-                 //   return "回弹模量-强度仪法";
-                    //break;
-                //case 2:
-                 //   return "无侧限抗压强度";
-                    //break;
-                //case 3:
-                 //   return "回弹模量-顶面法";
-                    //break;
+                case 5:
+                    return "冻融试验";
                 default:
                     return "unkown";
                     //break;
