@@ -116,7 +116,7 @@ namespace RecViewer
         {
             AbstractRecordInfo info = null;
             byte[] buffer=File.ReadAllBytes(file);
-            switch (buffer[2])
+            /*switch (buffer[2])
             {
                 //case 0:
                 //    info = new CBRRecordFileInfo();
@@ -143,7 +143,9 @@ namespace RecViewer
                 default:
                     //this.recordname = "unkown";
                     break;
-            }
+            }*/
+            info=RecordInfoFactory.CreateInfo(Convert.ToInt32(buffer[2]));
+            info.LoadData(buffer);
             if (info != null)
             {
                 FillData(info);
@@ -168,7 +170,7 @@ namespace RecViewer
                 tbnaodu.Text = _list[0].ActionName;
                 tbnaodu.Tag = _list[0].ValueName;
             }
-            if (info is CBRRecordFileInfo)
+            /*if (info is CBRRecordFileInfo)
             {
                 FillData(info as CBRRecordFileInfo);
             }
@@ -191,6 +193,108 @@ namespace RecViewer
             else
             {
                 currentInfo = null;
+            }*/
+            DataTable datatable = info.getDispalyTable();
+            if (info.DisplayMaxIdx > 0)
+            {
+                
+                FillData(datatable,info.DisplayMaxIdx);
+                
+            }
+            else
+                currentInfo = null;
+        }
+
+        private void FillData(DataTable dt, int maxidx)
+        {
+            int idx = 0;
+            lbldatedis.Text = (String)dt.Rows[idx][0];
+            lbldate.Text = (String)dt.Rows[idx++][1];
+            lblnodis.Text = (String)dt.Rows[idx][0];
+            lblno.Text = (String)dt.Rows[idx++][1];
+            lblheightdis.Text = (String)dt.Rows[idx][0];
+            lblheight.Text = (String)dt.Rows[idx++][1];
+            lbldiameterdis.Text = (String)dt.Rows[idx][0];
+            lbldiameter.Text = (String)dt.Rows[idx++][1];
+           
+            lblnodecntdis.Text = (String)dt.Rows[idx][0];
+            lblnodecnt.Text = (String)dt.Rows[idx++][1];
+
+            if (idx <= maxidx)
+            {
+                lbldis1.Text = (String)dt.Rows[idx][0];
+                lblinfo1.Text = (String)dt.Rows[idx++][1];
+            }
+            else
+            {
+                lbldis1.Text = "";
+                lblinfo1.Text = "";
+            }
+
+            if (idx <= maxidx)
+            {
+                lbldis2.Text = (String)dt.Rows[idx][0];
+                lblinfo2.Text = (String)dt.Rows[idx++][1];
+            }
+            else
+            {
+                lbldis2.Text = "";
+                lblinfo2.Text = "";
+            }
+
+            if (idx <= maxidx)
+            {
+                lbldis3.Text = (String)dt.Rows[idx][0];
+                lblinfo3.Text = (String)dt.Rows[idx++][1];
+            }
+            else
+            {
+                lbldis3.Text = "";
+                lblinfo3.Text = "";
+            }
+
+            if (idx <= maxidx)
+            {
+                lbldis4.Text = (String)dt.Rows[idx][0];
+                lblinfo4.Text = (String)dt.Rows[idx++][1];
+            }
+            else
+            {
+                lbldis4.Text = "";
+                lblinfo4.Text = "";
+            }
+
+            if (idx <= maxidx)
+            {
+                lbldis5.Text = (String)dt.Rows[idx][0];
+                lblinfo5.Text = (String)dt.Rows[idx++][1];
+            }
+            else
+            {
+                lbldis5.Text = "";
+                lblinfo5.Text = "";
+            }
+
+            if (idx <= maxidx)
+            {
+                lbldis6.Text = (String)dt.Rows[idx][0];
+                lblinfo6.Text = (String)dt.Rows[idx++][1];
+            }
+            else
+            {
+                lbldis6.Text = "";
+                lblinfo6.Text = "";
+            }
+
+            if (idx <= maxidx)
+            {
+                lbldis7.Text = (String)dt.Rows[idx][0];
+                lblinfo7.Text = (String)dt.Rows[idx++][1];
+            }
+            else
+            {
+                lbldis7.Text = "";
+                lblinfo7.Text = "";
             }
         }
 
@@ -1103,7 +1207,7 @@ namespace RecViewer
 
 
 
-                RectangleF imgrect = new RectangleF(firstpoint.X, firstpoint.Y + (txtmargin + txtheight) * 4, width, height);
+                RectangleF imgrect = new RectangleF(firstpoint.X, firstpoint.Y + (txtmargin + txtheight) * 5, width, height);
                 e.Graphics.DrawImage(_newbitmapchart, imgrect);
                 RectangleF txtrect = new RectangleF(imgrect.X, imgrect.Y + imgrect.Height + 40, imgrect.Width, 40);
                 e.Graphics.DrawString("试验员__________________________________", new Font(Font.SystemFontName, 10), Brushes.Black, txtrect);

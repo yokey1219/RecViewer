@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="AbstractRecordInfo.cs" />
     <Compile Include="ChartFormat.cs" />
+    <Compile Include="PilieTestInfo.cs" />
     <Compile Include="DongrongInfo.cs" />
     <Compile Include="LengzhutiInfo.cs" />
     <Compile Include="ModulusYuanInfo.cs" />

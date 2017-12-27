@@ -43,6 +43,7 @@
             this.label5 = new System.Windows.Forms.Label();
             this.tbsend = new System.Windows.Forms.TextBox();
             this.tbread = new System.Windows.Forms.TextBox();
+            this.tbreadno = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
             this.SuspendLayout();
@@ -122,6 +123,7 @@
             this.numericUpDown1.Name = "numericUpDown1";
             this.numericUpDown1.Size = new System.Drawing.Size(37, 21);
             this.numericUpDown1.TabIndex = 7;
+            this.numericUpDown1.Visible = false;
             // 
             // numericUpDown2
             // 
@@ -134,6 +136,7 @@
             this.numericUpDown2.Name = "numericUpDown2";
             this.numericUpDown2.Size = new System.Drawing.Size(37, 21);
             this.numericUpDown2.TabIndex = 8;
+            this.numericUpDown2.Visible = false;
             // 
             // btnRead
             // 
@@ -173,11 +176,20 @@
             this.tbread.Size = new System.Drawing.Size(308, 207);
             this.tbread.TabIndex = 12;
             // 
+            // tbreadno
+            // 
+            this.tbreadno.Location = new System.Drawing.Point(101, 130);
+            this.tbreadno.Name = "tbreadno";
+            this.tbreadno.Size = new System.Drawing.Size(121, 21);
+            this.tbreadno.TabIndex = 13;
+            this.tbreadno.Text = "0";
+            // 
             // ReadData
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(700, 261);
+            this.Controls.Add(this.tbreadno);
             this.Controls.Add(this.tbread);
             this.Controls.Add(this.tbsend);
             this.Controls.Add(this.label5);
@@ -217,5 +229,6 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox tbsend;
         private System.Windows.Forms.TextBox tbread;
+        private System.Windows.Forms.TextBox tbreadno;
     }
 }

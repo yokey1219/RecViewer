@@ -39,7 +39,27 @@ namespace RecViewer
             
             
             AbstractRecordInfo info=RecordInfoFactory.CreateInfo((int)comboBox3.SelectedValue);
-            int no = Convert.ToInt32(numericUpDown1.Value * 10 + numericUpDown2.Value);
+            int no = 0;// Convert.ToInt32(numericUpDown1.Value * 10 + numericUpDown2.Value);
+            try
+            {
+                no = Convert.ToInt32(tbreadno.Text);
+                if (no > 99 || no < 0)
+                {
+                    MessageBox.Show("编号只能是0-99");
+                    return;
+                }
+            }
+            catch (FormatException fmtex)
+            {
+                MessageForm.Show(fmtex.Message, fmtex);
+                return;
+            }
+            catch (OverflowException ovrex)
+            {
+                MessageForm.Show(ovrex.Message, ovrex);
+                return;
+            }
+
             info.MakeSendBuffer();
             info.SetReadNo(no);
             arInfo = info;
@@ -76,15 +96,23 @@ namespace RecViewer
                 }
                 serialPort1.DiscardInBuffer();
                 serialPort1.Close();
-                if (istimeout)
+                int toread = 0;
+                if(arInfo.DataBuffer.Length>4)
+                    toread=Convert.ToInt32((int)(arInfo.DataBuffer[2] << 8) + (int)arInfo.DataBuffer[3]);
+                //if (arInfo is ModulusYuanInfo)
+                //    toread = toread - 6;
+                if (istimeout && (toread < 1 || arInfo.DataBuffer.Length< (toread + 6)))
                 {
                     //MessageForm.Show("读取超时",new Exception());//MessageBox.Show("读取超时!");
-                    this.Close();
-                    throw new Exception("读取超时");
+                    //this.Close();
+                    tbread.Clear();
+                    foreach (byte b in arInfo.DataBuffer)
+                        tbread.AppendText(b.ToString("X2") + " ");
+                    throw new Exception(String.Format("读取超时,需要读取{0},实际读取{1}",toread+6,arInfo.DataBuffer.Length));
                 }
                 else
                 {
-                    int toread = Convert.ToInt32((int)(arInfo.DataBuffer[2] << 8) + (int)arInfo.DataBuffer[3]);
+                    //int toread = Convert.ToInt32((int)(arInfo.DataBuffer[2] << 8) + (int)arInfo.DataBuffer[3]);
                     foreach (byte b in arInfo.DataBuffer)
                         tbread.AppendText(b.ToString("X2") + " ");
                     if (arInfo.DataBuffer.Length >= (toread + 6))
@@ -134,8 +162,16 @@ namespace RecViewer
                 if (arInfo.DataBuffer.Length > 4)
                 {
                     int toread = Convert.ToInt32((arInfo.DataBuffer[2]<<8)+arInfo.DataBuffer[3]);
-                    if(arInfo.DataBuffer.Length>=(toread+6)&&arInfo.DataBuffer.Length>=2048)
-                        bWaitread = false;
+                    if (arInfo is ModulusYuanInfo)
+                    {
+                        if (arInfo.DataBuffer.Length >= (toread+6))
+                            bWaitread = false;
+                    }
+                    else
+                    {
+                        if (arInfo.DataBuffer.Length >= (toread + 6) && arInfo.DataBuffer.Length >= 2048)
+                            bWaitread = false;
+                    }
                 }
             }
             else

@@ -16,6 +16,7 @@ namespace RecordFileUtil
             Infos.Add(new RecordInfoItem(GetRecordName(1), 1));
             Infos.Add(new RecordInfoItem(GetRecordName(2), 2));//Infos.Add(new RecordInfoItem("承载比(CBR)", 0));
             Infos.Add(new RecordInfoItem(GetRecordName(3), 3)); //Infos.Add(new RecordInfoItem("回弹模量-强度仪法", 1));
+            Infos.Add(new RecordInfoItem(GetRecordName(4), 4)); //Infos.Add(new RecordInfoItem("回弹模量-强度仪法", 1));
             Infos.Add(new RecordInfoItem(GetRecordName(5), 5));
             //Infos.Add(new RecordInfoItem(GetRecordName(2), 2)); //Infos.Add(new RecordInfoItem("无侧限抗压强度", 2));
             //Infos.Add(new RecordInfoItem(GetRecordName(3), 3)); //Infos.Add(new RecordInfoItem("回弹模量-顶面法", 3));
@@ -52,6 +53,9 @@ namespace RecordFileUtil
                 case 3:
                     info = new WanquTestInfo();
                     break;
+                case 4:
+                    info = new PilieTestInfo();
+                    break;
                 case 5:
                     info = new DongrongInfo();
                     break;
@@ -73,6 +77,8 @@ namespace RecordFileUtil
                     return "棱柱体试验";
                 case 3:
                     return "沥青混合料弯曲试验";
+                case 4:
+                    return "劈裂试验";
                 case 5:
                     return "冻融试验";
                 default:

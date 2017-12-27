@@ -169,7 +169,7 @@ namespace RecordFileUtil
 
             //EB
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
-            this.eb = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("με", "")) /100);
+            this.eb = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("με", "").Replace("×10\u207b\u2076","")) /100);
 
             //SB
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
@@ -200,6 +200,83 @@ namespace RecordFileUtil
 
             thedate = String.Format("{0}年{1}月{2}日{3}时{4}分", year, month, day, hour, minute);
 
+        }
+
+        public override DataTable getDispalyTable()
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add();
+            dt.Columns.Add();
+            DataRow dr = dt.NewRow();
+            dr[0] = "试验日期";
+            dr[1] = String.Format("{0}-{1}-{2} {3}:{4}", this.year, this.month, this.day, this.hour, this.minute);
+            dt.Rows.Add(dr);
+
+            dr = dt.NewRow();
+            dr[0] = "编号";
+            dr[1] = this.no;
+            dt.Rows.Add(dr);
+
+            dr = dt.NewRow();
+            dr[0] = "试件宽度";
+            dr[1] = String.Format("{0:f1}mm", this.Diameter / 10f);
+            dt.Rows.Add(dr);
+
+            dr = dt.NewRow();
+            dr[0] = "试件高度";
+            dr[1] = String.Format("{0:f1}mm", this.Height / 10f);
+            dt.Rows.Add(dr);
+
+            dr = dt.NewRow();
+            dr[0] = "温度";
+            dr[1] = String.Format("{0}℃", this.temp);
+            dt.Rows.Add(dr);
+
+
+            dr = dt.NewRow();
+            dr[0] = "记录点数";
+            dr[1] = this.nodecnt;
+            dt.Rows.Add(dr);
+
+            dr = dt.NewRow();
+            dr[0] = "试件跨径";
+            dr[1] = String.Format("{0:f1}mm", this.sensor / 10f);
+            dt.Rows.Add(dr);
+
+            
+
+            dr = dt.NewRow();
+            dr[0] = "最大点压力";
+            dr[1] = String.Format("{0:f3}KN", this.maxstrength / 1000f);
+            dt.Rows.Add(dr);
+
+            dr = dt.NewRow();
+            dr[0] = "跨中挠度";
+            dr[1] = String.Format("{0:f2}mm", this.maxoffset / 100f);
+            dt.Rows.Add(dr);
+
+            double _rb;
+            _rb = (double)3 * (this.sensor / 10f) * (this.maxstrength) / (this.width / 10f) / (this.height / 10f) / (this.height / 10f) / 2;
+            dr = dt.NewRow();
+            dr[0] = "RB";
+            dr[1] = String.Format("{0:f3}MPa", _rb);// String.Format("{0:f3}MPa", this.rb / 1000f);
+            dt.Rows.Add(dr);
+
+            double _eb;
+            _eb = (double)6 * (this.height / 10f) * (this.maxoffset / 100f) / (this.sensor / 10f) / (this.sensor / 10f);
+            dr = dt.NewRow();
+            dr[0] = "εB";//"EB";
+            //dr[1] = String.Format("{0:d} ×10\u207b\u2076 με", this.eb *1000);
+            dr[1] = String.Format("{0:f1} ×10\u207b\u2076 με", _eb * 1000000);// String.Format("{0:d} με", this.eb * 100);
+            dt.Rows.Add(dr);
+
+            dr = dt.NewRow();
+            dr[0] = "SB";
+            dr[1] = String.Format("{0:f1}MPa", _rb / _eb); // String.Format("{0:f1}MPa", this.sb / 10f);
+            dt.Rows.Add(dr);
+
+            displaymaxidx = dt.Rows.Count - 1;
+            return dt;
         }
 
         public override System.Data.DataTable getDataTable()
@@ -256,7 +333,7 @@ namespace RecordFileUtil
             _rb = (double)3 * (this.sensor / 10f) * (this.maxstrength) / (this.width / 10f) / (this.height / 10f) / (this.height / 10f)/2;
             dr = dt.NewRow();
             dr[0] = "RB";
-            dr[1] = String.Format("{0:f1}MPa", _rb);// String.Format("{0:f3}MPa", this.rb / 1000f);
+            dr[1] = String.Format("{0:f3}MPa", _rb);// String.Format("{0:f3}MPa", this.rb / 1000f);
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
@@ -274,7 +351,7 @@ namespace RecordFileUtil
             dr = dt.NewRow();
             dr[0] = "εB";//"EB";
             //dr[1] = String.Format("{0:d} ×10\u207b\u2076 με", this.eb *1000);
-            dr[1] = String.Format("{0:f0} με", _eb*1000000);// String.Format("{0:d} με", this.eb * 100);
+            dr[1] = String.Format("{0:f1} ×10\u207b\u2076 με", _eb * 1000000);// String.Format("{0:d} με", this.eb * 100);
             dt.Rows.Add(dr);
             
             dr = dt.NewRow();

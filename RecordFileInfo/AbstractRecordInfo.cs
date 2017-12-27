@@ -36,6 +36,8 @@ namespace RecordFileUtil
         protected int nonuse1;//空
         protected int nodecnt;//点数
 
+        protected int displaymaxidx=0;//
+
         public String RecordName { get { return recordname; } }
         public String TheDate { get { return thedate; } }
         public int Diameter { get { return width; } }
@@ -44,6 +46,7 @@ namespace RecordFileUtil
         public int Nodecnt { get { return nodecnt; } }
         public int LoadSpeed { get { return loadspeed; } }
         public int Temp { get { return temp; } }
+        public int DisplayMaxIdx { get { return displaymaxidx; } }
         public ChartFormat Chartformat { get { return chartformat; } }
 
         public byte[] DataBuffer { get { return buffer; } }
@@ -54,6 +57,11 @@ namespace RecordFileUtil
         public abstract void LoadFromCSV(String[] strs);
         public abstract void initCharFormat();
         public virtual DataTable getDataTable()
+        {
+            return null;
+        }
+
+        public virtual DataTable getDispalyTable()
         {
             return null;
         }
@@ -125,9 +133,16 @@ namespace RecordFileUtil
         public void LoadData(byte[] buf)
         {
             this.LoadSendBuffer(buf);
-            byte[] bytes = new byte[buf.Length - 8];
-            Array.Copy(buf, 8,bytes, 0,bytes.Length );
+            int len = 0;
+            int toread = Convert.ToInt32((int)(buf[8+2] << 8) + (int)buf[8+3]);
+            len = toread + 6;
+            if (len > (buf.Length - 8))
+                len = buf.Length - 8;
+            byte[] bytes = new byte[len];
+            
+            Array.Copy(buf, 8,bytes,0,len );
             buffer = bytes;
+
             this.LoadInternalData(bytes);
         }
 

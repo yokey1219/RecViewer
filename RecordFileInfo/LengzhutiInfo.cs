@@ -13,9 +13,9 @@ namespace RecordFileUtil
         protected List<IXYNode> specialnodes;
         protected int maxwendingdu;
         protected int maxliuzhi;
-        internal int xdiv = 1000;
+        internal int xdiv = 100;
         internal int ydiv = 100;
-        internal static float xdivf = 1000f;
+        internal static float xdivf = 100f;
         internal static float ydivf = 100f;
         //protected int maxoffset;
         //protected int eb;
@@ -114,7 +114,7 @@ namespace RecordFileUtil
 
         protected override void makeSendBufferInternal()
         {
-            sendbuffer[2] = 3;
+            sendbuffer[2] = 2;
         }
 
         public override List<string> getCSVLines()
@@ -161,15 +161,15 @@ namespace RecordFileUtil
 
             //试件跨度
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
-            this.sensor = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("mm", ""))*10);
+            this.sensor = Convert.ToInt32(strarr[1].Replace("KN",""));
             
             //最大点压力
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
-            this.maxwendingdu = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("MPa", "")) * 1000);
+            this.maxwendingdu = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("KN", "")) * ydiv);
 
             //最大点位移
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
-            this.maxliuzhi = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("KN", "")) * 1000);
+            this.maxliuzhi = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("mm", "")) * xdiv);
 
            
    
@@ -198,6 +198,55 @@ namespace RecordFileUtil
 
             thedate = String.Format("{0}年{1}月{2}日{3}时{4}分", year, month, day, hour, minute);
 
+        }
+
+        public override DataTable getDispalyTable()
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add();
+            dt.Columns.Add();
+            DataRow dr = dt.NewRow();
+            dr[0] = "试验日期";
+            dr[1] = String.Format("{0}-{1}-{2} {3}:{4}", this.year, this.month, this.day, this.hour, this.minute);
+            dt.Rows.Add(dr);
+
+            dr = dt.NewRow();
+            dr[0] = "试件高度";
+            dr[1] = String.Format("{0:f1}mm", this.Height / 10f);
+            dt.Rows.Add(dr);
+
+            dr = dt.NewRow();
+            dr[0] = "试件直径";
+            dr[1] = String.Format("{0:f1}mm", this.Diameter / 10f);
+            dt.Rows.Add(dr);
+
+            dr = dt.NewRow();
+            dr[0] = "编号";
+            dr[1] = this.no;
+            dt.Rows.Add(dr);
+
+            dr = dt.NewRow();
+            dr[0] = "温度";
+            dr[1] = String.Format("{0}℃", this.temp);
+            dt.Rows.Add(dr);
+
+            dr = dt.NewRow();
+            dr[0] = "记录点数";
+            dr[1] = this.nodecnt;
+            dt.Rows.Add(dr);
+
+
+            dr = dt.NewRow();
+            dr[0] = "最大点压力";
+            dr[1] = String.Format("{0:f2}KN", this.maxwendingdu / ydivf);// String.Format("{0:f3}MPa", this.rb / 1000f);
+            dt.Rows.Add(dr);
+
+            dr = dt.NewRow();
+            dr[0] = "最大点位移";
+            dr[1] = String.Format("{0:f2}mm", this.maxliuzhi / xdivf);
+            dt.Rows.Add(dr);
+            displaymaxidx = dt.Rows.Count - 1;
+            return dt;
         }
 
         public override System.Data.DataTable getDataTable()
@@ -258,7 +307,7 @@ namespace RecordFileUtil
 
             dr = dt.NewRow();
             dr[0] = "最大点位移";
-            dr[1] = String.Format("{0:f3}KN", this.maxliuzhi / xdivf);
+            dr[1] = String.Format("{0:f2}mm", this.maxliuzhi / xdivf);
             dt.Rows.Add(dr);
 
 
@@ -268,8 +317,8 @@ namespace RecordFileUtil
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
-            dr[0] = "稳定度(KN)";
-            dr[1] = "流值(mm)";
+            dr[0] = "压力(KN)";
+            dr[1] = "位移(mm)";
             dt.Rows.Add(dr);
 
 
@@ -278,7 +327,7 @@ namespace RecordFileUtil
                 if (node.getX() != 0 && node.getY() != 0)
                 {
                     dr = dt.NewRow();
-                    dr[0] = String.Format("{0:f3}", node.getNodeY());
+                    dr[0] = String.Format("{0:f2}", node.getNodeY());
                     dr[1] = String.Format("{0:f2}", node.getNodeX());
                     dt.Rows.Add(dr);
                 }
@@ -334,13 +383,13 @@ namespace RecordFileUtil
 
         public double getNodeX()
         {
-            float x = this.offset / WendingduTestInfo.xdivf;
+            float x = this.offset / LengzhutiInfo.xdivf;
             return x;
         }
 
         public double getNodeY()
         {
-            float y = this.kn / WendingduTestInfo.ydivf;
+            float y = this.kn / LengzhutiInfo.ydivf;
             return y;
         }
 

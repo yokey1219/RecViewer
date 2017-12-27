@@ -6,26 +6,71 @@ using System.Data;
 
 namespace RecordFileUtil
 {
-    public class DongrongInfo : AbstractRecordInfo
+    public class PilieTestInfo : AbstractRecordInfo
     {
-        
+        protected const String MAXOFFSET = "最大点位移";
         protected List<IXYNode> nodes;
         protected List<IXYNode> specialnodes;
-        protected int maxwendingdu;
-        protected int maxliuzhi;
-        internal int xdiv = 100;
-        internal int ydiv = 100;
-        internal static float xdivf = 100f;
-        internal static float ydivf = 100f;
-        //protected int maxoffset;
-        //protected int eb;
-        //protected int sb;
+        protected int rt;
+        protected int maxstrength;
+        protected int maxoffset;
+        protected int et;
+        protected int st;
 
-        public int MaxWendingdu { get { return maxwendingdu; } }
-        public int MaxLiuzhi { get { return maxliuzhi; } }
-        
+        public int RT { get { return rt; } }
+        public int MaxStrength { get { return maxstrength; } }
+        public int MaxOffset { get { return maxoffset; } }
+        public int ET { get { return et; } }
+        public int ST { get { return st; } }
 
-    
+
+        protected double rta
+        {
+            get
+            {
+                if (width == 1000)
+                    return 0.006287;
+                if (width == 1500)
+                    return 0.00425;
+                else
+                    return 0;
+            }
+        }
+        protected double u
+        {
+            get
+            {
+                if (temp <= 10)
+                    return 0.25;
+                if (temp < 15)
+                    return 0.30;
+                if (temp < 20)
+                    return 0.35;
+                if (temp < 25)
+                    return 0.40;
+                else
+                    return 0.45;
+            }
+        }
+
+
+        protected double eta
+        {
+            get
+            {
+                return (0.0307 + 0.0936 * u) / (1.35 + 5*u);
+            }
+        }
+
+        protected double sta
+        {
+            get
+            {
+                return (0.27 + u) / (height/10f);
+            }
+        }
+
+
 
         public override List<IXYNode> getXYNodes()
         {
@@ -34,7 +79,7 @@ namespace RecordFileUtil
 
         public override List<IXYNode> getSpecialNodes()
         {
-            return  specialnodes;;
+            return specialnodes; ;
         }
 
         public override void initCharFormat()
@@ -75,46 +120,40 @@ namespace RecordFileUtil
                 loadspeed = (int)((bytes[idx++] << 8) | bytes[idx++]);
                 nodecnt = (int)((bytes[idx++] << 8) | bytes[idx++]);
                 sensor = (int)((bytes[idx++] << 8) | bytes[idx++]);
-                idx++;
-                idx++;
-                maxwendingdu = (int)((bytes[idx++] << 8) | bytes[idx++]);
-                maxliuzhi = (int)((bytes[idx++] << 8) | bytes[idx++]);
-                idx++;
-                idx++;
-                idx++;
-                idx++;
-                //maxoffset = (int)((bytes[idx++] << 8) | bytes[idx++]);
-                //eb = (int)((bytes[idx++] << 8) | bytes[idx++]);
-                //sb = (int)((bytes[idx++] << 8) | bytes[idx++]);
-                
+                rt = (int)((bytes[idx++] << 8) | bytes[idx++]);
+                maxstrength = (int)((bytes[idx++] << 8) | bytes[idx++]);
+                maxoffset = (int)((bytes[idx++] << 8) | bytes[idx++]);
+                et = (int)((bytes[idx++] << 8) | bytes[idx++]);
+                st = (int)((bytes[idx++] << 8) | bytes[idx++]);
+
                 //int stime = 0;
-                nodes.Add(new DongrongNodeInfo(0, 0));
+                nodes.Add(new PilieNodeInfo(0, 0));
                 while (idx < (bytes.Length - 2))
                 {
 
                     int kn = (int)((bytes[idx++] << 8) | bytes[idx++]);
                     int offset = (int)((bytes[idx++] << 8) | bytes[idx++]);
-                    nodes.Add(new DongrongNodeInfo(offset, kn));
-                    while (offset > chartformat.Xmax*xdiv)
+                    nodes.Add(new PilieNodeInfo(offset, kn));
+                    while (offset > chartformat.Xmax * 100)
                     {
                         chartformat.Xmax += chartformat.Xinterval;
                     }
-                    while (kn > chartformat.Ymax*ydiv)
+                    while (kn > chartformat.Ymax * 100)
                     {
                         chartformat.Ymax += chartformat.Yinterval;
                     }
                 }
 
                 specialnodes = new List<IXYNode>();
-                specialnodes.Add(new DongrongNodeInfo(maxliuzhi, maxwendingdu));
-                
+                specialnodes.Add(new PilieNodeInfo(maxoffset, maxstrength));
+
 
             }
         }
 
         protected override void makeSendBufferInternal()
         {
-            sendbuffer[2] = 5;
+            sendbuffer[2] = 4;
         }
 
         public override List<string> getCSVLines()
@@ -159,42 +198,52 @@ namespace RecordFileUtil
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
             this.nodecnt = Convert.ToInt32(strarr[1]);
 
-            //试件跨度
+            //感应器
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
-            this.sensor = Convert.ToInt32(Convert.ToInt32(strarr[1].Replace("KN", "")));
-            
+            this.sensor = Convert.ToInt32(strarr[1].Replace("KN", ""));
+
+            //RT
+            strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
+            this.rt = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("MPa", "")) * 1000);
+
             //最大点压力
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
-            this.maxwendingdu = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("KN", "")) * ydiv);
+            this.maxstrength = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("KN", "")) * 100);
 
             //最大点位移
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
-            this.maxliuzhi = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("mm", "")) * xdiv);
+            this.maxoffset = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("mm", "")) * 100);
 
-           
-   
+            //ET
+            strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
+            this.et = Convert.ToInt32(Convert.ToDouble(strarr[1]));
+
+            //ST
+            strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
+            this.st = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("MPa", "")) * 100);
+
             idx++;
             idx++;
             nodes = new List<IXYNode>();
-            nodes.Add(new DongrongNodeInfo(0, 0));
+            nodes.Add(new PilieNodeInfo(0, 0));
             for (; idx < strs.Length; idx++)
             {
                 strarr = strs[idx].Split(AbstractRecordInfo.csvsepchar);
-                int kpa = Convert.ToInt32(Convert.ToDouble(strarr[0]) * ydiv);
-                int off = Convert.ToInt32(Convert.ToDouble(strarr[1]) * xdiv);
-                nodes.Add(new DongrongNodeInfo(off, kpa));
-                while(off>chartformat.Xmax*xdiv)
+                int kpa = Convert.ToInt32(Convert.ToDouble(strarr[0]) * 100);
+                int off = Convert.ToInt32(Convert.ToDouble(strarr[1]) * 100);
+                nodes.Add(new PilieNodeInfo(off, kpa));
+                while (off > chartformat.Xmax * 100)
                 {
                     chartformat.Xmax += chartformat.Xinterval;
                 }
-                while (kpa > chartformat.Ymax * ydiv)
+                while (kpa > chartformat.Ymax * 100)
                 {
                     chartformat.Ymax += chartformat.Yinterval;
                 }
             }
 
             specialnodes = new List<IXYNode>();
-            specialnodes.Add(new DongrongNodeInfo(maxliuzhi, maxwendingdu));
+            specialnodes.Add(new PilieNodeInfo(maxoffset, maxstrength));
 
             thedate = String.Format("{0}年{1}月{2}日{3}时{4}分", year, month, day, hour, minute);
 
@@ -206,18 +255,9 @@ namespace RecordFileUtil
             dt.Columns.Add();
             dt.Columns.Add();
             DataRow dr = dt.NewRow();
+            dr = dt.NewRow();
             dr[0] = "试验日期";
             dr[1] = String.Format("{0}-{1}-{2} {3}:{4}", this.year, this.month, this.day, this.hour, this.minute);
-            dt.Rows.Add(dr);
-
-            dr = dt.NewRow();
-            dr[0] = "试件高度";
-            dr[1] = String.Format("{0:f1}mm", this.Height / 10f);
-            dt.Rows.Add(dr);
-
-            dr = dt.NewRow();
-            dr[0] = "试件直径";
-            dr[1] = String.Format("{0:f1}mm", this.Diameter / 10f);
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
@@ -226,8 +266,23 @@ namespace RecordFileUtil
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
+            dr[0] = "试件直径";
+            dr[1] = String.Format("{0:f1}mm", this.Diameter / 10f);
+            dt.Rows.Add(dr);
+
+            dr = dt.NewRow();
+            dr[0] = "试件高度";
+            dr[1] = String.Format("{0:f1}mm", this.Height / 10f);
+            dt.Rows.Add(dr);
+
+            dr = dt.NewRow();
             dr[0] = "温度";
             dr[1] = String.Format("{0}℃", this.temp);
+            dt.Rows.Add(dr);
+
+            dr = dt.NewRow();
+            dr[0] = "加载速度";
+            dr[1] = String.Format("{0}mm/min", this.loadspeed);
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
@@ -235,16 +290,44 @@ namespace RecordFileUtil
             dr[1] = this.nodecnt;
             dt.Rows.Add(dr);
 
+           /* dr = dt.NewRow();
+            dr[0] = "感应器";
+            dr[1] = String.Format("{0}KN", this.sensor);
+            dt.Rows.Add(dr);
+            */
+            double _rt = rta * ((double)maxstrength * 10f) / ((double)height / 10f);
+            double _xt = (double)(maxoffset/100f) * (0.135 + 0.5 * u) / (1.794 - 0.0314 * u);
+            double _et = eta * _xt*1000000;// *((double)maxoffset / 100f);
+            double _st = sta * ((double)maxstrength * 10f) / _xt;// ((double)maxoffset / 100f);
+            
 
             dr = dt.NewRow();
             dr[0] = "最大点压力";
-            dr[1] = String.Format("{0:f2}KN", this.maxwendingdu / ydivf);// String.Format("{0:f3}MPa", this.rb / 1000f);
+            dr[1] = String.Format("{0:f2}KN", this.maxstrength / 100f);
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
             dr[0] = "最大点位移";
-            dr[1] = String.Format("{0:f2}mm", this.maxliuzhi / xdivf);
+            dr[1] = String.Format("{0:f2}mm", this.maxoffset / 100f);
             dt.Rows.Add(dr);
+
+            dr = dt.NewRow();
+            dr[0] = "抗拉强度";
+            dr[1] = String.Format("{0:f3}MPa", _rt);// String.Format("{0:f3}MPa", this.rb / 1000f);
+            dt.Rows.Add(dr);
+
+            
+            dr = dt.NewRow();
+            dr[0] = "拉伸应变";//"EB";
+            //dr[1] = String.Format("{0:d} ×10\u207b\u2076 με", this.eb *1000);
+            dr[1] = String.Format("{0:d} 10\u207b\u2076", Convert.ToInt32(_et));// String.Format("{0:d} με", this.eb * 100);
+            dt.Rows.Add(dr);
+
+            dr = dt.NewRow();
+            dr[0] = "劲度模量";
+            dr[1] = String.Format("{0:f2}MPa", _st); // String.Format("{0:f1}MPa", this.sb / 10f);
+            dt.Rows.Add(dr);
+
             displaymaxidx = dt.Rows.Count - 1;
             return dt;
         }
@@ -270,7 +353,7 @@ namespace RecordFileUtil
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
-            dr[0] = "试件宽度";
+            dr[0] = "试件直径";
             dr[1] = String.Format("{0:f1}mm", this.Diameter / 10f);
             dt.Rows.Add(dr);
 
@@ -295,21 +378,43 @@ namespace RecordFileUtil
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
-            dr[0] = "传感器大小";
+            dr[0] = "感应器";
             dr[1] = String.Format("{0}KN", this.sensor);
             dt.Rows.Add(dr);
 
+            double _rt = rta * ((double)maxstrength * 10f) / ((double)height / 10f);
+            double _xt = (double)(maxoffset / 100f) * (0.135 + 0.5 * u) / (1.794 - 0.0314 * u);
+            double _et = eta * _xt * 1000000;// *((double)maxoffset / 100f);
+            double _st = sta * ((double)maxstrength * 10f) / _xt;// ((double)maxoffset / 100f);
             
             dr = dt.NewRow();
+            dr[0] = "抗拉强度";
+            dr[1] = String.Format("{0:f3}MPa", _rt);// String.Format("{0:f3}MPa", this.rb / 1000f);
+            dt.Rows.Add(dr);
+
+            dr = dt.NewRow();
             dr[0] = "最大点压力";
-            dr[1] = String.Format("{0:f2}KN",this.maxwendingdu/ydivf);// String.Format("{0:f3}MPa", this.rb / 1000f);
+            dr[1] = String.Format("{0:f2}KN", this.maxstrength / 100f);
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
             dr[0] = "最大点位移";
-            dr[1] = String.Format("{0:f2}mm", this.maxliuzhi / xdivf);
+            dr[1] = String.Format("{0:f2}mm", this.maxoffset / 100f);
             dt.Rows.Add(dr);
 
+            
+
+            
+            dr = dt.NewRow();
+            dr[0] = "拉伸应变";//"EB";
+            //dr[1] = String.Format("{0:d} ×10\u207b\u2076 με", this.eb *1000);
+            dr[1] = String.Format("{0:d}", Convert.ToInt32(_et));// String.Format("{0:d} με", this.eb * 100);
+            dt.Rows.Add(dr);
+
+            dr = dt.NewRow();
+            dr[0] = "劲度模量";
+            dr[1] = String.Format("{0:f2}MPa", _st); // String.Format("{0:f1}MPa", this.sb / 10f);
+            dt.Rows.Add(dr);
 
             dr = dt.NewRow();
             dr[0] = "";
@@ -327,7 +432,7 @@ namespace RecordFileUtil
                 if (node.getX() != 0 && node.getY() != 0)
                 {
                     dr = dt.NewRow();
-                    dr[0] = String.Format("{0:f2}", node.getNodeY());
+                    dr[0] = String.Format("{0:f3}", node.getNodeY());
                     dr[1] = String.Format("{0:f2}", node.getNodeX());
                     dt.Rows.Add(dr);
                 }
@@ -335,27 +440,60 @@ namespace RecordFileUtil
             return dt;
         }
 
-        
+        public override void EditValue(string p, string newvalue)
+        {
 
-        /*public override List<EditableItem> GetEditableList()
+            //this.sensor
+            if (p.Equals(MAXOFFSET))
+            {
+                newvalue = newvalue.Replace("mm", "");
+                int newmaxoff = Convert.ToInt32(Convert.ToDouble(newvalue)*100);
+                int oldmax = this.maxoffset;
+                this.maxoffset = newmaxoff;
+                //this.rt = rta * ((double)maxstrength / 100f) / ((double)height / 10f);
+                //this.et = eta * ((double)maxoffset / 100f);
+                //this.st = sta * ((double)maxstrength / 100f) / ((double)maxoffset / 100f);
+
+                int _offset = newmaxoff - oldmax;
+
+                //List<IXYNode> _nodes = new List<IXYNode>();
+                //_nodes.Add(new ModulusStengthNodeInfo(0, 0));
+                foreach (IXYNode node in nodes)
+                {
+                    // if (node.getX() != 0)
+                    //{
+                    PilieNodeInfo _node = node as PilieNodeInfo;
+                    if (_node != null)
+                    {
+                        _node.offset += _offset;
+                    }
+                    //}
+                }
+                specialnodes.Clear();
+                specialnodes.Add(new PilieNodeInfo(maxoffset, maxstrength));
+
+            }
+        }
+
+        public override List<EditableItem> GetEditableList()
         {
             List<EditableItem> list = new List<EditableItem>();
-            list.Add(new EditableItem("挠度修正", KUAZHONGNAODU));
+            list.Add(new EditableItem("位移修正", MAXOFFSET));
             return list;
-        }*/
+        }
 
-       /* public override string GetEditableValuStr(string valuename)
+        public override string GetEditableValuStr(string valuename)
         {
-            if (valuename.Equals(KUAZHONGNAODU))
+            if (valuename.Equals(MAXOFFSET))
             {
                 return String.Format("{0:f2}mm", this.maxoffset / 100f);
             }
             else
                 return base.GetEditableValuStr(valuename);
-        }*/
+        }
     }
 
-    public class DongrongNodeInfo : IXYNode
+    public class PilieNodeInfo : IXYNode
     {
         internal int kn;
         internal int offset;
@@ -363,7 +501,7 @@ namespace RecordFileUtil
         public int KN { get { return kn; } }
         public int Offset { get { return offset; } }
 
-        public DongrongNodeInfo(int offset, int kn)
+        public PilieNodeInfo(int offset, int kn)
         {
             this.kn = kn;
             this.offset = offset;
@@ -383,13 +521,13 @@ namespace RecordFileUtil
 
         public double getNodeX()
         {
-            float x = this.offset / DongrongInfo.xdivf;
+            float x = this.offset / 100f;
             return x;
         }
 
         public double getNodeY()
         {
-            float y = this.kn / DongrongInfo.ydivf;
+            float y = this.kn / 100f;
             return y;
         }
 
