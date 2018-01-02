@@ -216,7 +216,7 @@ namespace RecordFileUtil
 
             //ET
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
-            this.et = Convert.ToInt32(Convert.ToDouble(strarr[1]));
+            this.et = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("10\u207b\u2076", "")));
 
             //ST
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
@@ -313,19 +313,19 @@ namespace RecordFileUtil
 
             dr = dt.NewRow();
             dr[0] = "抗拉强度";
-            dr[1] = String.Format("{0:f3}MPa", _rt);// String.Format("{0:f3}MPa", this.rb / 1000f);
+            dr[1] =  String.Format("{0:f3}MPa", this.rt / 1000f);//String.Format("{0:f3}MPa", _rt);// String.Format("{0:f3}MPa", this.rb / 1000f);
             dt.Rows.Add(dr);
 
             
             dr = dt.NewRow();
             dr[0] = "拉伸应变";//"EB";
             //dr[1] = String.Format("{0:d} ×10\u207b\u2076 με", this.eb *1000);
-            dr[1] = String.Format("{0:d} 10\u207b\u2076", Convert.ToInt32(_et));// String.Format("{0:d} με", this.eb * 100);
+            dr[1] = String.Format("{0:d} 10\u207b\u2076", this.et);//String.Format("{0:d} 10\u207b\u2076", Convert.ToInt32(_et));// String.Format("{0:d} με", this.eb * 100);
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
             dr[0] = "劲度模量";
-            dr[1] = String.Format("{0:f2}MPa", _st); // String.Format("{0:f1}MPa", this.sb / 10f);
+            dr[1] = String.Format("{0:f2}MPa", this.st/100f);//String.Format("{0:f2}MPa", _st); // String.Format("{0:f1}MPa", this.sb / 10f);
             dt.Rows.Add(dr);
 
             displaymaxidx = dt.Rows.Count - 1;
@@ -389,7 +389,7 @@ namespace RecordFileUtil
             
             dr = dt.NewRow();
             dr[0] = "抗拉强度";
-            dr[1] = String.Format("{0:f3}MPa", _rt);// String.Format("{0:f3}MPa", this.rb / 1000f);
+            dr[1] = String.Format("{0:f3}MPa", this.rt/1000f);//String.Format("{0:f3}MPa", _rt);// String.Format("{0:f3}MPa", this.rb / 1000f);
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
@@ -408,12 +408,12 @@ namespace RecordFileUtil
             dr = dt.NewRow();
             dr[0] = "拉伸应变";//"EB";
             //dr[1] = String.Format("{0:d} ×10\u207b\u2076 με", this.eb *1000);
-            dr[1] = String.Format("{0:d}", Convert.ToInt32(_et));// String.Format("{0:d} με", this.eb * 100);
+            dr[1] = String.Format("{0:d} 10\u207b\u2076", this.et);//String.Format("{0:d}", Convert.ToInt32(_et));// String.Format("{0:d} με", this.eb * 100);
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
             dr[0] = "劲度模量";
-            dr[1] = String.Format("{0:f2}MPa", _st); // String.Format("{0:f1}MPa", this.sb / 10f);
+            dr[1] = String.Format("{0:f2}MPa", this.st/100f); //String.Format("{0:f2}MPa", _st); // String.Format("{0:f1}MPa", this.sb / 10f);
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
@@ -450,9 +450,14 @@ namespace RecordFileUtil
                 int newmaxoff = Convert.ToInt32(Convert.ToDouble(newvalue)*100);
                 int oldmax = this.maxoffset;
                 this.maxoffset = newmaxoff;
-                //this.rt = rta * ((double)maxstrength / 100f) / ((double)height / 10f);
-                //this.et = eta * ((double)maxoffset / 100f);
-                //this.st = sta * ((double)maxstrength / 100f) / ((double)maxoffset / 100f);
+                double _rt = rta * ((double)maxstrength * 10f) / ((double)height / 10f);
+                double _xt = (double)(maxoffset / 100f) * (0.135 + 0.5 * u) / (1.794 - 0.0314 * u);
+                double _et = eta * _xt * 1000000;// *((double)maxoffset / 100f);
+                double _st = sta * ((double)maxstrength * 10f) / _xt;// ((double)maxoffset / 100f);
+
+                this.rt = Convert.ToInt32(_rt * 1000);
+                this.et=Convert.ToInt32(_et);
+                this.st = Convert.ToInt32(_st * 100);
 
                 int _offset = newmaxoff - oldmax;
 

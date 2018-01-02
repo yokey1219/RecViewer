@@ -78,8 +78,15 @@ namespace RecordFileUtil
                 maxoffset = (int)((bytes[idx++] << 8) | bytes[idx++]);
                 eb = (int)((bytes[idx++] << 8) | bytes[idx++]);
                 sb = (int)((bytes[idx++] << 8) | bytes[idx++]);
-                
-                //int stime = 0;
+
+                double _rb;
+                _rb = (double)3 * (this.sensor / 10f) * (this.maxstrength) / (this.width / 10f) / (this.height / 10f) / (this.height / 10f) / 2;
+                double _eb;
+                _eb = (double)6 * (this.height / 10f) * (this.maxoffset / 100f) / (this.sensor / 10f) / (this.sensor / 10f);
+                int __eb = Convert.ToInt32(_eb * 10000000);
+                int _diff = __eb - eb;
+                if(_diff<-500||_diff>500)
+                    eb += 65536;
                 nodes.Add(new WanquNodeInfo(0, 0));
                 while (idx < (bytes.Length - 2))
                 {
@@ -169,7 +176,7 @@ namespace RecordFileUtil
 
             //EB
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
-            this.eb = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("με", "").Replace("×10\u207b\u2076","")) /100);
+            this.eb = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("με", "").Replace("×10\u207b\u2076","")) *10);
 
             //SB
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
@@ -259,7 +266,7 @@ namespace RecordFileUtil
             _rb = (double)3 * (this.sensor / 10f) * (this.maxstrength) / (this.width / 10f) / (this.height / 10f) / (this.height / 10f) / 2;
             dr = dt.NewRow();
             dr[0] = "RB";
-            dr[1] = String.Format("{0:f3}MPa", _rb);// String.Format("{0:f3}MPa", this.rb / 1000f);
+            dr[1] = String.Format("{0:f3}MPa", this.rb / 1000f);// String.Format("{0:f3}MPa", _rb);//
             dt.Rows.Add(dr);
 
             double _eb;
@@ -267,12 +274,12 @@ namespace RecordFileUtil
             dr = dt.NewRow();
             dr[0] = "εB";//"EB";
             //dr[1] = String.Format("{0:d} ×10\u207b\u2076 με", this.eb *1000);
-            dr[1] = String.Format("{0:f1} ×10\u207b\u2076 με", _eb * 1000000);// String.Format("{0:d} με", this.eb * 100);
+            dr[1] = String.Format("{0:f1} ×10\u207b\u2076 με", this.eb /10f); //String.Format("{0:f1} ×10\u207b\u2076 με", _eb * 1000000);// String.Format("{0:d} με", this.eb * 100);
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
             dr[0] = "SB";
-            dr[1] = String.Format("{0:f1}MPa", _rb / _eb); // String.Format("{0:f1}MPa", this.sb / 10f);
+            dr[1] = String.Format("{0:f1}MPa", this.sb / 10f); //String.Format("{0:f1}MPa", _rb / _eb); // 
             dt.Rows.Add(dr);
 
             displaymaxidx = dt.Rows.Count - 1;
@@ -333,7 +340,7 @@ namespace RecordFileUtil
             _rb = (double)3 * (this.sensor / 10f) * (this.maxstrength) / (this.width / 10f) / (this.height / 10f) / (this.height / 10f)/2;
             dr = dt.NewRow();
             dr[0] = "RB";
-            dr[1] = String.Format("{0:f3}MPa", _rb);// String.Format("{0:f3}MPa", this.rb / 1000f);
+            dr[1] = String.Format("{0:f3}MPa", this.rb / 1000f); //String.Format("{0:f3}MPa", _rb);//
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
@@ -351,12 +358,12 @@ namespace RecordFileUtil
             dr = dt.NewRow();
             dr[0] = "εB";//"EB";
             //dr[1] = String.Format("{0:d} ×10\u207b\u2076 με", this.eb *1000);
-            dr[1] = String.Format("{0:f1} ×10\u207b\u2076 με", _eb * 1000000);// String.Format("{0:d} με", this.eb * 100);
+            dr[1] = String.Format("{0:f1} ×10\u207b\u2076 με", this.eb/10f);// String.Format("{0:f1} ×10\u207b\u2076 με", _eb * 1000000);// 
             dt.Rows.Add(dr);
             
             dr = dt.NewRow();
             dr[0] = "SB";
-            dr[1] = String.Format("{0:f1}MPa", _rb/_eb); // String.Format("{0:f1}MPa", this.sb / 10f);
+            dr[1] = String.Format("{0:f1}MPa", this.sb / 10f);//String.Format("{0:f1}MPa", _rb/_eb); //
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
@@ -393,8 +400,16 @@ namespace RecordFileUtil
                 int newmaxoff = Convert.ToInt32(Convert.ToDouble(newvalue) * 100);
                 int oldmax = this.maxoffset;
                 this.maxoffset = newmaxoff;
-                this.eb = this.eb*1000 * this.maxoffset/oldmax/1000;
-                this.sb = this.sb * oldmax / this.maxoffset;
+                //this.eb = this.eb*1000 * this.maxoffset/oldmax/1000;
+                //this.sb = this.sb * oldmax / this.maxoffset;
+
+                double _rb;
+                _rb = (double)3 * (this.sensor / 10f) * (this.maxstrength) / (this.width / 10f) / (this.height / 10f) / (this.height / 10f)/2;
+                double _eb;
+                _eb = (double)6 * (this.height / 10f) * (this.maxoffset / 100f) / (this.sensor / 10f) / (this.sensor / 10f);
+                this.eb = Convert.ToInt32(_eb * 10000000);
+                this.sb = Convert.ToInt32((double)_rb * 10 / _eb);
+
 
                 int _offset = newmaxoff - oldmax;
 

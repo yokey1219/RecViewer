@@ -97,7 +97,7 @@ namespace RecViewer
                 serialPort1.DiscardInBuffer();
                 serialPort1.Close();
                 int toread = 0;
-                if(arInfo.DataBuffer.Length>4)
+                if(arInfo!=null&&arInfo.DataBuffer!=null&&arInfo.DataBuffer.Length>4)
                     toread=Convert.ToInt32((int)(arInfo.DataBuffer[2] << 8) + (int)arInfo.DataBuffer[3]);
                 //if (arInfo is ModulusYuanInfo)
                 //    toread = toread - 6;
