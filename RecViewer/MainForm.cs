@@ -697,6 +697,7 @@ namespace RecViewer
             //    series1.Points.AddXY(ninfo.KPa, y);
             //}
             double x = Double.MinValue;
+            double y = Double.MinValue;
             
             foreach (IXYNode ninfo in info.getXYNodes())
             {
@@ -706,6 +707,10 @@ namespace RecViewer
                 if (nodex < x) nodex = x;
                 else
                     x = nodex;
+
+                if (nodey < y) nodey = y;
+                else
+                    y = nodey;
                 series1.Points.AddXY(nodex,nodey);//series1.Points.AddXY(ninfo.getNodeX(), ninfo.getNodeY());
             }
 
