@@ -91,8 +91,10 @@ namespace RecordFileUtil
                 while (idx < (bytes.Length - 2))
                 {
 
-                    int kn = (int)((bytes[idx++] << 8) | bytes[idx++]);
-                    int offset = (int)((bytes[idx++] << 8) | bytes[idx++]);
+                    int kn = Convert.ToInt32(Convert.ToInt16(String.Format("{0:X}{1:X}", bytes[idx++], bytes[idx++]), 16));//(int)((bytes[idx++] << 8) | bytes[idx++]);
+                    int offset = Convert.ToInt32(Convert.ToInt16(String.Format("{0:X}{1:X}", bytes[idx++], bytes[idx++]), 16));//(int)((bytes[idx++] << 8) | bytes[idx++]);
+                    if (kn < 0) kn = 0;
+                    if (offset < 0) offset = 0;
                     nodes.Add(new WanquNodeInfo(offset,kn));
                     while (offset > chartformat.Xmax*100)
                     {
@@ -102,6 +104,9 @@ namespace RecordFileUtil
                     {
                         chartformat.Ymax += chartformat.Yinterval;
                     }
+
+                    if (nodes.Count > nodecnt)
+                        break;
                 }
 
                 specialnodes = new List<IXYNode>();
