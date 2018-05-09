@@ -76,8 +76,10 @@ namespace RecordFileUtil
                 rb = (int)((bytes[idx++] << 8) | bytes[idx++]);
                 maxstrength = (int)((bytes[idx++] << 8) | bytes[idx++]);
                 maxoffset = (int)((bytes[idx++] << 8) | bytes[idx++]);
-                eb = (int)((bytes[idx++] << 8) | bytes[idx++]);
-                sb = (int)((bytes[idx++] << 8) | bytes[idx++]);
+                //eb = (int)((bytes[idx++] << 8) | bytes[idx++]);
+                //sb = (int)((bytes[idx++] << 8) | bytes[idx++]);
+                eb = (int)((bytes[idx++] << 32) | bytes[idx++] << 16 | (bytes[idx++] << 8) | bytes[idx++]); 
+                sb=Convert.ToInt32((double)(rb/100.0) / ((double)eb/10000000.0));
 
                 double _rb;
                 _rb = (double)3 * (this.sensor / 10f) * (this.maxstrength) / (this.width / 10f) / (this.height / 10f) / (this.height / 10f) / 2;
