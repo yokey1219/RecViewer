@@ -71,7 +71,7 @@ namespace RecordFileUtil
                 thedate = String.Format("{0}年{1}月{2}日{3}时{4}分", year, month, day, hour, minute);
                 width = (int)((bytes[idx++] << 8) | bytes[idx++]);
                 height = (int)((bytes[idx++] << 8) | bytes[idx++]);
-                temp = Convert.ToInt32(Convert.ToInt16(String.Format("{0:X}{1:X}", bytes[idx++], bytes[idx++]), 16));//Convert.ToInt32((int)((bytes[idx++] << 8) | bytes[idx++]));
+                temp = Convert.ToInt32(Convert.ToInt16(String.Format("{0:X2}{1:X2}", bytes[idx++], bytes[idx++]), 16));//Convert.ToInt32((int)((bytes[idx++] << 8) | bytes[idx++]));
                 loadspeed = (int)((bytes[idx++] << 8) | bytes[idx++]);
                 nodecnt = (int)((bytes[idx++] << 8) | bytes[idx++]);
                 sensor = (int)((bytes[idx++] << 8) | bytes[idx++]);
@@ -92,8 +92,8 @@ namespace RecordFileUtil
                 while (idx < (bytes.Length - 2))
                 {
                     //(Convert.ToInt16(bytes[idx++])<<8)|Convert.ToInt16(bytes[idx++])
-                    int kn = Convert.ToInt32(Convert.ToInt16(String.Format("{0:X}{1:X}", bytes[idx++], bytes[idx++]),16));//(int)((bytes[idx++] << 8) | bytes[idx++]);
-                    int offset = Convert.ToInt32(Convert.ToInt16(String.Format("{0:X}{1:X}", bytes[idx++], bytes[idx++]), 16)); //(int)((bytes[idx++] << 8) | bytes[idx++]);
+                    int kn = Convert.ToInt32(Convert.ToInt16(String.Format("{0:X2}{1:X2}", bytes[idx++], bytes[idx++]),16));//(int)((bytes[idx++] << 8) | bytes[idx++]);
+                    int offset = Convert.ToInt32(Convert.ToInt16(String.Format("{0:X2}{1:X2}", bytes[idx++], bytes[idx++]), 16)); //(int)((bytes[idx++] << 8) | bytes[idx++]);
                     if (offset < 0) offset = 0;
                     if (kn < 0) kn = 0;
                     nodes.Add(new WendingduNodeInfo(offset, kn));
