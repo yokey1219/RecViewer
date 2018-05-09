@@ -105,6 +105,9 @@ namespace RecordFileUtil
                     {
                         chartformat.Ymax += chartformat.Yinterval;
                     }
+
+                    if (nodes.Count > nodecnt)
+                        break;
                 }
 
                 specialnodes = new List<IXYNode>();
