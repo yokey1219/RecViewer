@@ -454,17 +454,51 @@ namespace RecViewer
             series1.YValueType = info.Chartformat.Ytype == 0 ? ChartValueType.Int32 : ChartValueType.Double;// ChartValueType.Double;
 
             double x = Double.MinValue;
-            foreach (IXYNode ninfo in info.getXYNodes())
+            double y = Double.MinValue;
+            //foreach (IXYNode ninfo in info.getXYNodes())
+            //{
+            //    double nodex, nodey;
+            //    nodex = ninfo.getNodeX();
+            //    nodey = ninfo.getNodeY();
+            //    if (nodex < x) nodex = x;
+            //    else
+            //        x = nodex;
+            //    series1.Points.AddXY(nodex, nodey);//series1.Points.AddXY(ninfo.getNodeX(), ninfo.getNodeY());
+            //}
+
+            int idx = 0;
+            int nodecnt = info.getXYNodes().Count;
+            List<IXYNode> list = info.getXYNodes();
+            for (idx = 0; idx < nodecnt; idx++)
+            //foreach (IXYNode ninfo in info.getXYNodes())
             {
+                IXYNode ninfo, prev, next;
+                ninfo = list[idx];
                 double nodex, nodey;
                 nodex = ninfo.getNodeX();
                 nodey = ninfo.getNodeY();
+                //X轴防止倒退
                 if (nodex < x) nodex = x;
                 else
                     x = nodex;
+
+                //平均值法去掉离异y点值
+                if (idx > 0 && idx < nodecnt - 1)
+                {
+                    prev = list[idx - 1];
+                    next = list[idx + 1];
+                    double y1, y2;
+                    y1 = prev.getNodeY();
+                    y2 = next.getNodeY();
+                    y = (y1 + y2) / 2;
+                    if (Math.Abs(nodey - y) > Math.Abs(y1 - y2))
+                    {
+                        nodey = y;
+                    }
+                }
+
                 series1.Points.AddXY(nodex, nodey);//series1.Points.AddXY(ninfo.getNodeX(), ninfo.getNodeY());
             }
-
 
 
             chart1.Series.Add(series1);
@@ -699,19 +733,53 @@ namespace RecViewer
             double x = Double.MinValue;
             double y = Double.MinValue;
             
-            foreach (IXYNode ninfo in info.getXYNodes())
+            //foreach (IXYNode ninfo in info.getXYNodes())
+            //{
+            //    double nodex, nodey;
+            //    nodex = ninfo.getNodeX();
+            //    nodey = ninfo.getNodeY();
+            //    if (nodex < x) nodex = x;
+            //    else
+            //        x = nodex;
+
+            //    if (nodey < y) nodey = y;
+            //    else
+            //        y = nodey;
+            //    series1.Points.AddXY(nodex,nodey);//series1.Points.AddXY(ninfo.getNodeX(), ninfo.getNodeY());
+            //}
+
+            int idx = 0;
+            int nodecnt = info.getXYNodes().Count;
+            List<IXYNode> list = info.getXYNodes();
+            for (idx = 0; idx < nodecnt; idx++)
+            //foreach (IXYNode ninfo in info.getXYNodes())
             {
+                IXYNode ninfo, prev, next;
+                ninfo = list[idx];
                 double nodex, nodey;
                 nodex = ninfo.getNodeX();
                 nodey = ninfo.getNodeY();
+                //X轴防止倒退
                 if (nodex < x) nodex = x;
                 else
                     x = nodex;
 
-                if (nodey < y) nodey = y;
-                else
-                    y = nodey;
-                series1.Points.AddXY(nodex,nodey);//series1.Points.AddXY(ninfo.getNodeX(), ninfo.getNodeY());
+                //平均值法去掉离异y点值
+                if (idx > 0 && idx < nodecnt - 1)
+                {
+                    prev = list[idx - 1];
+                    next = list[idx + 1];
+                    double y1, y2;
+                    y1 = prev.getNodeY();
+                    y2 = next.getNodeY();
+                    y = (y1 + y2) / 2;
+                    if (Math.Abs(nodey - y) > Math.Abs(y1 - y2))
+                    {
+                        nodey = y;
+                    }
+                }
+
+                series1.Points.AddXY(nodex, nodey);//series1.Points.AddXY(ninfo.getNodeX(), ninfo.getNodeY());
             }
 
             
