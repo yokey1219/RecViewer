@@ -454,6 +454,7 @@ namespace RecViewer
             series1.YValueType = info.Chartformat.Ytype == 0 ? ChartValueType.Int32 : ChartValueType.Double;// ChartValueType.Double;
 
             double x = Double.MinValue;
+            double y = Double.MinValue;
             foreach (IXYNode ninfo in info.getXYNodes())
             {
                 double nodex, nodey;
@@ -462,6 +463,9 @@ namespace RecViewer
                 if (nodex < x) nodex = x;
                 else
                     x = nodex;
+                if (nodey < y) nodey = y;
+                else
+                    y = nodey;
                 series1.Points.AddXY(nodex, nodey);//series1.Points.AddXY(ninfo.getNodeX(), ninfo.getNodeY());
             }
 
