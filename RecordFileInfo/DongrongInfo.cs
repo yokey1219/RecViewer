@@ -17,6 +17,7 @@ namespace RecordFileUtil
         internal int ydiv = 100;
         internal static float xdivf = 100f;
         internal static float ydivf = 100f;
+        protected const float RT_CONST = 0.006287f;
         //protected int maxoffset;
         //protected int eb;
         //protected int sb;
@@ -250,6 +251,13 @@ namespace RecordFileUtil
             dr[0] = "最大点位移";
             dr[1] = String.Format("{0:f2}mm", this.maxliuzhi / xdivf);
             dt.Rows.Add(dr);
+
+
+            dr = dt.NewRow();
+            dr[0] = "抗拉强度";
+            dr[1] = String.Format("{0:f4}MPa", this.maxwendingdu*1000 / ydivf/(this.Height / 10f)*RT_CONST);
+            dt.Rows.Add(dr);
+
             displaymaxidx = dt.Rows.Count - 1;
             return dt;
         }
@@ -313,6 +321,11 @@ namespace RecordFileUtil
             dr = dt.NewRow();
             dr[0] = "最大点位移";
             dr[1] = String.Format("{0:f2}mm", this.maxliuzhi / xdivf);
+            dt.Rows.Add(dr);
+
+            dr = dt.NewRow();
+            dr[0] = "抗拉强度";
+            dr[1] = String.Format("{0:f4}MPa", this.maxwendingdu*1000 / ydivf / (this.Height / 10f) * RT_CONST);
             dt.Rows.Add(dr);
 
 

@@ -17,6 +17,8 @@ namespace RecordFileUtil
         protected int et;
         protected int st;
 
+        protected const float RT_SCALA_CONST = 10000f;
+
         public int RT { get { return rt; } }
         public int MaxStrength { get { return maxstrength; } }
         public int MaxOffset { get { return maxoffset; } }
@@ -208,7 +210,7 @@ namespace RecordFileUtil
 
             //RT
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
-            this.rt = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("MPa", "")) * 1000);
+            this.rt = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("MPa", "")) * RT_SCALA_CONST);
 
             //最大点压力
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
@@ -317,7 +319,7 @@ namespace RecordFileUtil
 
             dr = dt.NewRow();
             dr[0] = "抗拉强度";
-            dr[1] =  String.Format("{0:f3}MPa", this.rt / 1000f);//String.Format("{0:f3}MPa", _rt);// String.Format("{0:f3}MPa", this.rb / 1000f);
+            dr[1] = String.Format("{0:f4}MPa", this.rt / RT_SCALA_CONST);//String.Format("{0:f3}MPa", _rt);// String.Format("{0:f3}MPa", this.rb / 1000f);
             dt.Rows.Add(dr);
 
             
@@ -393,7 +395,7 @@ namespace RecordFileUtil
             
             dr = dt.NewRow();
             dr[0] = "抗拉强度";
-            dr[1] = String.Format("{0:f3}MPa", this.rt/1000f);//String.Format("{0:f3}MPa", _rt);// String.Format("{0:f3}MPa", this.rb / 1000f);
+            dr[1] = String.Format("{0:f4}MPa", this.rt / RT_SCALA_CONST);//String.Format("{0:f3}MPa", _rt);// String.Format("{0:f3}MPa", this.rb / 1000f);
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
@@ -459,7 +461,7 @@ namespace RecordFileUtil
                 double _et = eta * _xt * 1000000;// *((double)maxoffset / 100f);
                 double _st = sta * ((double)maxstrength * 10f) / _xt;// ((double)maxoffset / 100f);
 
-                this.rt = Convert.ToInt32(_rt * 1000);
+                this.rt = Convert.ToInt32(_rt * RT_SCALA_CONST);
                 this.et=Convert.ToInt32(_et);
                 this.st = Convert.ToInt32(_st * 100);
 
