@@ -15,9 +15,9 @@ namespace RecordFileUtil
         protected int maxoffset;
         protected int modulus;
         internal int xdiv = 1000;
-        internal int ydiv = 100;
+        internal int ydiv = 1000;//位移改3位小数 yidv=100;
         internal static float xdivf = 1000f;
-        internal static float ydivf = 100f;
+        internal static float ydivf = 1000f;//位移改3位小数 yidvf=100f;
         //protected int maxoffset;
         //protected int eb;
         //protected int sb;
@@ -94,12 +94,12 @@ namespace RecordFileUtil
                 while (idx < (bytes.Length - 2))
                 {
 
-                    int kn = (int)((bytes[idx++] << 8) | bytes[idx++]);
+                    int mpa = (int)((bytes[idx++] << 8) | bytes[idx++]);
                     int offset = (int)((bytes[idx++] << 8) | bytes[idx++]);
                     nodes.Add(new ModulusYuanNodeInfo(lastx,offset));
-                    nodes.Add(new ModulusYuanNodeInfo(kn , offset));
-                    lastx = kn;
-                    while (kn > chartformat.Xmax*xdiv)
+                    nodes.Add(new ModulusYuanNodeInfo(mpa , offset));
+                    lastx = mpa;
+                    while (mpa > chartformat.Xmax*xdiv)
                     {
                         chartformat.Xmax += chartformat.Xinterval;
                     }
@@ -173,11 +173,11 @@ namespace RecordFileUtil
 
             //回弹模量
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
-            this.modulus = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("Mpa", "")) * 100);
+            this.modulus = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("Mpa", "")) * 10);
 
             //最大点位移
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
-            this.maxoffset = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("mm", "")) * 100);
+            this.maxoffset = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("mm", "")) * ydiv);
 
            
    
@@ -249,7 +249,7 @@ namespace RecordFileUtil
 
             dr = dt.NewRow();
             dr[0] = "回弹模量";
-            dr[1] = String.Format("{0:f2}Mpa", this.modulus / 100);// String.Format("{0:f3}MPa", this.rb / 1000f);
+            dr[1] = String.Format("{0:f1}Mpa", this.modulus / 10f);// String.Format("{0:f3}MPa", this.rb / 1000f);
             dt.Rows.Add(dr);
 
             /*dr = dt.NewRow();
@@ -266,7 +266,7 @@ namespace RecordFileUtil
                 {
                     dr = dt.NewRow();
                     dr[0] = String.Format("{0:f3}Mpa", node.getNodeX());
-                    dr[1] = String.Format("{0:f2}mm", node.getNodeY());
+                    dr[1] = String.Format("{0:f3}mm", node.getNodeY());
                     dt.Rows.Add(dr);
                 }
             }
@@ -332,12 +332,12 @@ namespace RecordFileUtil
             
             dr = dt.NewRow();
             dr[0] = "回弹模量";
-            dr[1] = String.Format("{0:f2}Mpa",this.modulus/100);// String.Format("{0:f3}MPa", this.rb / 1000f);
+            dr[1] = String.Format("{0:f1}Mpa",this.modulus/10f);// String.Format("{0:f3}MPa", this.rb / 1000f);
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
             dr[0] = "最大变形";
-            dr[1] = String.Format("{0:f2}mm", this.maxoffset / 100f);
+            dr[1] = String.Format("{0:f3}mm", this.maxoffset / ydivf);
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
@@ -359,7 +359,7 @@ namespace RecordFileUtil
                 {
                     dr = dt.NewRow();
                     dr[0] = String.Format("{0:f3}", node.getNodeX());
-                    dr[1] = String.Format("{0:f2}", node.getNodeY());
+                    dr[1] = String.Format("{0:f3}", node.getNodeY());
                     dt.Rows.Add(dr);
                 }
             }
@@ -388,39 +388,39 @@ namespace RecordFileUtil
 
     public class ModulusYuanNodeInfo : IXYNode
     {
-        internal int kn;
         internal int offset;
+        internal int mpa;
 
-        public int KN { get { return kn; } }
-        public int Offset { get { return offset; } }
+        public int KN { get { return offset; } }
+        public int Offset { get { return mpa; } }
 
-        public ModulusYuanNodeInfo(int offset, int kn)
+        public ModulusYuanNodeInfo(int mpa, int offset)
         {
-            this.kn = kn;
             this.offset = offset;
+            this.mpa = mpa;
         }
 
         #region IXYNode Members
 
         public int getX()
         {
-            return this.offset;
+            return this.mpa;
         }
 
         public int getY()
         {
-            return this.kn;
+            return this.offset;
         }
 
         public double getNodeX()
         {
-            float x = this.offset / ModulusYuanInfo.xdivf;
+            float x = this.mpa / ModulusYuanInfo.xdivf;
             return x;
         }
 
         public double getNodeY()
         {
-            float y = this.kn / ModulusYuanInfo.ydivf;
+            float y = this.offset / ModulusYuanInfo.ydivf;
             return y;
         }
 

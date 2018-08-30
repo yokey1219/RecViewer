@@ -13,9 +13,9 @@ namespace RecordFileUtil
         protected List<IXYNode> specialnodes;
         protected int maxwendingdu;
         protected int maxliuzhi;
-        internal int xdiv = 100;
+        internal int xdiv = 1000;//位移改3位小数,xdiv=100
         internal int ydiv = 100;
-        internal static float xdivf = 100f;
+        internal static float xdivf = 1000f;//位移改3位小数,xdivf=100f
         internal static float ydivf = 100f;
         protected const float RT_CONST = 0.006287f;
         //protected int maxoffset;
@@ -249,7 +249,7 @@ namespace RecordFileUtil
 
             dr = dt.NewRow();
             dr[0] = "最大点位移";
-            dr[1] = String.Format("{0:f2}mm", this.maxliuzhi / xdivf);
+            dr[1] = String.Format("{0:f3}mm", this.maxliuzhi / xdivf);
             dt.Rows.Add(dr);
 
 
@@ -320,7 +320,7 @@ namespace RecordFileUtil
 
             dr = dt.NewRow();
             dr[0] = "最大点位移";
-            dr[1] = String.Format("{0:f2}mm", this.maxliuzhi / xdivf);
+            dr[1] = String.Format("{0:f3}mm", this.maxliuzhi / xdivf);
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
@@ -346,7 +346,7 @@ namespace RecordFileUtil
                 {
                     dr = dt.NewRow();
                     dr[0] = String.Format("{0:f2}", node.getNodeY());
-                    dr[1] = String.Format("{0:f2}", node.getNodeX());
+                    dr[1] = String.Format("{0:f3}", node.getNodeX());
                     dt.Rows.Add(dr);
                 }
             }

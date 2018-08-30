@@ -16,6 +16,10 @@ namespace RecordFileUtil
         protected int maxoffset;
         protected int et;
         protected int st;
+        internal int xdiv = 1000;//位移改3位小数 xidv=100;
+        internal int ydiv = 100;
+        internal static float xdivf = 1000f;//位移改3位小数 xidvf=100;
+        internal static float ydivf = 100f;
 
         protected const float RT_SCALA_CONST = 10000f;
 
@@ -138,11 +142,11 @@ namespace RecordFileUtil
                     if (kn < 0) kn = 0;
                     if (offset < 0) offset = 0;
                     nodes.Add(new PilieNodeInfo(offset, kn));
-                    while (offset > chartformat.Xmax * 100)
+                    while (offset > chartformat.Xmax * xdiv)
                     {
                         chartformat.Xmax += chartformat.Xinterval;
                     }
-                    while (kn > chartformat.Ymax * 100)
+                    while (kn > chartformat.Ymax * ydiv)
                     {
                         chartformat.Ymax += chartformat.Yinterval;
                     }
@@ -218,7 +222,7 @@ namespace RecordFileUtil
 
             //最大点位移
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
-            this.maxoffset = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("mm", "")) * 100);
+            this.maxoffset = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("mm", "")) * xdiv);
 
             //ET
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
@@ -238,11 +242,11 @@ namespace RecordFileUtil
                 int kpa = Convert.ToInt32(Convert.ToDouble(strarr[0]) * 100);
                 int off = Convert.ToInt32(Convert.ToDouble(strarr[1]) * 100);
                 nodes.Add(new PilieNodeInfo(off, kpa));
-                while (off > chartformat.Xmax * 100)
+                while (off > chartformat.Xmax * xdiv)
                 {
                     chartformat.Xmax += chartformat.Xinterval;
                 }
-                while (kpa > chartformat.Ymax * 100)
+                while (kpa > chartformat.Ymax * ydiv)
                 {
                     chartformat.Ymax += chartformat.Yinterval;
                 }
@@ -314,7 +318,7 @@ namespace RecordFileUtil
 
             dr = dt.NewRow();
             dr[0] = "最大点位移";
-            dr[1] = String.Format("{0:f2}mm", this.maxoffset / 100f);
+            dr[1] = String.Format("{0:f3}mm", this.maxoffset / xdivf);
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
@@ -405,7 +409,7 @@ namespace RecordFileUtil
 
             dr = dt.NewRow();
             dr[0] = "最大点位移";
-            dr[1] = String.Format("{0:f2}mm", this.maxoffset / 100f);
+            dr[1] = String.Format("{0:f3}mm", this.maxoffset / xdivf);
             dt.Rows.Add(dr);
 
             
@@ -439,7 +443,7 @@ namespace RecordFileUtil
                 {
                     dr = dt.NewRow();
                     dr[0] = String.Format("{0:f3}", node.getNodeY());
-                    dr[1] = String.Format("{0:f2}", node.getNodeX());
+                    dr[1] = String.Format("{0:f3}", node.getNodeX());
                     dt.Rows.Add(dr);
                 }
             }
@@ -453,7 +457,7 @@ namespace RecordFileUtil
             if (p.Equals(MAXOFFSET))
             {
                 newvalue = newvalue.Replace("mm", "");
-                int newmaxoff = Convert.ToInt32(Convert.ToDouble(newvalue)*100);
+                int newmaxoff = Convert.ToInt32(Convert.ToDouble(newvalue)*xdiv);
                 int oldmax = this.maxoffset;
                 this.maxoffset = newmaxoff;
                 double _rt = rta * ((double)maxstrength * 10f) / ((double)height / 10f);
@@ -497,7 +501,7 @@ namespace RecordFileUtil
         {
             if (valuename.Equals(MAXOFFSET))
             {
-                return String.Format("{0:f2}mm", this.maxoffset / 100f);
+                return String.Format("{0:f3}mm", this.maxoffset / xdivf);
             }
             else
                 return base.GetEditableValuStr(valuename);
@@ -532,13 +536,13 @@ namespace RecordFileUtil
 
         public double getNodeX()
         {
-            float x = this.offset / 100f;
+            float x = this.offset / PilieTestInfo.xdivf;
             return x;
         }
 
         public double getNodeY()
         {
-            float y = this.kn / 100f;
+            float y = this.kn / PilieTestInfo.ydivf;
             return y;
         }
 
