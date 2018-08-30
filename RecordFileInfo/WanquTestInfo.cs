@@ -16,6 +16,10 @@ namespace RecordFileUtil
         protected int maxoffset;
         protected int eb;
         protected int sb;
+        internal int xdiv = 1000;//位移改3位小数 xidv=100;
+        internal int ydiv = 1000;
+        internal static float xdivf = 1000f;//位移改3位小数 xidvf=100;
+        internal static float ydivf = 1000f;
 
         public int RB { get { return rb; } }
         public int MaxStrength { get { return maxstrength; } }
@@ -84,7 +88,7 @@ namespace RecordFileUtil
                 double _rb;
                 _rb = (double)3 * (this.sensor / 10f) * (this.maxstrength) / (this.width / 10f) / (this.height / 10f) / (this.height / 10f) / 2;
                 double _eb;
-                _eb = (double)6 * (this.height / 10f) * (this.maxoffset / 100f) / (this.sensor / 10f) / (this.sensor / 10f);
+                _eb = (double)6 * (this.height / 10f) * (this.maxoffset / xdivf) / (this.sensor / 10f) / (this.sensor / 10f);
                 int __eb = Convert.ToInt32(_eb * 10000000);
                 int _diff = __eb - eb;
                 if(_diff<-500||_diff>500)
@@ -98,11 +102,11 @@ namespace RecordFileUtil
                     if (kn < 0) kn = 0;
                     if (offset < 0) offset = 0;
                     nodes.Add(new WanquNodeInfo(offset,kn));
-                    while (offset > chartformat.Xmax*100)
+                    while (offset > chartformat.Xmax*xdiv)
                     {
                         chartformat.Xmax += chartformat.Xinterval;
                     }
-                    while (kn > chartformat.Ymax*1000)
+                    while (kn > chartformat.Ymax*ydiv)
                     {
                         chartformat.Ymax += chartformat.Yinterval;
                     }
@@ -179,7 +183,7 @@ namespace RecordFileUtil
 
             //最大点位移
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
-            this.maxoffset = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("mm", "")) * 100);
+            this.maxoffset = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("mm", "")) * xdiv);
 
             //EB
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
@@ -199,7 +203,7 @@ namespace RecordFileUtil
                 int kpa = Convert.ToInt32(Convert.ToDouble(strarr[0]) * 1000);
                 int off = Convert.ToInt32(Convert.ToDouble(strarr[1]) * 100);
                 nodes.Add(new WanquNodeInfo(off, kpa));
-                while(off>chartformat.Xmax*100)
+                while(off>chartformat.Xmax*xdiv)
                 {
                     chartformat.Xmax += chartformat.Xinterval;
                 }
@@ -266,7 +270,7 @@ namespace RecordFileUtil
 
             dr = dt.NewRow();
             dr[0] = "跨中挠度";
-            dr[1] = String.Format("{0:f2}mm", this.maxoffset / 100f);
+            dr[1] = String.Format("{0:f3}mm", this.maxoffset / xdivf);
             dt.Rows.Add(dr);
 
             double _rb;
@@ -277,7 +281,7 @@ namespace RecordFileUtil
             dt.Rows.Add(dr);
 
             double _eb;
-            _eb = (double)6 * (this.height / 10f) * (this.maxoffset / 100f) / (this.sensor / 10f) / (this.sensor / 10f);
+            _eb = (double)6 * (this.height / 10f) * (this.maxoffset / xdivf) / (this.sensor / 10f) / (this.sensor / 10f);
             dr = dt.NewRow();
             dr[0] = "εB";//"EB";
             //dr[1] = String.Format("{0:d} ×10\u207b\u2076 με", this.eb *1000);
@@ -357,7 +361,7 @@ namespace RecordFileUtil
 
             dr = dt.NewRow();
             dr[0] = "最大点位移";
-            dr[1] = String.Format("{0:f2}mm", this.maxoffset / 100f);
+            dr[1] = String.Format("{0:f3}mm", this.maxoffset / xdivf);
             dt.Rows.Add(dr);
 
             double _eb;
@@ -390,7 +394,7 @@ namespace RecordFileUtil
                 {
                     dr = dt.NewRow();
                     dr[0] = String.Format("{0:f3}", node.getNodeY());
-                    dr[1] = String.Format("{0:f2}", node.getNodeX());
+                    dr[1] = String.Format("{0:f3}", node.getNodeX());
                     dt.Rows.Add(dr);
                 }
             }
@@ -404,7 +408,7 @@ namespace RecordFileUtil
             if (p.Equals(KUAZHONGNAODU))
             {
                 newvalue = newvalue.Replace("mm", "");
-                int newmaxoff = Convert.ToInt32(Convert.ToDouble(newvalue) * 100);
+                int newmaxoff = Convert.ToInt32(Convert.ToDouble(newvalue) * xdiv);
                 int oldmax = this.maxoffset;
                 this.maxoffset = newmaxoff;
                 //this.eb = this.eb*1000 * this.maxoffset/oldmax/1000;
@@ -413,7 +417,7 @@ namespace RecordFileUtil
                 double _rb;
                 _rb = (double)3 * (this.sensor / 10f) * (this.maxstrength) / (this.width / 10f) / (this.height / 10f) / (this.height / 10f)/2;
                 double _eb;
-                _eb = (double)6 * (this.height / 10f) * (this.maxoffset / 100f) / (this.sensor / 10f) / (this.sensor / 10f);
+                _eb = (double)6 * (this.height / 10f) * (this.maxoffset / xdivf) / (this.sensor / 10f) / (this.sensor / 10f);
                 this.eb = Convert.ToInt32(_eb * 10000000);
                 this.sb = Convert.ToInt32((double)_rb * 10 / _eb);
 
@@ -450,7 +454,7 @@ namespace RecordFileUtil
         {
             if (valuename.Equals(KUAZHONGNAODU))
             {
-                return String.Format("{0:f2}mm", this.maxoffset / 100f);
+                return String.Format("{0:f3}mm", this.maxoffset / xdivf);
             }
             else
                 return base.GetEditableValuStr(valuename);
@@ -485,13 +489,13 @@ namespace RecordFileUtil
 
         public double getNodeX()
         {
-            float x = this.offset / 100f;
+            float x = this.offset / WanquTestInfo.xdivf;
             return x;
         }
 
         public double getNodeY()
         {
-            float y = this.kn / 1000f;
+            float y = this.kn / WanquTestInfo.ydivf;
             return y;
         }
 
