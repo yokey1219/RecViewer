@@ -57,7 +57,10 @@ namespace RecordFileUtil
                 thedate = String.Format("{0}年{1}月{2}日{3}时{4}分", year, month, day, hour, minute);
                 width = (int)((bytes[idx++] << 8) | bytes[idx++]);
                 height = (int)((bytes[idx++] << 8) | bytes[idx++]);
-                sensor = (int)((bytes[idx++] << 8) | bytes[idx++]);
+                //sensor = (int)((bytes[idx++] << 8) | bytes[idx++]);
+                shiyanno1 = (int)bytes[idx++];
+                shiyanno2 = (int)bytes[idx++];
+                
                 idx++;
                 idx++;
                 nodecnt = (int)((bytes[idx++] << 8) | bytes[idx++]);
@@ -155,7 +158,13 @@ namespace RecordFileUtil
             this.height = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("mm", "")) * 10);
             //传感器
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
-            this.sensor = Convert.ToInt32(strarr[1].Replace("KN", ""));
+            //this.sensor = Convert.ToInt32(strarr[1].Replace("KN", ""));
+            String[] bianhaostrarr = strarr[1].Split('-');
+            shiyanno1 = Convert.ToInt32(bianhaostrarr[0]);
+            if (bianhaostrarr.Length > 1)
+                shiyanno2 = Convert.ToInt32(bianhaostrarr[1]);
+            else
+                shiyanno2 = 1;
             idx++;
             //记录点数
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
@@ -228,8 +237,11 @@ namespace RecordFileUtil
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
-            dr[0] = "传感器";
-            dr[1] = String.Format("{0}KN", this.sensor);
+            //dr[0] = "传感器大小";
+            //dr[1] = String.Format("{0}KN", this.sensor);
+            //dt.Rows.Add(dr);
+            dr[0] = "试验编号";
+            dr[1] = String.Format("{0}-{1}", this.shiyanno1, this.shiyanno2);
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();

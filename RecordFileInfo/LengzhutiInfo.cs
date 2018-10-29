@@ -20,6 +20,9 @@ namespace RecordFileUtil
         //protected int maxoffset;
         //protected int eb;
         //protected int sb;
+        protected int rt;
+        protected int et;
+        protected int st;
 
         public int MaxWendingdu { get { return maxwendingdu; } }
         public int MaxLiuzhi { get { return maxliuzhi; } }
@@ -74,15 +77,15 @@ namespace RecordFileUtil
                 temp = Convert.ToInt32(Convert.ToInt16(String.Format("{0:X2}{1:X2}", bytes[idx++], bytes[idx++]), 16));//Convert.ToInt32((int)((bytes[idx++] << 8) | bytes[idx++]));
                 loadspeed = (int)((bytes[idx++] << 8) | bytes[idx++]);
                 nodecnt = (int)((bytes[idx++] << 8) | bytes[idx++]);
-                sensor = (int)((bytes[idx++] << 8) | bytes[idx++]);
-                idx++;
-                idx++;
+                //sensor = (int)((bytes[idx++] << 8) | bytes[idx++]);
+                shiyanno1 = (int)bytes[idx++];
+                shiyanno2 = (int)bytes[idx++];
+
+                rt = (int)((bytes[idx++] << 8) | bytes[idx++]);//idx++;idx++;
                 maxwendingdu = (int)((bytes[idx++] << 8) | bytes[idx++]);
                 maxliuzhi = (int)((bytes[idx++] << 8) | bytes[idx++]);
-                idx++;
-                idx++;
-                idx++;
-                idx++;
+                et = (int)((bytes[idx++] << 8) | bytes[idx++]);//idx++;idx++;
+                st = (int)((bytes[idx++] << 8) | bytes[idx++]);//idx++;idx++;
                 //maxoffset = (int)((bytes[idx++] << 8) | bytes[idx++]);
                 //eb = (int)((bytes[idx++] << 8) | bytes[idx++]);
                 //sb = (int)((bytes[idx++] << 8) | bytes[idx++]);
@@ -166,7 +169,13 @@ namespace RecordFileUtil
 
             //试件跨度
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
-            this.sensor = Convert.ToInt32(strarr[1].Replace("KN",""));
+            //this.sensor = Convert.ToInt32(strarr[1].Replace("KN",""));
+            String[] bianhaostrarr = strarr[1].Split('-');
+            shiyanno1 = Convert.ToInt32(bianhaostrarr[0]);
+            if (bianhaostrarr.Length > 1)
+                shiyanno2 = Convert.ToInt32(bianhaostrarr[1]);
+            else
+                shiyanno2 = 1;
             
             //最大点压力
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
@@ -176,7 +185,19 @@ namespace RecordFileUtil
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
             this.maxliuzhi = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("mm", "")) * xdiv);
 
-           
+            //抗压强度
+            strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
+            this.rt = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("Mpa", "")) * 1000);
+            
+
+            //压缩应变
+            strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
+            this.et = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("", "")) * 100000);
+            
+
+            //劲度模量
+            strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
+            this.st = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("Mpa", "")) * 10);
    
             idx++;
             idx++;
@@ -226,8 +247,11 @@ namespace RecordFileUtil
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
-            dr[0] = "编号";
-            dr[1] = this.no;
+            //dr[0] = "编号";
+            //dr[1] = this.no;
+            //dt.Rows.Add(dr);
+            dr[0] = "试验编号";
+            dr[1] = String.Format("{0}-{1}", shiyanno1, shiyanno2);
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
@@ -250,6 +274,23 @@ namespace RecordFileUtil
             dr[0] = "最大点位移";
             dr[1] = String.Format("{0:f3}mm", this.maxliuzhi / xdivf);
             dt.Rows.Add(dr);
+
+            /*50KN not need this
+            dr = dt.NewRow();
+            dr[0] = "抗压强度";
+            dr[1] = String.Format("{0:f3}Mpa", this.rt / 1000f);
+            dt.Rows.Add(dr);
+
+            dr = dt.NewRow();
+            dr[0] = "压缩应变";
+            dr[1] = String.Format("{0:f5}", this.et / 100000f);
+            dt.Rows.Add(dr);
+
+            dr = dt.NewRow();
+            dr[0] = "劲度模量";
+            dr[1] = String.Format("{0:f1}Mpa", this.st / 10f);
+            dt.Rows.Add(dr);
+            */
             displaymaxidx = dt.Rows.Count - 1;
             return dt;
         }
@@ -300,8 +341,11 @@ namespace RecordFileUtil
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
-            dr[0] = "传感器大小";
-            dr[1] = String.Format("{0}KN", this.sensor);
+            //dr[0] = "传感器大小";
+            //dr[1] = String.Format("{0}KN", this.sensor);
+            //dt.Rows.Add(dr);
+            dr[0] = "试验编号";
+            dr[1] = String.Format("{0}-{1}", this.shiyanno1, this.shiyanno2);
             dt.Rows.Add(dr);
 
             
@@ -314,7 +358,22 @@ namespace RecordFileUtil
             dr[0] = "最大点位移";
             dr[1] = String.Format("{0:f3}mm", this.maxliuzhi / xdivf);
             dt.Rows.Add(dr);
+            /*50KN not need this
+            dr = dt.NewRow();
+            dr[0] = "抗压强度";
+            dr[1] = String.Format("{0:f3}Mpa", this.rt / 1000f);
+            dt.Rows.Add(dr);
 
+            dr = dt.NewRow();
+            dr[0] = "压缩应变";
+            dr[1] = String.Format("{0:f5}", this.et / 100000f);
+            dt.Rows.Add(dr);
+
+            dr = dt.NewRow();
+            dr[0] = "劲度模量";
+            dr[1] = String.Format("{0:f1}Mpa", this.st / 10f);
+            dt.Rows.Add(dr);
+            */
 
             dr = dt.NewRow();
             dr[0] = "";
