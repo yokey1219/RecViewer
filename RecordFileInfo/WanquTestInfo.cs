@@ -176,6 +176,7 @@ namespace RecordFileUtil
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
             this.sensor = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("mm", ""))*10);
 
+            //试验编号
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
             String[] bianhaostrarr = strarr[1].Split('-');
             shiyanno1 = Convert.ToInt32(bianhaostrarr[0]);
@@ -275,13 +276,13 @@ namespace RecordFileUtil
             dr[1] = String.Format("{0:f1}mm", this.sensor / 10f);
             dt.Rows.Add(dr);
 
-            dr = dt.NewRow();
+            //dr = dt.NewRow();
             //dr[0] = "传感器大小";
             //dr[1] = String.Format("{0}KN", this.sensor);
             //dt.Rows.Add(dr);
-            dr[0] = "试验编号";
-            dr[1] = String.Format("{0}-{1}", this.shiyanno1, this.shiyanno2);
-            dt.Rows.Add(dr);
+            //dr[0] = "试验编号";
+            //dr[1] = String.Format("{0}-{1}", this.shiyanno1, this.shiyanno2);
+            //dt.Rows.Add(dr);
             
 
             dr = dt.NewRow();
@@ -366,6 +367,11 @@ namespace RecordFileUtil
             dr = dt.NewRow();
             dr[0] = "试件跨径";
             dr[1] = String.Format("{0:f1}mm", this.sensor/10f);
+            dt.Rows.Add(dr);
+
+            dr = dt.NewRow();
+            dr[0] = "试验编号";
+            dr[1] = String.Format("{0}-{1}", this.shiyanno1, this.shiyanno2);
             dt.Rows.Add(dr);
 
             double _rb;
