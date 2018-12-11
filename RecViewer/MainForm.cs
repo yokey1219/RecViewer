@@ -1284,7 +1284,7 @@ namespace RecViewer
                 RectangleF imgrect = new RectangleF(firstpoint.X, firstpoint.Y + (txtmargin + txtheight) * 5, width, height);
                 e.Graphics.DrawImage(_newbitmapchart, imgrect);
                 RectangleF txtrect = new RectangleF(imgrect.X, imgrect.Y + imgrect.Height + 40, imgrect.Width, 40);
-                e.Graphics.DrawString("试验员__________________________________", new Font(Font.SystemFontName, 10), Brushes.Black, txtrect);
+                e.Graphics.DrawString("试验者________________________________   校核者_______________________________", new Font(Font.SystemFontName, 10), Brushes.Black, txtrect);
             }
 
             groupboxchart.Text = old1;
