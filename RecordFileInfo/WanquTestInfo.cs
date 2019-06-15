@@ -164,13 +164,24 @@ namespace RecordFileUtil
             this.temp = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("℃", "")));
 
             //速度
-            strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
-            this.loadspeed = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("mm/min", "")));
+            //strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
+            //this.loadspeed = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("mm/min", "")));
 
-
+            
             //记录点数
+            xdiv = 1000;
+            xdivf = 1000f;
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
-            this.nodecnt = Convert.ToInt32(strarr[1]);
+            if (strarr[0].Equals("加载速度"))
+            {
+                this.loadspeed = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("mm/min", "")));
+                strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
+                this.nodecnt = Convert.ToInt32(strarr[1]);
+                xdiv = 100;
+                xdivf = 100f;
+            }
+            else
+                this.nodecnt = Convert.ToInt32(strarr[1]);
 
             //试件跨度
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
@@ -178,15 +189,18 @@ namespace RecordFileUtil
 
             //试验编号
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
-            String[] bianhaostrarr = strarr[1].Split('-');
-            shiyanno1 = Convert.ToInt32(bianhaostrarr[0]);
-            if (bianhaostrarr.Length > 1)
-                shiyanno2 = Convert.ToInt32(bianhaostrarr[1]);
-            else
-                shiyanno2 = 1;
-            
-            //RB
-            strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
+            if (strarr[0].Equals("试验编号"))
+            {
+                String[] bianhaostrarr = strarr[1].Split('-');
+                shiyanno1 = Convert.ToInt32(bianhaostrarr[0]);
+                if (bianhaostrarr.Length > 1)
+                    shiyanno2 = Convert.ToInt32(bianhaostrarr[1]);
+                else
+                    shiyanno2 = 1;
+
+                //RB
+                strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
+            }
             this.rb = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("MPa", "")) * 1000);
 
             //最大点压力
@@ -213,7 +227,7 @@ namespace RecordFileUtil
             {
                 strarr = strs[idx].Split(AbstractRecordInfo.csvsepchar);
                 int kpa = Convert.ToInt32(Convert.ToDouble(strarr[0]) * 1000);
-                int off = Convert.ToInt32(Convert.ToDouble(strarr[1]) * 100);
+                int off = Convert.ToInt32(Convert.ToDouble(strarr[1]) * xdiv);
                 nodes.Add(new WanquNodeInfo(off, kpa));
                 while(off>chartformat.Xmax*xdiv)
                 {
