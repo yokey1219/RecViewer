@@ -92,6 +92,7 @@
             this.printDialog1 = new System.Windows.Forms.PrintDialog();
             this.pageSetupDialog1 = new System.Windows.Forms.PageSetupDialog();
             this.printPreviewDialog1 = new System.Windows.Forms.PrintPreviewDialog();
+            this.tsmiedit = new System.Windows.Forms.ToolStripMenuItem();
             this.pnltop.SuspendLayout();
             this.panel1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -240,11 +241,12 @@
             this.tsm_saveinfo.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmitobin,
             this.tsmitocsv,
-            this.tsmitoxml});
+            this.tsmitoxml,
+            this.tsmiedit});
             this.tsm_saveinfo.Font = new System.Drawing.Font("Microsoft YaHei UI", 12F);
             this.tsm_saveinfo.Name = "tsm_saveinfo";
-            this.tsm_saveinfo.Size = new System.Drawing.Size(118, 25);
-            this.tsm_saveinfo.Text = "保存当前记录";
+            this.tsm_saveinfo.Size = new System.Drawing.Size(102, 25);
+            this.tsm_saveinfo.Text = "保存和编辑";
             this.tsm_saveinfo.Click += new System.EventHandler(this.tsm_saveinfo_Click);
             // 
             // tsmitobin
@@ -720,6 +722,13 @@
             this.printPreviewDialog1.Name = "printPreviewDialog1";
             this.printPreviewDialog1.Visible = false;
             // 
+            // tsmiedit
+            // 
+            this.tsmiedit.Name = "tsmiedit";
+            this.tsmiedit.Size = new System.Drawing.Size(258, 26);
+            this.tsmiedit.Text = "编辑当前记录";
+            this.tsmiedit.Click += new System.EventHandler(this.tsmiedit_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -811,6 +820,7 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripButton tbnaodu;
+        private System.Windows.Forms.ToolStripMenuItem tsmiedit;
         
     }
 }

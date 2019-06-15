@@ -24,12 +24,13 @@ namespace RecViewer
             this.testload();
         }
 
-        
+        private String xmlfilenmae = "";
 
         private void testload()
         {
             RecordOpenDialog dialog = new RecordOpenDialog();
             String filename=dialog.SelectFile();
+            xmlfilenmae = "";
             if (filename != null)
             {
                 //CBRRecordFileInfo info = new CBRRecordFileInfo();
@@ -95,6 +96,7 @@ namespace RecViewer
                                             info.LoadFromCSV(strs);
                                             RenderChart(info);
                                             FillData(info);
+                                            xmlfilenmae = filename;
                                         }
                                     }
                                 }
@@ -1308,6 +1310,34 @@ namespace RecViewer
             }
         }
 
+        private void saveXmlFile(AbstractRecordInfo info)
+        {
+            if (info != null)
+            {
+                if (xmlfilenmae == "")
+                {
+                    saveFileDialog1.FileName = String.Format("{0}_{1}.xml", currentInfo.RecordName, currentInfo.TheDate);
+                    saveFileDialog1.Filter = ".xml|*.xml";
+                    if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+                    {
+                        String filename = saveFileDialog1.FileName;
+                        if (!filename.EndsWith(".xml"))
+                            filename = String.Format("{0}.xml", filename);
+                        ExcelHelper.ExportFile(info.getDataTable(), filename, false);
+                        //File.WriteAllLines(filename, currentInfo.getCSVLines().ToArray(), Encoding.UTF8);
+                        MessageBox.Show("保存成功");
+                    }
+                }
+                else
+                {
+                    ExcelHelper.ExportFile(info.getDataTable(), xmlfilenmae, false);
+                    //File.WriteAllLines(filename, currentInfo.getCSVLines().ToArray(), Encoding.UTF8);
+                    MessageBox.Show("保存成功");
+                }
+
+            }
+        }
+
         private void tbxzoomout_Click(object sender, EventArgs e)
         {
             if (currentInfo != null)
@@ -1372,6 +1402,21 @@ namespace RecViewer
             FillData(currentInfo);
             ReRenderChart(currentInfo);
             ef.Close();
+        }
+
+        private void tsmiedit_Click(object sender, EventArgs e)
+        {
+            if (currentInfo != null)
+            {
+                //DataTable toedit = currentInfo.getDataTable();
+                DataEditForm form = new DataEditForm();
+                if (form.EditData(currentInfo))
+                {
+                    saveXmlFile(currentInfo);
+                }
+                //form.Close();
+                form = null;
+            }
         }
        
     }

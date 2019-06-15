@@ -66,6 +66,26 @@ namespace RecordFileUtil
             return null;
         }
 
+        public virtual DataTable getHeaderTable()
+        {
+            return null;
+        }
+
+        public virtual DataTable getBodyTable()
+        {
+            return null;
+        }
+
+        public virtual void acceptHeaderChange(DataTable dt)
+        {
+
+        }
+
+        public virtual void acceptBodyChange(DataTable dt)
+        {
+           
+        }
+
         public static char csvsepchar=',';
         public static String csvfmt = "{0},{1}";
 

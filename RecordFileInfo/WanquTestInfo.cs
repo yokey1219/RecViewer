@@ -395,6 +395,114 @@ namespace RecordFileUtil
             return dt;
         }
 
+
+        public override DataTable getHeaderTable()
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("字段");
+            dt.Columns.Add("数值");
+            DataRow dr = dt.NewRow();
+            dr[0] = "试验日期";
+            dr[1] = String.Format("{0}-{1}-{2} {3}:{4}", this.year, this.month, this.day, this.hour, this.minute);
+            dt.Rows.Add(dr);
+
+            dr = dt.NewRow();
+            dr[0] = "编号";
+            dr[1] = this.no;
+            dt.Rows.Add(dr);
+
+            dr = dt.NewRow();
+            dr[0] = "试件宽度";
+            dr[1] = String.Format("{0:f1}mm", this.Diameter / 10f);
+            dt.Rows.Add(dr);
+
+            dr = dt.NewRow();
+            dr[0] = "试件高度";
+            dr[1] = String.Format("{0:f1}mm", this.Height / 10f);
+            dt.Rows.Add(dr);
+
+            dr = dt.NewRow();
+            dr[0] = "温度";
+            dr[1] = String.Format("{0}℃", this.temp);
+            dt.Rows.Add(dr);
+
+
+            dr = dt.NewRow();
+            dr[0] = "记录点数";
+            dr[1] = this.nodecnt;
+            dt.Rows.Add(dr);
+
+            dr = dt.NewRow();
+            dr[0] = "试件跨径";
+            dr[1] = String.Format("{0:f1}mm", this.sensor / 10f);
+            dt.Rows.Add(dr);
+
+
+
+            dr = dt.NewRow();
+            dr[0] = "最大点压力";
+            dr[1] = String.Format("{0:f3}KN", this.maxstrength / 1000f);
+            dt.Rows.Add(dr);
+
+            dr = dt.NewRow();
+            dr[0] = "跨中挠度";
+            dr[1] = String.Format("{0:f2}mm", this.maxoffset / 100f);
+            dt.Rows.Add(dr);
+
+            double _rb;
+            _rb = (double)3 * (this.sensor / 10f) * (this.maxstrength) / (this.width / 10f) / (this.height / 10f) / (this.height / 10f) / 2;
+            dr = dt.NewRow();
+            dr[0] = "RB";
+            dr[1] = String.Format("{0:f3}MPa", this.rb / 1000f);// String.Format("{0:f3}MPa", _rb);//
+            dt.Rows.Add(dr);
+
+            double _eb;
+            _eb = (double)6 * (this.height / 10f) * (this.maxoffset / 100f) / (this.sensor / 10f) / (this.sensor / 10f);
+            dr = dt.NewRow();
+            dr[0] = "εB";//"EB";
+            //dr[1] = String.Format("{0:d} ×10\u207b\u2076 με", this.eb *1000);
+            dr[1] = String.Format("{0:f1} ×10\u207b\u2076 με", this.eb / 10f); //String.Format("{0:f1} ×10\u207b\u2076 με", _eb * 1000000);// String.Format("{0:d} με", this.eb * 100);
+            dt.Rows.Add(dr);
+
+            dr = dt.NewRow();
+            dr[0] = "SB";
+            dr[1] = String.Format("{0:f1}MPa", this.sb / 10f); //String.Format("{0:f1}MPa", _rb / _eb); // 
+            dt.Rows.Add(dr);
+            dt.AcceptChanges();
+            return dt;
+        }
+
+        public override System.Data.DataTable getBodyTable()
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add("压力(KN)");
+            dt.Columns.Add("挠度(mm)");
+            DataRow dr;
+
+            foreach (IXYNode node in this.nodes)
+            {
+                if (node.getX() != 0 && node.getY() != 0)
+                {
+                    dr = dt.NewRow();
+                    dr[0] = String.Format("{0:f3}", node.getNodeY());
+                    dr[1] = String.Format("{0:f2}", node.getNodeX());
+                    dt.Rows.Add(dr);
+                }
+            }
+            dt.AcceptChanges();
+            return dt;
+        }
+
+        public override void acceptBodyChange(DataTable dt)
+        {
+            
+        }
+
+        public override void acceptHeaderChange(DataTable dt)
+        {
+            
+        }
+
         public override void EditValue(string p, string newvalue)
         {
 
