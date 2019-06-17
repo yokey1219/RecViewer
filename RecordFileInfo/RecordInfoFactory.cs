@@ -18,6 +18,7 @@ namespace RecordFileUtil
             Infos.Add(new RecordInfoItem(GetRecordName(3), 3)); //Infos.Add(new RecordInfoItem("回弹模量-强度仪法", 1));
             Infos.Add(new RecordInfoItem(GetRecordName(4), 4)); //Infos.Add(new RecordInfoItem("回弹模量-强度仪法", 1));
             Infos.Add(new RecordInfoItem(GetRecordName(5), 5));
+            Infos.Add(new RecordInfoItem(GetRecordName(6), 6));
             //Infos.Add(new RecordInfoItem(GetRecordName(2), 2)); //Infos.Add(new RecordInfoItem("无侧限抗压强度", 2));
             //Infos.Add(new RecordInfoItem(GetRecordName(3), 3)); //Infos.Add(new RecordInfoItem("回弹模量-顶面法", 3));
         }
@@ -59,6 +60,9 @@ namespace RecordFileUtil
                 case 5:
                     info = new DongrongInfo();
                     break;
+                case 6:
+                    info = new ModeInjectionInfo();
+                    break;
             }
             if (info != null)
                 info.SetName(GetRecordName(type));
@@ -81,6 +85,8 @@ namespace RecordFileUtil
                     return "劈裂试验";
                 case 5:
                     return "冻融试验";
+                case 6:
+                    return "贯入模式";
                 default:
                     return "unkown";
                     //break;
