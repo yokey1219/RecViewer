@@ -159,12 +159,13 @@ namespace RecordFileUtil
             this.temp = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("℃", "")));
 
             //速度
-            //strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
-            //this.loadspeed = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("mm/min", "")));
-
-
-            //记录点数
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
+            if (strarr[0].Equals("加载速度"))
+            {
+                this.loadspeed = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("mm/min", "")));
+                //记录点数
+                strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
+            }
             this.nodecnt = Convert.ToInt32(strarr[1]);
 
             //试件跨度
