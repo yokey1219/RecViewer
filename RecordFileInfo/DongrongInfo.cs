@@ -295,7 +295,7 @@ namespace RecordFileUtil
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
-            dr[0] = "试件宽度";
+            dr[0] = "试件直径";
             dr[1] = String.Format("{0:f1}mm", this.Diameter / 10f);
             dt.Rows.Add(dr);
 

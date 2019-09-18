@@ -72,8 +72,8 @@ namespace RecordFileUtil
                 hour = (int)((bytes[idx++] << 8) | bytes[idx++]);
                 minute = (int)((bytes[idx++] << 8) | bytes[idx++]);
                 thedate = String.Format("{0}年{1}月{2}日{3}时{4}分", year, month, day, hour, minute);
-                width = (int)((bytes[idx++] << 8) | bytes[idx++]);
-                height = (int)((bytes[idx++] << 8) | bytes[idx++]);
+                height = (int)((bytes[idx++] << 8) | bytes[idx++]);//高度在前
+                width = (int)((bytes[idx++] << 8) | bytes[idx++]);//长度在后面
                 temp = Convert.ToInt32(Convert.ToInt16(String.Format("{0:X2}{1:X2}", bytes[idx++], bytes[idx++]), 16));//Convert.ToInt32((int)((bytes[idx++] << 8) | bytes[idx++]));
                 loadspeed = (int)((bytes[idx++] << 8) | bytes[idx++]);
                 nodecnt = (int)((bytes[idx++] << 8) | bytes[idx++]);
@@ -242,7 +242,7 @@ namespace RecordFileUtil
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
-            dr[0] = "试件直径";
+            dr[0] = "试件长度";
             dr[1] = String.Format("{0:f1}mm", this.Diameter / 10f);
             dt.Rows.Add(dr);
 
@@ -315,7 +315,7 @@ namespace RecordFileUtil
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
-            dr[0] = "试件宽度";
+            dr[0] = "试件长度";
             dr[1] = String.Format("{0:f1}mm", this.Diameter / 10f);
             dt.Rows.Add(dr);
 
