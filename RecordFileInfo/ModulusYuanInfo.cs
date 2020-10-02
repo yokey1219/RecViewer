@@ -94,7 +94,8 @@ namespace RecordFileUtil
                 //int stime = 0;
                 //nodes.Add(new WendingduNodeInfo(0, 0));
                 int lastx = 0;
-                while (idx < (bytes.Length - 2))
+                int _nodecnt = nodecnt;
+                while (_nodecnt>0&&idx < (bytes.Length - 2))
                 {
 
                     int mpa = (int)((bytes[idx++] << 8) | bytes[idx++]);
@@ -110,6 +111,7 @@ namespace RecordFileUtil
                     {
                         chartformat.Ymax += chartformat.Yinterval;
                     }
+                    _nodecnt--;
                 }
 
                 //specialnodes = new List<IXYNode>();

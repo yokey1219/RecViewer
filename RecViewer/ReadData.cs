@@ -82,7 +82,7 @@ namespace RecViewer
                 Boolean istimeout = false;
                 while (bWaitread)
                 {
-                    if (count > 200)
+                    if (count > 60)
                     {
                         istimeout = true;
                         break;
@@ -154,6 +154,7 @@ namespace RecViewer
 
         private void serialPort1_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
+            if (e.EventType.Equals(SerialData.Eof)) return;
             byte[] buf = new byte[1024];
             int len = serialPort1.Read(buf, 0, 1024);
             if (len > 0)
@@ -169,7 +170,7 @@ namespace RecViewer
                     }
                     else
                     {
-                        if (arInfo.DataBuffer.Length >= (toread + 6) && arInfo.DataBuffer.Length >= 2048)
+                        if (arInfo.DataBuffer.Length >= (toread + 6) )//&& arInfo.DataBuffer.Length >= 2048)
                             bWaitread = false;
                     }
                 }
