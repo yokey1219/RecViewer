@@ -8,7 +8,7 @@ namespace RecordFileUtil
 {
     public class WendingduTestInfo : AbstractRecordInfo
     {
-        
+        protected const String MAXFLUEVALUE = "最大流值";
         protected List<IXYNode> nodes;
         protected List<IXYNode> specialnodes;
         protected int maxwendingdu;
@@ -356,24 +356,55 @@ namespace RecordFileUtil
             return dt;
         }
 
-        
+        public override void EditValue(string p, string newvalue)
+        {
 
-        /*public override List<EditableItem> GetEditableList()
+            //this.sensor
+            if (p.Equals(MAXFLUEVALUE))
+            {
+                newvalue = newvalue.Replace("mm", "");
+                int newmaxoff = Convert.ToInt32(Convert.ToDouble(newvalue) * xdiv);
+                int oldmax = this.maxliuzhi;
+                this.maxliuzhi = newmaxoff;
+
+
+                int _offset = newmaxoff - oldmax;
+
+                //List<IXYNode> _nodes = new List<IXYNode>();
+                //_nodes.Add(new ModulusStengthNodeInfo(0, 0));
+                foreach (IXYNode node in nodes)
+                {
+                    // if (node.getX() != 0)
+                    //{
+                    WendingduNodeInfo _node = node as WendingduNodeInfo;
+                    if (_node != null)
+                    {
+                        _node.offset += _offset;
+                    }
+                    //}
+                }
+                specialnodes.Clear();
+                specialnodes.Add(new WendingduNodeInfo(maxliuzhi, maxwendingdu));
+
+            }
+        }
+
+        public override List<EditableItem> GetEditableList()
         {
             List<EditableItem> list = new List<EditableItem>();
-            list.Add(new EditableItem("挠度修正", KUAZHONGNAODU));
+            list.Add(new EditableItem("流值修正", MAXFLUEVALUE));
             return list;
-        }*/
+        }
 
-       /* public override string GetEditableValuStr(string valuename)
+        public override string GetEditableValuStr(string valuename)
         {
-            if (valuename.Equals(KUAZHONGNAODU))
+            if (valuename.Equals(MAXFLUEVALUE))
             {
-                return String.Format("{0:f2}mm", this.maxoffset / 100f);
+                return String.Format("{0:f3}mm", this.maxliuzhi / xdivf);
             }
             else
                 return base.GetEditableValuStr(valuename);
-        }*/
+        }
     }
 
     public class WendingduNodeInfo : IXYNode
