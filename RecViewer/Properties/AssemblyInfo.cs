@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("RecViewer(100KN)3位小数")]
+[assembly: AssemblyTitle("RecViewer(150KN)3位小数")]
 [assembly: AssemblyDescription("RecordFileUtil_V3,作者:yokey1219@aliyun.com")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("北鱼工作室(BeiYu Studio)")]
-[assembly: AssemblyProduct("RecViewer(100KN)3位小数")]
+[assembly: AssemblyProduct("RecViewer(150KN)3位小数")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

@@ -45,9 +45,9 @@ namespace RecordFileUtil
             chartformat.Xmin = 0;
             chartformat.Ymin = 0;
             chartformat.Xmax = 10;
-            chartformat.Ymax = 80;
+            chartformat.Ymax = 150;
             chartformat.Xinterval = 2;
-            chartformat.Yinterval = 16;
+            chartformat.Yinterval = 30;
             chartformat.Xtype = 1;
             chartformat.Ytype = 1;
             chartformat.Xreverse = false;
