@@ -33,6 +33,7 @@ namespace RecViewer
         private Boolean bWaitread = false;
         public AbstractRecordInfo Info { get { return arInfo; } }
         public Boolean isReaded = false;
+        private const int MAX_TIMEOUT_SECONDS = 60;
 
         private void btnRead_Click(object sender, EventArgs e)
         {
@@ -80,16 +81,18 @@ namespace RecViewer
                 bWaitread = true;
                 int count = 0;
                 Boolean istimeout = false;
+                DateTime begin = DateTime.Now;
                 while (bWaitread)
                 {
-                    if (count > 60)
+                    int timespan = DateTime.Now.Subtract(begin).Seconds;
+                    if (timespan > MAX_TIMEOUT_SECONDS)//if (count > 60)
                     {
                         istimeout = true;
                         break;
                     }
                     else
                     {
-                        Thread.Sleep(100);
+                        Thread.Sleep(10);
                         Application.DoEvents();
                     }
                     count++;
@@ -106,6 +109,8 @@ namespace RecViewer
                     //MessageForm.Show("读取超时",new Exception());//MessageBox.Show("读取超时!");
                     //this.Close();
                     tbread.Clear();
+                    if(arInfo.DataBuffer==null)
+                        throw new Exception(String.Format("读取超时,未读取到数据"));
                     foreach (byte b in arInfo.DataBuffer)
                         tbread.AppendText(b.ToString("X2") + " ");
                     throw new Exception(String.Format("读取超时,需要读取{0},实际读取{1}",toread+6,arInfo.DataBuffer.Length));
