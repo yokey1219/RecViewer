@@ -194,7 +194,7 @@ namespace RecordFileUtil
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
-            //dr[0] = "传感器大小";
+            //dr[0] = "传感器";
             //dr[1] = String.Format("{0}KN", this.sensor);
             //dt.Rows.Add(dr);
             dr[0] = "试验编号";

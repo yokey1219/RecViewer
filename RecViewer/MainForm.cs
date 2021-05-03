@@ -56,6 +56,7 @@ namespace RecViewer
                                 if (info != null)
                                 {
                                     info.LoadFromCSV(strs);
+                                    info.reFormat();
                                     RenderChart(info);
                                     FillData(info);
                                 }
@@ -93,6 +94,7 @@ namespace RecViewer
                                         if (info != null)
                                         {
                                             info.LoadFromCSV(strs);
+                                            info.reFormat();
                                             RenderChart(info);
                                             FillData(info);
                                         }
@@ -146,6 +148,7 @@ namespace RecViewer
             }*/
             info=RecordInfoFactory.CreateInfo(Convert.ToInt32(buffer[2]));
             info.LoadData(buffer);
+            info.reFormat();
             if (info != null)
             {
                 FillData(info);
@@ -1028,6 +1031,7 @@ namespace RecViewer
                 try
                 {
                     FillData(rd.Info);
+                    rd.Info.reFormat();
                     RenderChart(rd.Info);
                 }
                 catch (Exception ex)

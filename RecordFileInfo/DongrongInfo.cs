@@ -75,9 +75,9 @@ namespace RecordFileUtil
                 temp = Convert.ToInt32(Convert.ToInt16(String.Format("{0:X2}{1:X2}", bytes[idx++], bytes[idx++]), 16));//Convert.ToInt32((int)((bytes[idx++] << 8) | bytes[idx++]));
                 loadspeed = (int)((bytes[idx++] << 8) | bytes[idx++]);
                 nodecnt = (int)((bytes[idx++] << 8) | bytes[idx++]);
-                //sensor = (int)((bytes[idx++] << 8) | bytes[idx++]);
-                shiyanno1 = (int)bytes[idx++];
-                shiyanno2 = (int)bytes[idx++];
+                sensor = (int)((bytes[idx++] << 8) | bytes[idx++]);
+                //shiyanno1 = (int)bytes[idx++];
+                //shiyanno2 = (int)bytes[idx++];
                 
                 idx++;
                 idx++;
@@ -170,13 +170,13 @@ namespace RecordFileUtil
 
             //试验编号
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
-            //this.sensor = Convert.ToInt32(Convert.ToInt32(strarr[1].Replace("KN", "")));
-            String[] bianhaostrarr = strarr[1].Split('-');
-            shiyanno1 = Convert.ToInt32(bianhaostrarr[0]);
-            if (bianhaostrarr.Length > 1)
-                shiyanno2 = Convert.ToInt32(bianhaostrarr[1]);
-            else
-                shiyanno2 = 1;
+            this.sensor = Convert.ToInt32(Convert.ToInt32(strarr[1].Replace("KN", "")));
+            //String[] bianhaostrarr = strarr[1].Split('-');
+            //shiyanno1 = Convert.ToInt32(bianhaostrarr[0]);
+            //if (bianhaostrarr.Length > 1)
+            //    shiyanno2 = Convert.ToInt32(bianhaostrarr[1]);
+            //else
+            //    shiyanno2 = 1;
             
             //最大点压力
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
@@ -236,12 +236,12 @@ namespace RecordFileUtil
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
-            //dr[0] = "编号";
-            //dr[1] = this.no;
-            //dt.Rows.Add(dr);
-            dr[0] = "试验编号";
-            dr[1] = String.Format("{0}-{1}",shiyanno1,shiyanno2);
+            dr[0] = "传感器";
+            dr[1] = String.Format("{0}KN", this.sensor);
             dt.Rows.Add(dr);
+            //dr[0] = "试验编号";
+            //dr[1] = String.Format("{0}-{1}",shiyanno1,shiyanno2);
+            //dt.Rows.Add(dr);
 
             dr = dt.NewRow();
             dr[0] = "温度";
@@ -320,12 +320,12 @@ namespace RecordFileUtil
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
-            //dr[0] = "传感器大小";
-            //dr[1] = String.Format("{0}KN", this.sensor);
-            //dt.Rows.Add(dr);
-            dr[0] = "试验编号";
-            dr[1] = String.Format("{0}-{1}", this.shiyanno1,this.shiyanno2);
+            dr[0] = "传感器";
+            dr[1] = String.Format("{0}KN", this.sensor);
             dt.Rows.Add(dr);
+            //dr[0] = "试验编号";
+            //dr[1] = String.Format("{0}-{1}", this.shiyanno1,this.shiyanno2);
+            //dt.Rows.Add(dr);
 
             
             dr = dt.NewRow();

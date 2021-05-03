@@ -58,6 +58,34 @@ namespace RecordFileUtil
         public abstract List<String> getCSVLines();
         public abstract void LoadFromCSV(String[] strs);
         public abstract void initCharFormat();
+        public virtual void reFormat()
+        {
+            switch (sensor)
+            {
+                case 1:
+                    chartformat.Ymax = 0.8;
+                    chartformat.Yinterval = 0.16;
+                    break;
+                case 5:
+                    chartformat.Ymax = 4;
+                    chartformat.Yinterval = 0.8;
+                    break;
+                case 10:
+                    chartformat.Ymax = 8;
+                    chartformat.Yinterval = 1.6;
+                    break;
+                case 50:
+                    chartformat.Ymax = 40;
+                    chartformat.Yinterval = 8;
+                    break;
+                case 100:
+                    chartformat.Ymax = 80;
+                    chartformat.Yinterval = 16;
+                    break;
+                default:
+                    break;
+            }
+        }
         public virtual DataTable getDataTable()
         {
             return null;

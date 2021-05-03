@@ -514,11 +514,11 @@
             this.lblnodis.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblnodis.AutoSize = true;
             this.lblnodis.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lblnodis.Location = new System.Drawing.Point(53, 63);
+            this.lblnodis.Location = new System.Drawing.Point(29, 63);
             this.lblnodis.Name = "lblnodis";
-            this.lblnodis.Size = new System.Drawing.Size(42, 21);
+            this.lblnodis.Size = new System.Drawing.Size(90, 21);
             this.lblnodis.TabIndex = 2;
-            this.lblnodis.Text = "编号";
+            this.lblnodis.Text = "传感器";
             // 
             // lbldate
             // 
