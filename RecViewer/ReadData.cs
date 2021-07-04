@@ -33,11 +33,28 @@ namespace RecViewer
         private Boolean bWaitread = false;
         public AbstractRecordInfo Info { get { return arInfo; } }
         public Boolean isReaded = false;
-        private const int MAX_TIMEOUT_SECONDS = 60;
+        private const int MAX_TIMEOUT_SECONDS = 5;
+        private int time_out_seconds = 0;
+
+        private void setTimeout()
+        {
+            //time_out_seconds = MAX_TIMEOUT_SECONDS;
+            try
+            {
+                time_out_seconds = Int32.Parse(tbTimeout.Text);
+
+            }
+            catch
+            {
+                time_out_seconds = MAX_TIMEOUT_SECONDS;
+                tbTimeout.Text = time_out_seconds.ToString();
+            }
+
+        }
 
         private void btnRead_Click(object sender, EventArgs e)
         {
-            
+            setTimeout();
             
             AbstractRecordInfo info=RecordInfoFactory.CreateInfo((int)comboBox3.SelectedValue);
             int no = 0;// Convert.ToInt32(numericUpDown1.Value * 10 + numericUpDown2.Value);
@@ -84,8 +101,8 @@ namespace RecViewer
                 DateTime begin = DateTime.Now;
                 while (bWaitread)
                 {
-                    int timespan = DateTime.Now.Subtract(begin).Seconds;
-                    if (timespan > MAX_TIMEOUT_SECONDS)//if (count > 60)
+                    TimeSpan timespan=DateTime.Now.Subtract(begin);// int timespan = DateTime.Now.Subtract(begin).Seconds;
+                    if (timespan.TotalSeconds > time_out_seconds)//if (count > 60)
                     {
                         istimeout = true;
                         break;

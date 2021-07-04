@@ -44,6 +44,8 @@
             this.tbsend = new System.Windows.Forms.TextBox();
             this.tbread = new System.Windows.Forms.TextBox();
             this.tbreadno = new System.Windows.Forms.TextBox();
+            this.tbTimeout = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
             this.SuspendLayout();
@@ -184,11 +186,30 @@
             this.tbreadno.TabIndex = 13;
             this.tbreadno.Text = "0";
             // 
+            // tbTimeout
+            // 
+            this.tbTimeout.Location = new System.Drawing.Point(287, 129);
+            this.tbTimeout.Name = "tbTimeout";
+            this.tbTimeout.Size = new System.Drawing.Size(41, 21);
+            this.tbTimeout.TabIndex = 14;
+            this.tbTimeout.Text = "5";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(228, 133);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(53, 12);
+            this.label6.TabIndex = 15;
+            this.label6.Text = "超时设置";
+            // 
             // ReadData
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(700, 261);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.tbTimeout);
             this.Controls.Add(this.tbreadno);
             this.Controls.Add(this.tbread);
             this.Controls.Add(this.tbsend);
@@ -230,5 +251,7 @@
         private System.Windows.Forms.TextBox tbsend;
         private System.Windows.Forms.TextBox tbread;
         private System.Windows.Forms.TextBox tbreadno;
+        private System.Windows.Forms.TextBox tbTimeout;
+        private System.Windows.Forms.Label label6;
     }
 }
