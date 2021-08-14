@@ -731,6 +731,7 @@
             this.Name = "MainForm";
             this.Text = "试验记录读取工具";
             this.Load += new System.EventHandler(this.MainForm_Load);
+            this.Activated += new System.EventHandler(this.MainForm_Activated);
             this.pnltop.ResumeLayout(false);
             this.pnltop.PerformLayout();
             this.panel1.ResumeLayout(false);
