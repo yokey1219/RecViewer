@@ -26,7 +26,18 @@ namespace RecViewer
             this.comboBox3.DataSource = RecordInfoFactory.Infos;
             this.comboBox3.DisplayMember = "Name";
             this.comboBox3.ValueMember = "InfoType";
+            defaultNumRangeCheck();
+            LoadHistory();
 
+        }
+
+        private void LoadHistory()
+        {
+            String history_no = (String)GerneralConfig.getUserData("test_no");
+            if (history_no != null)
+            {
+                numUpDwn.Value = Convert.ToInt32(history_no);
+            }
         }
 
         private AbstractRecordInfo arInfo = null;
@@ -60,12 +71,9 @@ namespace RecViewer
             int no = 0;// Convert.ToInt32(numericUpDown1.Value * 10 + numericUpDown2.Value);
             try
             {
-                no = Convert.ToInt32(tbreadno.Text);
-                if (no > 99 || no < 0)
-                {
-                    MessageBox.Show("编号只能是0-99");
+                no = Convert.ToInt32(numUpDwn.Value);//no = Convert.ToInt32(tbreadno.Text);
+                if(!checkNumRange(no))
                     return;
-                }
             }
             catch (FormatException fmtex)
             {
@@ -77,6 +85,8 @@ namespace RecViewer
                 MessageForm.Show(ovrex.Message, ovrex);
                 return;
             }
+
+            GerneralConfig.setUserData("test_no", no.ToString());
 
             info.MakeSendBuffer();
             info.SetReadNo(no);
@@ -174,6 +184,22 @@ namespace RecViewer
             }
         }
 
+        private  Boolean checkNumRange(int no)
+        {
+            if (rb0999.Checked&&(no > 999 || no < 0))
+            {
+                MessageBox.Show("编号只能是0-999");
+                return false;
+            }
+            else if (rb099.Checked && (no > 255 || no < 0))
+            {
+                MessageBox.Show("编号只能是0-255");
+                return false;
+            }
+            else
+                return true;
+        }
+
         private void serialPort1_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             if (e.EventType.Equals(SerialData.Eof)) return;
@@ -212,5 +238,49 @@ namespace RecViewer
             String filename=String.Format("{0}\\{1}",AppDomain.CurrentDomain.BaseDirectory,DateTime.Now.ToString("yyyy_MM_dd_hh_mm_ss.txt"));
             File.WriteAllText(filename,txt);
         }
+
+        private void numRangeCheckedChanged(object sender, EventArgs e)
+        {
+            if (sender is RadioButton)
+            {
+                //unCheckAllNumRange();
+                if ((sender as RadioButton).Checked && sender == rb0999)
+                {
+                    change999(true);
+                }
+                else
+                    change999(false);
+            }
+            
+        }
+
+        private void unCheckAllNumRange()
+        {
+            rb099.Checked = false;
+            rb0999.Checked = false;
+        }
+
+        private void change999(bool rslt)
+        {
+            GerneralConfig.Is999 = rslt;
+            AbstractRecordInfo.set999(rslt);
+        }
+
+
+        private void defaultNumRangeCheck()
+        {
+            unCheckAllNumRange();
+            if (GerneralConfig.Is999)
+            {
+                rb0999.Checked = true;
+            }
+            else rb099.Checked = true;
+        }
+
+        private void btnclearno_Click(object sender, EventArgs e)
+        {
+            numUpDwn.Value = 0;
+        }
+        
     }
 }
