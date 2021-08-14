@@ -46,6 +46,9 @@
             this.tbreadno = new System.Windows.Forms.TextBox();
             this.tbTimeout = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.rb099 = new System.Windows.Forms.RadioButton();
+            this.rb0999 = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
             this.SuspendLayout();
@@ -172,7 +175,7 @@
             // 
             // tbread
             // 
-            this.tbread.Location = new System.Drawing.Point(354, 23);
+            this.tbread.Location = new System.Drawing.Point(380, 23);
             this.tbread.Multiline = true;
             this.tbread.Name = "tbread";
             this.tbread.Size = new System.Drawing.Size(308, 207);
@@ -188,7 +191,7 @@
             // 
             // tbTimeout
             // 
-            this.tbTimeout.Location = new System.Drawing.Point(287, 129);
+            this.tbTimeout.Location = new System.Drawing.Point(285, 60);
             this.tbTimeout.Name = "tbTimeout";
             this.tbTimeout.Size = new System.Drawing.Size(41, 21);
             this.tbTimeout.TabIndex = 14;
@@ -197,17 +200,53 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(228, 133);
+            this.label6.Location = new System.Drawing.Point(226, 64);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(53, 12);
             this.label6.TabIndex = 15;
             this.label6.Text = "超时设置";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(228, 97);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(53, 12);
+            this.label7.TabIndex = 16;
+            this.label7.Text = "编号范围";
+            // 
+            // rb099
+            // 
+            this.rb099.AutoSize = true;
+            this.rb099.Location = new System.Drawing.Point(243, 126);
+            this.rb099.Name = "rb099";
+            this.rb099.Size = new System.Drawing.Size(65, 16);
+            this.rb099.TabIndex = 17;
+            this.rb099.TabStop = true;
+            this.rb099.Text = "0 ~ 255";
+            this.rb099.UseVisualStyleBackColor = true;
+            this.rb099.CheckedChanged += new System.EventHandler(this.numRangeCheckedChanged);
+            // 
+            // rb0999
+            // 
+            this.rb0999.AutoSize = true;
+            this.rb0999.Location = new System.Drawing.Point(243, 148);
+            this.rb0999.Name = "rb0999";
+            this.rb0999.Size = new System.Drawing.Size(65, 16);
+            this.rb0999.TabIndex = 18;
+            this.rb0999.TabStop = true;
+            this.rb0999.Text = "0 ~ 999";
+            this.rb0999.UseVisualStyleBackColor = true;
+            this.rb0999.CheckedChanged += new System.EventHandler(this.numRangeCheckedChanged);
             // 
             // ReadData
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(700, 261);
+            this.Controls.Add(this.rb0999);
+            this.Controls.Add(this.rb099);
+            this.Controls.Add(this.label7);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.tbTimeout);
             this.Controls.Add(this.tbreadno);
@@ -253,5 +292,8 @@
         private System.Windows.Forms.TextBox tbreadno;
         private System.Windows.Forms.TextBox tbTimeout;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.RadioButton rb099;
+        private System.Windows.Forms.RadioButton rb0999;
     }
 }

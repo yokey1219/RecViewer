@@ -40,6 +40,8 @@ namespace RecordFileUtil
 
         protected int displaymaxidx=0;//
 
+        protected static bool is999 = false;
+
         public String RecordName { get { return recordname; } }
         public String TheDate { get { return thedate; } }
         public int Diameter { get { return width; } }
@@ -73,7 +75,20 @@ namespace RecordFileUtil
 
         public void SetReadNo(int no)
         {
-            sendbuffer[3] = Convert.ToByte(no);
+            if (no < 0) throw new Exception("编号必须大于0");
+            if (no <= 255)
+                sendbuffer[3] = Convert.ToByte(no);
+            else
+            {
+                if (is999)
+                {
+                    if (no > 999) throw new Exception("编号必须小于1000");
+                    sendbuffer[2] = Convert.ToByte(sendbuffer[2] | Convert.ToByte((int)(no >> 8)));
+                    sendbuffer[3] = Convert.ToByte(no & 0xff);
+                }
+                else
+                    throw new Exception("编号必须小于256");
+            }
             this.dosendCRC();
         }
 
@@ -83,9 +98,16 @@ namespace RecordFileUtil
             sendbuffer[0] = 0x10;
             sendbuffer[1] = 0x04;
             sendbuffer[4] = 0xff;
-            sendbuffer[5] = 0xff;
+            sendbuffer[5] = 0xff; 
             this.makeSendBufferInternal();
+            if (is999)
+                this.sendbuffer[2] = Convert.ToByte(this.sendbuffer[2] << 4);
             this.dosendCRC();
+        }
+
+        public static void set999(bool flag)
+        {
+            is999 = flag;
         }
 
         protected void dosendCRC()
@@ -164,26 +186,16 @@ namespace RecordFileUtil
 
         protected void ParseSendBuffer()
         {
-            this.recordname = RecordInfoFactory.GetRecordName(sendbuffer[2]);
-            //switch (sendbuffer[2])
-            //{
-            //    case 0:
-            //        this.recordname = "承载比(CBR)";
-            //        break;
-            //    case 1:
-            //        this.recordname = "回弹模量-强度仪法";
-            //        break;
-            //    case 2:
-            //        this.recordname = "无侧限抗压强度";
-            //        break;
-            //    case 3:
-            //        this.recordname = "回弹模量-顶面法";
-            //        break;
-            //    default:
-            //        this.recordname = "unkown";
-            //        break;
-            //}
-            this.no = Convert.ToInt32(sendbuffer[3]);
+            if (is999)
+            {
+                this.recordname=RecordInfoFactory.GetRecordName(Convert.ToInt32((sendbuffer[2]&0xf0)>>4));
+                this.no = Convert.ToInt32(sendbuffer[2] & 0x0f) * 256 + Convert.ToInt32(sendbuffer[3]);
+            }
+            else
+            {
+                this.recordname = RecordInfoFactory.GetRecordName(sendbuffer[2]);
+                this.no = Convert.ToInt32(sendbuffer[3]);
+            }
         }
 
         public Boolean CheckCRC()
