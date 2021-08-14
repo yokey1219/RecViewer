@@ -17,6 +17,7 @@ namespace RecViewer
         public MainForm()
         {
             InitializeComponent();
+            AbstractRecordInfo.set999(GerneralConfig.Is999);
         }
 
         private void tsm_openfile_Click(object sender, EventArgs e)
@@ -1445,6 +1446,18 @@ namespace RecViewer
             FillData(currentInfo);
             ReRenderChart(currentInfo);
             ef.Close();
+        }
+
+        private void MainForm_Activated(object sender, EventArgs e)
+        {
+            if (GerneralConfig.Is999)
+            {
+                this.Text = String.Format("{0}[编号范围0 ~ {1}]", "试验记录读取工具", "999");
+            }
+            else
+            {
+                this.Text = String.Format("{0}[编号范围0 ~ {1}]", "试验记录读取工具", "255");
+            }
         }
        
     }
