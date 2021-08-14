@@ -27,7 +27,17 @@ namespace RecViewer
             this.comboBox3.DisplayMember = "Name";
             this.comboBox3.ValueMember = "InfoType";
             defaultNumRangeCheck();
+            LoadHistory();
 
+        }
+
+        private void LoadHistory()
+        {
+            String history_no = (String)GerneralConfig.getUserData("test_no");
+            if (history_no != null)
+            {
+                numUpDwn.Value = Convert.ToInt32(history_no);
+            }
         }
 
         private AbstractRecordInfo arInfo = null;
@@ -61,7 +71,7 @@ namespace RecViewer
             int no = 0;// Convert.ToInt32(numericUpDown1.Value * 10 + numericUpDown2.Value);
             try
             {
-                no = Convert.ToInt32(tbreadno.Text);
+                no = Convert.ToInt32(numUpDwn.Value);//no = Convert.ToInt32(tbreadno.Text);
                 if(!checkNumRange(no))
                     return;
             }
@@ -75,6 +85,8 @@ namespace RecViewer
                 MessageForm.Show(ovrex.Message, ovrex);
                 return;
             }
+
+            GerneralConfig.setUserData("test_no", no.ToString());
 
             info.MakeSendBuffer();
             info.SetReadNo(no);
@@ -263,6 +275,11 @@ namespace RecViewer
                 rb0999.Checked = true;
             }
             else rb099.Checked = true;
+        }
+
+        private void btnclearno_Click(object sender, EventArgs e)
+        {
+            numUpDwn.Value = 0;
         }
         
     }

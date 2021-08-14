@@ -36,8 +36,6 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.comboBox3 = new System.Windows.Forms.ComboBox();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
             this.btnRead = new System.Windows.Forms.Button();
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.label5 = new System.Windows.Forms.Label();
@@ -49,8 +47,9 @@
             this.label7 = new System.Windows.Forms.Label();
             this.rb099 = new System.Windows.Forms.RadioButton();
             this.rb0999 = new System.Windows.Forms.RadioButton();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
+            this.numUpDwn = new System.Windows.Forms.NumericUpDown();
+            this.btnclearno = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.numUpDwn)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -117,32 +116,6 @@
             this.comboBox3.Size = new System.Drawing.Size(121, 20);
             this.comboBox3.TabIndex = 6;
             // 
-            // numericUpDown1
-            // 
-            this.numericUpDown1.Location = new System.Drawing.Point(101, 130);
-            this.numericUpDown1.Maximum = new decimal(new int[] {
-            9,
-            0,
-            0,
-            0});
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(37, 21);
-            this.numericUpDown1.TabIndex = 7;
-            this.numericUpDown1.Visible = false;
-            // 
-            // numericUpDown2
-            // 
-            this.numericUpDown2.Location = new System.Drawing.Point(156, 130);
-            this.numericUpDown2.Maximum = new decimal(new int[] {
-            9,
-            0,
-            0,
-            0});
-            this.numericUpDown2.Name = "numericUpDown2";
-            this.numericUpDown2.Size = new System.Drawing.Size(37, 21);
-            this.numericUpDown2.TabIndex = 8;
-            this.numericUpDown2.Visible = false;
-            // 
             // btnRead
             // 
             this.btnRead.Location = new System.Drawing.Point(43, 207);
@@ -183,11 +156,12 @@
             // 
             // tbreadno
             // 
-            this.tbreadno.Location = new System.Drawing.Point(101, 130);
+            this.tbreadno.Location = new System.Drawing.Point(136, 209);
             this.tbreadno.Name = "tbreadno";
             this.tbreadno.Size = new System.Drawing.Size(121, 21);
             this.tbreadno.TabIndex = 13;
             this.tbreadno.Text = "0";
+            this.tbreadno.Visible = false;
             // 
             // tbTimeout
             // 
@@ -218,7 +192,7 @@
             // rb099
             // 
             this.rb099.AutoSize = true;
-            this.rb099.Location = new System.Drawing.Point(243, 126);
+            this.rb099.Location = new System.Drawing.Point(261, 126);
             this.rb099.Name = "rb099";
             this.rb099.Size = new System.Drawing.Size(65, 16);
             this.rb099.TabIndex = 17;
@@ -230,7 +204,7 @@
             // rb0999
             // 
             this.rb0999.AutoSize = true;
-            this.rb0999.Location = new System.Drawing.Point(243, 148);
+            this.rb0999.Location = new System.Drawing.Point(261, 148);
             this.rb0999.Name = "rb0999";
             this.rb0999.Size = new System.Drawing.Size(65, 16);
             this.rb0999.TabIndex = 18;
@@ -239,11 +213,30 @@
             this.rb0999.UseVisualStyleBackColor = true;
             this.rb0999.CheckedChanged += new System.EventHandler(this.numRangeCheckedChanged);
             // 
+            // numUpDwn
+            // 
+            this.numUpDwn.Location = new System.Drawing.Point(101, 130);
+            this.numUpDwn.Name = "numUpDwn";
+            this.numUpDwn.Size = new System.Drawing.Size(87, 21);
+            this.numUpDwn.TabIndex = 19;
+            // 
+            // btnclearno
+            // 
+            this.btnclearno.Location = new System.Drawing.Point(194, 128);
+            this.btnclearno.Name = "btnclearno";
+            this.btnclearno.Size = new System.Drawing.Size(52, 23);
+            this.btnclearno.TabIndex = 20;
+            this.btnclearno.Text = "清零";
+            this.btnclearno.UseVisualStyleBackColor = true;
+            this.btnclearno.Click += new System.EventHandler(this.btnclearno_Click);
+            // 
             // ReadData
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(700, 261);
+            this.Controls.Add(this.btnclearno);
+            this.Controls.Add(this.numUpDwn);
             this.Controls.Add(this.rb0999);
             this.Controls.Add(this.rb099);
             this.Controls.Add(this.label7);
@@ -254,8 +247,6 @@
             this.Controls.Add(this.tbsend);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.btnRead);
-            this.Controls.Add(this.numericUpDown2);
-            this.Controls.Add(this.numericUpDown1);
             this.Controls.Add(this.comboBox3);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
@@ -266,8 +257,7 @@
             this.Name = "ReadData";
             this.Text = "记录读取";
             this.Load += new System.EventHandler(this.ReadData_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numUpDwn)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -282,8 +272,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ComboBox comboBox3;
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
-        private System.Windows.Forms.NumericUpDown numericUpDown2;
         private System.Windows.Forms.Button btnRead;
         private System.IO.Ports.SerialPort serialPort1;
         private System.Windows.Forms.Label label5;
@@ -295,5 +283,7 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.RadioButton rb099;
         private System.Windows.Forms.RadioButton rb0999;
+        private System.Windows.Forms.NumericUpDown numUpDwn;
+        private System.Windows.Forms.Button btnclearno;
     }
 }
