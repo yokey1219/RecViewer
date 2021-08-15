@@ -97,6 +97,16 @@ namespace RecordFileUtil
         {
             return GetRecordName(Convert.ToInt32(type));
         }
+
+        public static bool CheckRecordName(string name)
+        {
+            foreach (RecordInfoItem item in Infos)
+            {
+                if (item.Name == name)
+                    return true;
+            }
+            return false;
+        }
     }
 
     public class RecordInfoItem
