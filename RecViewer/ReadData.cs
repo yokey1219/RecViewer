@@ -27,8 +27,15 @@ namespace RecViewer
             this.comboBox3.DisplayMember = "Name";
             this.comboBox3.ValueMember = "InfoType";
             defaultNumRangeCheck();
+            LoadSetting();
             LoadHistory();
 
+        }
+
+        private void LoadSetting()
+        {
+            this.comboBox2.Items.Clear();
+            this.comboBox2.Items.AddRange(GerneralConfig.BaudRate);
         }
 
         private void LoadHistory()
@@ -38,6 +45,23 @@ namespace RecViewer
             {
                 numUpDwn.Value = Convert.ToInt32(history_no);
             }
+
+            String history_name = (String)GerneralConfig.getUserData("test_name");
+            if (history_name != null)
+            {
+                if (RecordInfoFactory.CheckRecordName(history_name))
+                    comboBox3.Text = history_name;
+            }
+
+
+            String history_timeout = (String)GerneralConfig.getUserData("timeout");
+            if (history_timeout != null)
+            {
+                tbTimeout.Text = history_timeout;
+                setTimeout();
+            }
+
+            tbTimeout.Text = time_out_seconds.ToString();
         }
 
         private AbstractRecordInfo arInfo = null;
@@ -45,7 +69,7 @@ namespace RecViewer
         public AbstractRecordInfo Info { get { return arInfo; } }
         public Boolean isReaded = false;
         private const int MAX_TIMEOUT_SECONDS = 5;
-        private int time_out_seconds = 0;
+        private int time_out_seconds = MAX_TIMEOUT_SECONDS;
 
         private void setTimeout()
         {
@@ -86,7 +110,7 @@ namespace RecViewer
                 return;
             }
 
-            GerneralConfig.setUserData("test_no", no.ToString());
+            StoreHistory(no);
 
             info.MakeSendBuffer();
             info.SetReadNo(no);
@@ -198,6 +222,13 @@ namespace RecViewer
             }
             else
                 return true;
+        }
+
+        private void StoreHistory(int no)
+        {
+            GerneralConfig.setUserData("test_name", (comboBox3.SelectedItem as RecordFileUtil.RecordInfoItem).Name);
+            GerneralConfig.setUserData("test_no", no.ToString());
+            GerneralConfig.setUserData("timeout", tbTimeout.Text);
         }
 
         private void serialPort1_DataReceived(object sender, SerialDataReceivedEventArgs e)
