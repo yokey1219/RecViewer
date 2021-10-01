@@ -151,6 +151,7 @@
             this.tbread.Location = new System.Drawing.Point(380, 23);
             this.tbread.Multiline = true;
             this.tbread.Name = "tbread";
+            this.tbread.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.tbread.Size = new System.Drawing.Size(308, 207);
             this.tbread.TabIndex = 12;
             // 

@@ -179,7 +179,7 @@ namespace RecViewer
                         byte[] tocrc = new byte[len - 2];
                         Array.Copy(arInfo.DataBuffer, tocrc, len - 2);
                         byte[] crc = UtilTools.CRCCalc(tocrc);
-                        if (true)//crc[0] == arInfo.DataBuffer[len - 2] && crc[1] == arInfo.DataBuffer[len - 1])
+                        if (arInfo.DataBuffer[0] == 0x10 && arInfo.DataBuffer[1] == 0x04)//crc[0] == arInfo.DataBuffer[len - 2] && crc[1] == arInfo.DataBuffer[len - 1])
                         {
                             info.ProcBufferWhenReadEnd(len);
                             info.ReadFinish();
@@ -189,8 +189,10 @@ namespace RecViewer
                         }
                         else
                         {
+                            
                             isReaded = false;
-                            MessageBox.Show("校验失败!");
+                            MessageBox.Show("校验失败!不是以10 04开头");
+                            SaveData();
                         }
                     }
                     else
@@ -266,7 +268,7 @@ namespace RecViewer
         internal void SaveData()
         {
             String txt = tbread.Text;
-            String filename=String.Format("{0}\\{1}",AppDomain.CurrentDomain.BaseDirectory,DateTime.Now.ToString("yyyy_MM_dd_hh_mm_ss.txt"));
+            String filename=String.Format("{0}\\{1}.txt",AppDomain.CurrentDomain.BaseDirectory,DateTime.Now.ToString("yyyy_MM_dd_hh_mm_ss"));
             File.WriteAllText(filename,txt);
         }
 
