@@ -233,6 +233,8 @@ namespace RecViewer
             GerneralConfig.setUserData("timeout", tbTimeout.Text);
         }
 
+        bool readingdataflag = false;
+
         private void serialPort1_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             if (e.EventType.Equals(SerialData.Eof)) return;
@@ -240,19 +242,29 @@ namespace RecViewer
             int len = serialPort1.Read(buf, 0, 1024);
             if (len > 0)
             {
-                arInfo.ReadDataToBuffer(buf, 0, len);
-                if (arInfo.DataBuffer.Length > 4)
+                if(serialPort_ReadData_Check(buf,len))
                 {
-                    int toread = Convert.ToInt32((arInfo.DataBuffer[2]<<8)+arInfo.DataBuffer[3]);
-                    if (arInfo is ModulusYuanInfo)
+                    arInfo.ReadDataToBuffer(buf, 0, len);
+                    readingdataflag = true;
+                    if (arInfo.DataBuffer.Length > 4)
                     {
-                        if (arInfo.DataBuffer.Length >= (toread+6))
-                            bWaitread = false;
-                    }
-                    else
-                    {
-                        if (arInfo.DataBuffer.Length >= (toread + 6) )//&& arInfo.DataBuffer.Length >= 2048)
-                            bWaitread = false;
+                        int toread = Convert.ToInt32((arInfo.DataBuffer[2]<<8)+arInfo.DataBuffer[3]);
+                        if (arInfo is ModulusYuanInfo)
+                        {
+                            if (arInfo.DataBuffer.Length >= (toread + 6))
+                            {
+                                bWaitread = false;
+                                readingdataflag = false;
+                            }
+                        }
+                        else
+                        {
+                            if (arInfo.DataBuffer.Length >= (toread + 6))//&& arInfo.DataBuffer.Length >= 2048)
+                            {
+                                bWaitread = false;
+                                readingdataflag = false;
+                            }
+                        }
                     }
                 }
             }
@@ -261,6 +273,22 @@ namespace RecViewer
                 bWaitread = false;
             }
             
+        }
+
+        private bool serialPort_ReadData_Check(byte[] buf,int len)
+        {
+            if (readingdataflag) return true;
+            if (len < 2 || (buf[0] != 0x10 && buf[1] != 0x04))
+            {
+                Console.WriteLine("receive error data,len:{0}", len);
+                for (int i = 0; i < len; i++)
+                    Console.Write("{0:X2} ", buf[i]);
+                Console.WriteLine();
+                Console.WriteLine("print error data end");
+                return false;
+            }
+            else
+                return true;
         }
 
 
