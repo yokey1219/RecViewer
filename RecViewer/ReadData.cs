@@ -179,6 +179,7 @@ namespace RecViewer
                         byte[] tocrc = new byte[len - 2];
                         Array.Copy(arInfo.DataBuffer, tocrc, len - 2);
                         byte[] crc = UtilTools.CRCCalc(tocrc);
+                        if (arInfo.DataBuffer[0] == 0xff) arInfo.DataBuffer[0] = 0x10;
                         if (arInfo.DataBuffer[0] == 0x10 && arInfo.DataBuffer[1] == 0x04)//crc[0] == arInfo.DataBuffer[len - 2] && crc[1] == arInfo.DataBuffer[len - 1])
                         {
                             info.ProcBufferWhenReadEnd(len);
@@ -278,13 +279,13 @@ namespace RecViewer
         private bool serialPort_ReadData_Check(byte[] buf,int len)
         {
             if (readingdataflag) return true;
-            if (len < 2 || (buf[0] != 0x10 && buf[1] != 0x04))
+            if (len < 2 || (buf[0] != 0x10&&buf[0]!=0xff) || buf[1] != 0x04)
             {
-                Console.WriteLine("receive error data,len:{0}", len);
-                for (int i = 0; i < len; i++)
-                    Console.Write("{0:X2} ", buf[i]);
-                Console.WriteLine();
-                Console.WriteLine("print error data end");
+                //Console.WriteLine("receive error data,len:{0}", len);
+                //for (int i = 0; i < len; i++)
+                //    Console.Write("{0:X2} ", buf[i]);
+                //Console.WriteLine();
+                //Console.WriteLine("print error data end");
                 return false;
             }
             else
