@@ -12,12 +12,13 @@ namespace RecordFileUtil
         protected List<IXYNode> specialnodes;
         protected int maxstrength;
         protected int maxoffset;
-        protected int antistrength;//抗剪强度
-        protected int injectionstrength;//贯入强度
+        protected int antistrength;//抗剪强度 改 贯入强度
+        protected int injectionstrength;//贯入强度 改 贯入应力
         internal int xdiv = 1000;
         internal int ydiv = 1000;
         internal static float xdivf = 1000f;
         internal static float ydivf = 1000f;
+        protected int yatouwidth;//压头直径
 
         public int MaxStrength { get { return maxstrength; } }
         public int MaxOffset { get { return maxoffset; } }
@@ -59,23 +60,38 @@ namespace RecordFileUtil
             {
                 nodes = new List<IXYNode>();
                 int idx = 2;
+                
                 int length = (int)((bytes[idx++] << 8) | bytes[idx++]);
+                //0
                 year = (int)((bytes[idx++] << 8) | bytes[idx++]);
+                //1
                 month = (int)((bytes[idx++] << 8) | bytes[idx++]);
+                //2
                 day = (int)((bytes[idx++] << 8) | bytes[idx++]);
+                //3
                 hour = (int)((bytes[idx++] << 8) | bytes[idx++]);
+                //4
                 minute = (int)((bytes[idx++] << 8) | bytes[idx++]);
                 thedate = String.Format("{0}年{1}月{2}日{3}时{4}分", year, month, day, hour, minute);
+                //5
                 height = (int)((bytes[idx++] << 8) | bytes[idx++]);
+                //6
                 width = (int)((bytes[idx++] << 8) | bytes[idx++]);
+                //7
                 temp = Convert.ToInt32(Convert.ToInt16(String.Format("{0:X2}{1:X2}", bytes[idx++], bytes[idx++]), 16));//Convert.ToInt32((int)((bytes[idx++] << 8) | bytes[idx++]));
+                //8
                 loadspeed = (int)((bytes[idx++] << 8) | bytes[idx++]);
+                //9
                 nodecnt = (int)((bytes[idx++] << 8) | bytes[idx++]);
                 //sensor = (int)((bytes[idx++] << 8) | bytes[idx++]);
+                //A
                 shiyanno1 = (int)bytes[idx++];
                 shiyanno2 = (int)bytes[idx++];
-                idx++;
-                idx++;
+                //B
+                //压头直径
+                yatouwidth = (int)((bytes[idx++] << 8) | bytes[idx++]);
+                //idx++;
+                //idx++;
                 //rb = (int)((bytes[idx++] << 8) | bytes[idx++]);
                 maxstrength = (int)((bytes[idx++] << 8) | bytes[idx++]);
                 maxoffset = (int)((bytes[idx++] << 8) | bytes[idx++]);
@@ -95,7 +111,7 @@ namespace RecordFileUtil
                     {
                         chartformat.Xmax += chartformat.Xinterval;
                     }
-                    while (kn> chartformat.Ymax * ydiv)
+                    while (kn > chartformat.Ymax * ydiv)
                     {
                         chartformat.Ymax += chartformat.Yinterval;
                     }
@@ -103,6 +119,8 @@ namespace RecordFileUtil
                     if (nodes.Count > nodecnt)
                         break;
                 }
+                
+
 
                 specialnodes = new List<IXYNode>();
                 specialnodes.Add(new ModeInjectionNodeInfo(maxstrength,maxoffset));
@@ -194,16 +212,27 @@ namespace RecordFileUtil
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
             this.maxoffset = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("mm", "")) * ydiv);
 
-            //抗剪强度
+            //抗剪强度  改  贯入强度
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
-            this.antistrength = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("MPa", "")) * 10000);
+            this.antistrength = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("MPa", "")) * 1000);
 
-            //贯入强度
+            //贯入强度 改 贯入应力
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
-            this.injectionstrength = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("MPa", "")) * 10000);
+            this.injectionstrength = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("MPa", "")) * 1000);
 
-            idx++;
-            idx++;
+            //压头直径
+            strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
+            if (strarr[0].Equals("压头直径"))
+            {
+                this.yatouwidth = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("mm", "")) * 10);
+                idx++;
+                idx++;
+            }
+            else
+            {
+                idx++;
+            }
+
             nodes = new List<IXYNode>();
             nodes.Add(new ModeInjectionNodeInfo(0, 0));
             for (; idx < strs.Length; idx++)
@@ -272,10 +301,10 @@ namespace RecordFileUtil
             dr[1] = this.nodecnt;
             dt.Rows.Add(dr);
 
-            dr = dt.NewRow();
-            dr[0] = "试验编号";
-            dr[1] = String.Format("{0}-{1}", this.shiyanno1, this.shiyanno2);
-            dt.Rows.Add(dr);
+            //dr = dt.NewRow();
+            //dr[0] = "试验编号";
+            //dr[1] = String.Format("{0}-{1}", this.shiyanno1, this.shiyanno2);
+            //dt.Rows.Add(dr);
 
 
             dr = dt.NewRow();
@@ -289,14 +318,20 @@ namespace RecordFileUtil
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
-            dr[0] = "抗剪强度";
-            dr[1] = String.Format("{0:f4}MPa", this.antistrength / 10000f);// String.Format("{0:f3}MPa", _rb);//
+            dr[0] = "贯入强度";// "抗剪强度";
+            dr[1] = String.Format("{0:f4}MPa", this.antistrength / 1000f);// String.Format("{0:f3}MPa", _rb);//
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
-            dr[0] = "贯入强度";
-            dr[1] = String.Format("{0:f4}MPa", this.injectionstrength / 10000f);// String.Format("{0:f3}MPa", _rb);//
+            dr[0] = "贯入应力";// "贯入强度";
+            dr[1] = String.Format("{0:f4}MPa", this.injectionstrength / 1000f);// String.Format("{0:f3}MPa", _rb);//
             dt.Rows.Add(dr);
+
+            dr = dt.NewRow();
+            dr[0] = "压头直径";
+            dr[1] = String.Format("{0:f1}mm", this.yatouwidth / 10f);// String.Format("{0:f3}MPa", _rb);//
+            dt.Rows.Add(dr);
+
 
             displaymaxidx = dt.Rows.Count - 1;
             return dt;
@@ -364,13 +399,18 @@ namespace RecordFileUtil
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
-            dr[0] = "抗剪强度";
-            dr[1] = String.Format("{0:f4}MPa", this.antistrength / 10000f);// String.Format("{0:f3}MPa", _rb);//
+            dr[0] = "贯入强度";// "抗剪强度";
+            dr[1] = String.Format("{0:f4}MPa", this.antistrength / 1000f);// String.Format("{0:f3}MPa", _rb);//
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
-            dr[0] = "贯入强度";
-            dr[1] = String.Format("{0:f4}MPa", this.injectionstrength / 10000f);// String.Format("{0:f3}MPa", _rb);//
+            dr[0] = "贯入应力";//"贯入强度";
+            dr[1] = String.Format("{0:f4}MPa", this.injectionstrength / 1000f);// String.Format("{0:f3}MPa", _rb);//
+            dt.Rows.Add(dr);
+
+            dr = dt.NewRow();
+            dr[0] = "压头直径";
+            dr[1] = String.Format("{0:f1}mm", this.yatouwidth / 10f);// String.Format("{0:f3}MPa", _rb);//
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
