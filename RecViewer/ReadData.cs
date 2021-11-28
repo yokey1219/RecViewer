@@ -209,7 +209,7 @@ namespace RecViewer
         internal void SaveData()
         {
             String txt = tbread.Text;
-            String filename=String.Format("{0}\\{1}",AppDomain.CurrentDomain.BaseDirectory,DateTime.Now.ToString("yyyy_MM_dd_hh_mm_ss.txt"));
+            String filename=String.Format("{0}\\{1}.txt",AppDomain.CurrentDomain.BaseDirectory,DateTime.Now.ToString("yyyy_MM_dd_hh_mm_ss"));
             File.WriteAllText(filename,txt);
         }
     }
