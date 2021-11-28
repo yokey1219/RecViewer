@@ -35,8 +35,8 @@ namespace RecordFileUtil
         protected int sensor;//传感器
         protected int nonuse1;//空
         protected int nodecnt;//点数
-        protected int shiyanno1;//试验编号高位
-        protected int shiyanno2;//试验编号低位
+        //protected int shiyanno1;//试验编号高位
+        //protected int shiyanno2;//试验编号低位
 
         protected int displaymaxidx=0;//
 

@@ -16,6 +16,7 @@ namespace RecordFileUtil
         protected int maxoffset;
         protected int eb;
         protected int sb;
+        protected int kuajing;//跨径
         internal int xdiv = 1000;//位移改3位小数 xidv=100;
         internal int ydiv = 1000;
         internal static float xdivf = 1000f;//位移改3位小数 xidvf=100;
@@ -74,11 +75,11 @@ namespace RecordFileUtil
                 width = (int)((bytes[idx++] << 8) | bytes[idx++]);
                 height = (int)((bytes[idx++] << 8) | bytes[idx++]);
                 temp = Convert.ToInt32(Convert.ToInt16(String.Format("{0:X2}{1:X2}", bytes[idx++], bytes[idx++]), 16));//Convert.ToInt32((int)((bytes[idx++] << 8) | bytes[idx++]));
-                sensor = (int)((bytes[idx++] << 8) | bytes[idx++]);
+                kuajing = (int)((bytes[idx++] << 8) | bytes[idx++]);
                 nodecnt = (int)((bytes[idx++] << 8) | bytes[idx++]);
-                //sensor = (int)((bytes[idx++] << 8) | bytes[idx++]);
-                shiyanno1 = (int)bytes[idx++];
-                shiyanno2 = (int)bytes[idx++];
+                sensor = (int)((bytes[idx++] << 8) | bytes[idx++]);
+                //shiyanno1 = (int)bytes[idx++];
+                //shiyanno2 = (int)bytes[idx++];
                 
                 rb = (int)((bytes[idx++] << 8) | bytes[idx++]);
                 maxstrength = (int)((bytes[idx++] << 8) | bytes[idx++]);
@@ -89,9 +90,9 @@ namespace RecordFileUtil
                 sb=Convert.ToInt32((double)(rb/100.0) / ((double)eb/10000000.0));
 
                 double _rb;
-                _rb = (double)3 * (this.sensor / 10f) * (this.maxstrength) / (this.width / 10f) / (this.height / 10f) / (this.height / 10f) / 2;
+                _rb = (double)3 * (this.kuajing / 10f) * (this.maxstrength) / (this.width / 10f) / (this.height / 10f) / (this.height / 10f) / 2;
                 double _eb;
-                _eb = (double)6 * (this.height / 10f) * (this.maxoffset / xdivf) / (this.sensor / 10f) / (this.sensor / 10f);
+                _eb = (double)6 * (this.height / 10f) * (this.maxoffset / xdivf) / (this.kuajing / 10f) / (this.kuajing / 10f);
                 int __eb = Convert.ToInt32(_eb * 10000000);
                 int _diff = __eb - eb;
                 if(_diff<-500||_diff>500)
@@ -185,21 +186,25 @@ namespace RecordFileUtil
 
             //试件跨度
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
-            this.sensor = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("mm", ""))*10);
+            this.kuajing = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("mm", "")) * 10);
 
             //试验编号
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
             if (strarr[0].Equals("试验编号"))
             {
-                String[] bianhaostrarr = strarr[1].Split('-');
-                shiyanno1 = Convert.ToInt32(bianhaostrarr[0]);
-                if (bianhaostrarr.Length > 1)
-                    shiyanno2 = Convert.ToInt32(bianhaostrarr[1]);
-                else
-                    shiyanno2 = 1;
+                //String[] bianhaostrarr = strarr[1].Split('-');
+                //shiyanno1 = Convert.ToInt32(bianhaostrarr[0]);
+                //if (bianhaostrarr.Length > 1)
+                //    shiyanno2 = Convert.ToInt32(bianhaostrarr[1]);
+                //else
+                //    shiyanno2 = 1;
 
                 //RB
                 strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
+            }
+            else if (strarr[0].StartsWith("传感器"))
+            {
+                this.sensor = Convert.ToInt32(Convert.ToInt32(strarr[1].Replace("KN", "")) * 10);
             }
             this.rb = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("MPa", "")) * 1000);
 
@@ -257,12 +262,12 @@ namespace RecordFileUtil
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
-            //dr[0] = "编号";
-            //dr[1] = this.no;
-            //dt.Rows.Add(dr);
-            dr[0] = "试验编号";
-            dr[1] = String.Format("{0}-{1}", shiyanno1, shiyanno2);
+            dr[0] = "编号";
+            dr[1] = this.no;
             dt.Rows.Add(dr);
+            //dr[0] = "试验编号";
+            //dr[1] = String.Format("{0}-{1}", shiyanno1, shiyanno2);
+            //dt.Rows.Add(dr);
 
             dr = dt.NewRow();
             dr[0] = "试件宽度";
@@ -287,16 +292,19 @@ namespace RecordFileUtil
 
             dr = dt.NewRow();
             dr[0] = "试件跨径";
-            dr[1] = String.Format("{0:f1}mm", this.sensor / 10f);
+            dr[1] = String.Format("{0:f1}mm", this.kuajing / 10f);
             dt.Rows.Add(dr);
 
-            //dr = dt.NewRow();
+            dr = dt.NewRow();
             //dr[0] = "传感器大小";
             //dr[1] = String.Format("{0}KN", this.sensor);
             //dt.Rows.Add(dr);
             //dr[0] = "试验编号";
             //dr[1] = String.Format("{0}-{1}", this.shiyanno1, this.shiyanno2);
             //dt.Rows.Add(dr);
+            dr[0] = "传感器";
+            dr[1] = String.Format("{0:f1}KN", this.sensor / 10f);
+            dt.Rows.Add(dr);
             
 
             dr = dt.NewRow();
@@ -310,14 +318,14 @@ namespace RecordFileUtil
             dt.Rows.Add(dr);
 
             double _rb;
-            _rb = (double)3 * (this.sensor / 10f) * (this.maxstrength) / (this.width / 10f) / (this.height / 10f) / (this.height / 10f) / 2;
+            _rb = (double)3 * (this.kuajing / 10f) * (this.maxstrength) / (this.width / 10f) / (this.height / 10f) / (this.height / 10f) / 2;
             dr = dt.NewRow();
             dr[0] = "RB";
             dr[1] = String.Format("{0:f3}MPa", this.rb / 1000f);// String.Format("{0:f3}MPa", _rb);//
             dt.Rows.Add(dr);
 
             double _eb;
-            _eb = (double)6 * (this.height / 10f) * (this.maxoffset / xdivf) / (this.sensor / 10f) / (this.sensor / 10f);
+            _eb = (double)6 * (this.height / 10f) * (this.maxoffset / xdivf) / (this.kuajing / 10f) / (this.kuajing / 10f);
             dr = dt.NewRow();
             dr[0] = "εB";//"EB";
             //dr[1] = String.Format("{0:d} ×10\u207b\u2076 με", this.eb *1000);
@@ -380,16 +388,19 @@ namespace RecordFileUtil
 
             dr = dt.NewRow();
             dr[0] = "试件跨径";
-            dr[1] = String.Format("{0:f1}mm", this.sensor/10f);
+            dr[1] = String.Format("{0:f1}mm", this.kuajing / 10f);
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
-            dr[0] = "试验编号";
-            dr[1] = String.Format("{0}-{1}", this.shiyanno1, this.shiyanno2);
+            //dr[0] = "试验编号";
+            //dr[1] = String.Format("{0}-{1}", this.shiyanno1, this.shiyanno2);
+            //dt.Rows.Add(dr);
+            dr[0] = "传感器";
+            dr[1] = String.Format("{0:f1}KN", this.sensor / 10f);
             dt.Rows.Add(dr);
 
             double _rb;
-            _rb = (double)3 * (this.sensor / 10f) * (this.maxstrength) / (this.width / 10f) / (this.height / 10f) / (this.height / 10f)/2;
+            _rb = (double)3 * (this.kuajing / 10f) * (this.maxstrength) / (this.width / 10f) / (this.height / 10f) / (this.height / 10f) / 2;
             dr = dt.NewRow();
             dr[0] = "RB";
             dr[1] = String.Format("{0:f3}MPa", this.rb / 1000f); //String.Format("{0:f3}MPa", _rb);//
@@ -406,7 +417,7 @@ namespace RecordFileUtil
             dt.Rows.Add(dr);
 
             double _eb;
-            _eb = (double)6 * (this.height / 10f) * (this.maxoffset / 100f) / (this.sensor / 10f) / (this.sensor / 10f);
+            _eb = (double)6 * (this.height / 10f) * (this.maxoffset / 100f) / (this.kuajing / 10f) / (this.kuajing / 10f);
             dr = dt.NewRow();
             dr[0] = "εB";//"EB";
             //dr[1] = String.Format("{0:d} ×10\u207b\u2076 με", this.eb *1000);
@@ -445,7 +456,6 @@ namespace RecordFileUtil
         public override void EditValue(string p, string newvalue)
         {
 
-            //this.sensor
             if (p.Equals(KUAZHONGNAODU))
             {
                 newvalue = newvalue.Replace("mm", "");
@@ -456,9 +466,9 @@ namespace RecordFileUtil
                 //this.sb = this.sb * oldmax / this.maxoffset;
 
                 double _rb;
-                _rb = (double)3 * (this.sensor / 10f) * (this.maxstrength) / (this.width / 10f) / (this.height / 10f) / (this.height / 10f)/2;
+                _rb = (double)3 * (this.kuajing / 10f) * (this.maxstrength) / (this.width / 10f) / (this.height / 10f) / (this.height / 10f) / 2;
                 double _eb;
-                _eb = (double)6 * (this.height / 10f) * (this.maxoffset / xdivf) / (this.sensor / 10f) / (this.sensor / 10f);
+                _eb = (double)6 * (this.height / 10f) * (this.maxoffset / xdivf) / (this.kuajing / 10f) / (this.kuajing / 10f);
                 this.eb = Convert.ToInt32(_eb * 10000000);
                 this.sb = Convert.ToInt32((double)_rb * 10 / _eb);
 
