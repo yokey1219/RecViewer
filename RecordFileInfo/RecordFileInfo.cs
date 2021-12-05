@@ -91,6 +91,7 @@ namespace RecordFileUtil
                 specialnodes.Add(new CBRRecordNodeInfo(kpa25, 2500));
                 specialnodes.Add(new CBRRecordNodeInfo(kpa50, 5000));
             }
+            base.LoadInternalData(bytes);
         }
 
         public override List<IXYNode> getXYNodes()
@@ -204,6 +205,7 @@ namespace RecordFileUtil
             specialnodes.Add(new CBRRecordNodeInfo(kpa50, 5000));
             thedate = String.Format("{0}年{1}月{2}日{3}时{4}分", year, month, day, hour, minute);
 
+            base.LoadFromCSV(strs);
         }
 
         public override DataTable getDataTable()

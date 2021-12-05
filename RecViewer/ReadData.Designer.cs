@@ -192,7 +192,7 @@
             this.tbTimeout.Name = "tbTimeout";
             this.tbTimeout.Size = new System.Drawing.Size(41, 21);
             this.tbTimeout.TabIndex = 14;
-            this.tbTimeout.Text = "5";
+            this.tbTimeout.Text = "20";
             // 
             // label6
             // 

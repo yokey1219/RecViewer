@@ -92,6 +92,8 @@
             this.printDialog1 = new System.Windows.Forms.PrintDialog();
             this.pageSetupDialog1 = new System.Windows.Forms.PageSetupDialog();
             this.printPreviewDialog1 = new System.Windows.Forms.PrintPreviewDialog();
+            this.lblinfo8 = new System.Windows.Forms.Label();
+            this.lbldis8 = new System.Windows.Forms.Label();
             this.pnltop.SuspendLayout();
             this.panel1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -345,6 +347,8 @@
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.Controls.Add(this.lbldis8, 0, 12);
+            this.tableLayoutPanel1.Controls.Add(this.lblinfo8, 0, 12);
             this.tableLayoutPanel1.Controls.Add(this.lblinfo7, 1, 11);
             this.tableLayoutPanel1.Controls.Add(this.lbldis7, 0, 11);
             this.tableLayoutPanel1.Controls.Add(this.lblinfo6, 1, 10);
@@ -372,19 +376,20 @@
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 45);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 12;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 8.333332F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 8.333332F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 8.333332F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 8.333332F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 8.333332F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 8.333332F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 8.333332F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 8.333332F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 8.333332F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 8.333332F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 8.333332F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 8.333332F));
+            this.tableLayoutPanel1.RowCount = 13;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7.692307F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7.692307F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7.692307F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7.692307F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7.692307F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7.692307F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7.692307F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7.692307F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7.692307F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7.692307F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7.692307F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7.692307F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7.692307F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(299, 595);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
@@ -393,7 +398,7 @@
             this.lblinfo7.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblinfo7.AutoSize = true;
             this.lblinfo7.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lblinfo7.Location = new System.Drawing.Point(203, 556);
+            this.lblinfo7.Location = new System.Drawing.Point(203, 507);
             this.lblinfo7.Name = "lblinfo7";
             this.lblinfo7.Size = new System.Drawing.Size(42, 21);
             this.lblinfo7.TabIndex = 23;
@@ -404,7 +409,7 @@
             this.lbldis7.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lbldis7.AutoSize = true;
             this.lbldis7.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbldis7.Location = new System.Drawing.Point(53, 556);
+            this.lbldis7.Location = new System.Drawing.Point(53, 507);
             this.lbldis7.Name = "lbldis7";
             this.lbldis7.Size = new System.Drawing.Size(42, 21);
             this.lbldis7.TabIndex = 22;
@@ -415,7 +420,7 @@
             this.lblinfo6.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblinfo6.AutoSize = true;
             this.lblinfo6.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lblinfo6.Location = new System.Drawing.Point(203, 504);
+            this.lblinfo6.Location = new System.Drawing.Point(203, 462);
             this.lblinfo6.Name = "lblinfo6";
             this.lblinfo6.Size = new System.Drawing.Size(42, 21);
             this.lblinfo6.TabIndex = 21;
@@ -426,7 +431,7 @@
             this.lbldis6.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lbldis6.AutoSize = true;
             this.lbldis6.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbldis6.Location = new System.Drawing.Point(53, 504);
+            this.lbldis6.Location = new System.Drawing.Point(53, 462);
             this.lbldis6.Name = "lbldis6";
             this.lbldis6.Size = new System.Drawing.Size(42, 21);
             this.lbldis6.TabIndex = 20;
@@ -437,7 +442,7 @@
             this.lblinfo5.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblinfo5.AutoSize = true;
             this.lblinfo5.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lblinfo5.Location = new System.Drawing.Point(203, 455);
+            this.lblinfo5.Location = new System.Drawing.Point(203, 417);
             this.lblinfo5.Name = "lblinfo5";
             this.lblinfo5.Size = new System.Drawing.Size(42, 21);
             this.lblinfo5.TabIndex = 19;
@@ -448,7 +453,7 @@
             this.lbldis5.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lbldis5.AutoSize = true;
             this.lbldis5.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbldis5.Location = new System.Drawing.Point(53, 455);
+            this.lbldis5.Location = new System.Drawing.Point(53, 417);
             this.lbldis5.Name = "lbldis5";
             this.lbldis5.Size = new System.Drawing.Size(42, 21);
             this.lbldis5.TabIndex = 18;
@@ -459,7 +464,7 @@
             this.lbldiameter.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lbldiameter.AutoSize = true;
             this.lbldiameter.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbldiameter.Location = new System.Drawing.Point(181, 161);
+            this.lbldiameter.Location = new System.Drawing.Point(181, 147);
             this.lbldiameter.Name = "lbldiameter";
             this.lbldiameter.Size = new System.Drawing.Size(85, 21);
             this.lbldiameter.TabIndex = 7;
@@ -470,7 +475,7 @@
             this.lbldiameterdis.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lbldiameterdis.AutoSize = true;
             this.lbldiameterdis.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbldiameterdis.Location = new System.Drawing.Point(37, 161);
+            this.lbldiameterdis.Location = new System.Drawing.Point(37, 147);
             this.lbldiameterdis.Name = "lbldiameterdis";
             this.lbldiameterdis.Size = new System.Drawing.Size(74, 21);
             this.lbldiameterdis.TabIndex = 6;
@@ -481,7 +486,7 @@
             this.lblheight.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblheight.AutoSize = true;
             this.lblheight.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lblheight.Location = new System.Drawing.Point(181, 112);
+            this.lblheight.Location = new System.Drawing.Point(181, 102);
             this.lblheight.Name = "lblheight";
             this.lblheight.Size = new System.Drawing.Size(85, 21);
             this.lblheight.TabIndex = 5;
@@ -492,7 +497,7 @@
             this.lblheightdis.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblheightdis.AutoSize = true;
             this.lblheightdis.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lblheightdis.Location = new System.Drawing.Point(37, 112);
+            this.lblheightdis.Location = new System.Drawing.Point(37, 102);
             this.lblheightdis.Name = "lblheightdis";
             this.lblheightdis.Size = new System.Drawing.Size(74, 21);
             this.lblheightdis.TabIndex = 4;
@@ -503,7 +508,7 @@
             this.lblno.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblno.AutoSize = true;
             this.lblno.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lblno.Location = new System.Drawing.Point(210, 63);
+            this.lblno.Location = new System.Drawing.Point(210, 57);
             this.lblno.Name = "lblno";
             this.lblno.Size = new System.Drawing.Size(28, 21);
             this.lblno.TabIndex = 3;
@@ -514,7 +519,7 @@
             this.lblnodis.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblnodis.AutoSize = true;
             this.lblnodis.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lblnodis.Location = new System.Drawing.Point(53, 63);
+            this.lblnodis.Location = new System.Drawing.Point(53, 57);
             this.lblnodis.Name = "lblnodis";
             this.lblnodis.Size = new System.Drawing.Size(42, 21);
             this.lblnodis.TabIndex = 2;
@@ -525,7 +530,7 @@
             this.lbldate.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lbldate.AutoSize = true;
             this.lbldate.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbldate.Location = new System.Drawing.Point(152, 3);
+            this.lbldate.Location = new System.Drawing.Point(152, 1);
             this.lbldate.Name = "lbldate";
             this.lbldate.Size = new System.Drawing.Size(144, 42);
             this.lbldate.TabIndex = 1;
@@ -536,7 +541,7 @@
             this.lbldatedis.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lbldatedis.AutoSize = true;
             this.lbldatedis.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbldatedis.Location = new System.Drawing.Point(53, 14);
+            this.lbldatedis.Location = new System.Drawing.Point(53, 12);
             this.lbldatedis.Name = "lbldatedis";
             this.lbldatedis.Size = new System.Drawing.Size(42, 21);
             this.lbldatedis.TabIndex = 0;
@@ -547,7 +552,7 @@
             this.lbldis4.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lbldis4.AutoSize = true;
             this.lbldis4.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbldis4.Location = new System.Drawing.Point(31, 406);
+            this.lbldis4.Location = new System.Drawing.Point(31, 372);
             this.lbldis4.Name = "lbldis4";
             this.lbldis4.Size = new System.Drawing.Size(86, 21);
             this.lbldis4.TabIndex = 14;
@@ -558,7 +563,7 @@
             this.lblinfo4.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblinfo4.AutoSize = true;
             this.lblinfo4.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lblinfo4.Location = new System.Drawing.Point(179, 406);
+            this.lblinfo4.Location = new System.Drawing.Point(179, 372);
             this.lblinfo4.Name = "lblinfo4";
             this.lblinfo4.Size = new System.Drawing.Size(89, 21);
             this.lblinfo4.TabIndex = 15;
@@ -569,7 +574,7 @@
             this.lbldis3.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lbldis3.AutoSize = true;
             this.lbldis3.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbldis3.Location = new System.Drawing.Point(32, 357);
+            this.lbldis3.Location = new System.Drawing.Point(32, 327);
             this.lbldis3.Name = "lbldis3";
             this.lbldis3.Size = new System.Drawing.Size(85, 21);
             this.lbldis3.TabIndex = 12;
@@ -580,7 +585,7 @@
             this.lbldis2.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lbldis2.AutoSize = true;
             this.lbldis2.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbldis2.Location = new System.Drawing.Point(25, 308);
+            this.lbldis2.Location = new System.Drawing.Point(25, 282);
             this.lbldis2.Name = "lbldis2";
             this.lbldis2.Size = new System.Drawing.Size(99, 21);
             this.lbldis2.TabIndex = 10;
@@ -591,7 +596,7 @@
             this.lbldis1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lbldis1.AutoSize = true;
             this.lbldis1.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbldis1.Location = new System.Drawing.Point(25, 259);
+            this.lbldis1.Location = new System.Drawing.Point(25, 237);
             this.lbldis1.Name = "lbldis1";
             this.lbldis1.Size = new System.Drawing.Size(98, 21);
             this.lbldis1.TabIndex = 8;
@@ -602,7 +607,7 @@
             this.lblnodecntdis.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblnodecntdis.AutoSize = true;
             this.lblnodecntdis.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lblnodecntdis.Location = new System.Drawing.Point(37, 210);
+            this.lblnodecntdis.Location = new System.Drawing.Point(37, 192);
             this.lblnodecntdis.Name = "lblnodecntdis";
             this.lblnodecntdis.Size = new System.Drawing.Size(74, 21);
             this.lblnodecntdis.TabIndex = 16;
@@ -613,7 +618,7 @@
             this.lblinfo1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblinfo1.AutoSize = true;
             this.lblinfo1.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lblinfo1.Location = new System.Drawing.Point(189, 259);
+            this.lblinfo1.Location = new System.Drawing.Point(189, 237);
             this.lblinfo1.Name = "lblinfo1";
             this.lblinfo1.Size = new System.Drawing.Size(69, 21);
             this.lblinfo1.TabIndex = 9;
@@ -624,7 +629,7 @@
             this.lblnodecnt.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblnodecnt.AutoSize = true;
             this.lblnodecnt.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lblnodecnt.Location = new System.Drawing.Point(205, 210);
+            this.lblnodecnt.Location = new System.Drawing.Point(205, 192);
             this.lblnodecnt.Name = "lblnodecnt";
             this.lblnodecnt.Size = new System.Drawing.Size(37, 21);
             this.lblnodecnt.TabIndex = 17;
@@ -635,7 +640,7 @@
             this.lblinfo3.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblinfo3.AutoSize = true;
             this.lblinfo3.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lblinfo3.Location = new System.Drawing.Point(184, 357);
+            this.lblinfo3.Location = new System.Drawing.Point(184, 327);
             this.lblinfo3.Name = "lblinfo3";
             this.lblinfo3.Size = new System.Drawing.Size(80, 21);
             this.lblinfo3.TabIndex = 11;
@@ -646,7 +651,7 @@
             this.lblinfo2.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lblinfo2.AutoSize = true;
             this.lblinfo2.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lblinfo2.Location = new System.Drawing.Point(185, 308);
+            this.lblinfo2.Location = new System.Drawing.Point(185, 282);
             this.lblinfo2.Name = "lblinfo2";
             this.lblinfo2.Size = new System.Drawing.Size(78, 21);
             this.lblinfo2.TabIndex = 13;
@@ -719,6 +724,28 @@
             this.printPreviewDialog1.Icon = ((System.Drawing.Icon)(resources.GetObject("printPreviewDialog1.Icon")));
             this.printPreviewDialog1.Name = "printPreviewDialog1";
             this.printPreviewDialog1.Visible = false;
+            // 
+            // lblinfo8
+            // 
+            this.lblinfo8.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.lblinfo8.AutoSize = true;
+            this.lblinfo8.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lblinfo8.Location = new System.Drawing.Point(203, 557);
+            this.lblinfo8.Name = "lblinfo8";
+            this.lblinfo8.Size = new System.Drawing.Size(42, 21);
+            this.lblinfo8.TabIndex = 24;
+            this.lblinfo8.Text = "保留";
+            // 
+            // lbldis8
+            // 
+            this.lbldis8.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.lbldis8.AutoSize = true;
+            this.lbldis8.Font = new System.Drawing.Font("Microsoft YaHei", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lbldis8.Location = new System.Drawing.Point(53, 557);
+            this.lbldis8.Name = "lbldis8";
+            this.lbldis8.Size = new System.Drawing.Size(42, 21);
+            this.lbldis8.TabIndex = 25;
+            this.lbldis8.Text = "保留";
             // 
             // MainForm
             // 
@@ -811,6 +838,8 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripButton tbnaodu;
+        private System.Windows.Forms.Label lbldis8;
+        private System.Windows.Forms.Label lblinfo8;
         
     }
 }

@@ -119,6 +119,8 @@ namespace RecordFileUtil
                 
 
             }
+
+            base.LoadInternalData(bytes);
         }
 
         protected override void makeSendBufferInternal()
@@ -212,7 +214,7 @@ namespace RecordFileUtil
             specialnodes.Add(new DongrongNodeInfo(maxliuzhi, maxwendingdu));
 
             thedate = String.Format("{0}年{1}月{2}日{3}时{4}分", year, month, day, hour, minute);
-
+            base.LoadFromCSV(strs);
         }
 
         public override DataTable getDispalyTable()

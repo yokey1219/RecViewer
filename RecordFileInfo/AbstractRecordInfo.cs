@@ -56,8 +56,41 @@ namespace RecordFileUtil
         public abstract List<IXYNode> getXYNodes();
         public abstract List<IXYNode> getSpecialNodes();
         public abstract List<String> getCSVLines();
-        public abstract void LoadFromCSV(String[] strs);
+        public virtual void LoadFromCSV(String[] strs)
+        {
+            this.reFomart();
+        }
         public abstract void initCharFormat();
+
+        public virtual void reFomart()
+        {
+            switch (sensor)
+            {
+                case 1000:
+                    chartformat.Ymax = 100;
+                    chartformat.Yinterval = 20;
+                    break;
+                case 500:
+                    chartformat.Ymax = 50;
+                    chartformat.Yinterval = 10;
+                    break;
+                case 200:
+                    chartformat.Ymax = 20;
+                    chartformat.Yinterval = 4;
+                    break;
+                case 20:
+                    chartformat.Ymax = 2;
+                    chartformat.Yinterval = 0.4;
+                    break;
+                case 15:
+                    chartformat.Ymax = 1.5;
+                    chartformat.Yinterval = 0.3;
+                    break;
+                default:
+                    break;
+            }
+        }
+
         public virtual DataTable getDataTable()
         {
             return null;
@@ -148,7 +181,10 @@ namespace RecordFileUtil
             this.LoadInternalData(bytes);
         }
 
-        protected  abstract void LoadInternalData(byte[] bytes);
+        protected virtual void LoadInternalData(byte[] bytes)
+        {
+            this.reFomart();
+        }
 
         internal void SetName(String name)
         {

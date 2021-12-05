@@ -296,6 +296,17 @@ namespace RecViewer
                 lbldis7.Text = "";
                 lblinfo7.Text = "";
             }
+
+            if (idx <= maxidx)
+            {
+                lbldis8.Text = (String)dt.Rows[idx][0];
+                lblinfo8.Text = (String)dt.Rows[idx++][1];
+            }
+            else
+            {
+                lbldis8.Text = "";
+                lblinfo8.Text = "";
+            }
         }
 
 
@@ -323,6 +334,8 @@ namespace RecViewer
             lblinfo6.Text = String.Format(fmt2, info.getXYNodes()[i++].getNodeY());
             lbldis7.Text = "";
             lblinfo7.Text = "";
+            lbldis8.Text = "";
+            lblinfo8.Text = "";
         }
 
         private void FillData(WanquTestInfo info)
@@ -1112,6 +1125,8 @@ namespace RecViewer
             lblinfo6.Text = "";
             lbldis7.Text = "";
             lblinfo7.Text = "";
+            lbldis8.Text = "";
+            lblinfo8.Text = "";
             lblrecordname.Text = "试验记录名称";
             chart1.ChartAreas.Clear();
             chart1.Series.Clear();
