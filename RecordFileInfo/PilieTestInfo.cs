@@ -240,7 +240,7 @@ namespace RecordFileUtil
 
             //ST
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
-            this.st = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("MPa", "")) * 100);
+            this.st = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("MPa", "")) * 10);
 
             idx++;
             idx++;
@@ -349,7 +349,7 @@ namespace RecordFileUtil
 
             dr = dt.NewRow();
             dr[0] = "劲度模量";
-            dr[1] = String.Format("{0:f2}MPa", this.st/100f);//String.Format("{0:f2}MPa", _st); // String.Format("{0:f1}MPa", this.sb / 10f);
+            dr[1] = String.Format("{0:f1}MPa", this.st/10f);//String.Format("{0:f2}MPa", _st); // String.Format("{0:f1}MPa", this.sb / 10f);
             dt.Rows.Add(dr);
 
             displaymaxidx = dt.Rows.Count - 1;
@@ -443,7 +443,7 @@ namespace RecordFileUtil
 
             dr = dt.NewRow();
             dr[0] = "劲度模量";
-            dr[1] = String.Format("{0:f2}MPa", this.st/100f); //String.Format("{0:f2}MPa", _st); // String.Format("{0:f1}MPa", this.sb / 10f);
+            dr[1] = String.Format("{0:f1}MPa", this.st/10f); //String.Format("{0:f2}MPa", _st); // String.Format("{0:f1}MPa", this.sb / 10f);
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
