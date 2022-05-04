@@ -1455,6 +1455,16 @@ namespace RecViewer
                 this.Text = String.Format("{0}[编号范围0 ~ {1}]", "试验记录读取工具", "255");
             }
         }
+
+        private void tsmi_editinfo_Click(object sender, EventArgs e)
+        {
+            if (currentInfo != null)
+            {
+                new DataEditForm().EditData(currentInfo);
+                FillData(currentInfo);
+                ReRenderChart(currentInfo);
+            }
+        }
        
     }
 }

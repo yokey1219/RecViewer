@@ -54,6 +54,8 @@ namespace RecordFileUtil
         public ChartFormat Chartformat { get { return chartformat; } }
 
         public byte[] DataBuffer { get { return buffer; } }
+        public virtual int NodeCntIdx { get { return 6; } }
+
 
         public abstract List<IXYNode> getXYNodes();
         public abstract List<IXYNode> getSpecialNodes();
@@ -230,6 +232,35 @@ namespace RecordFileUtil
         {
             return String.Empty;
         }
+
+        public abstract DataTable getHeaderTable();
+        public abstract DataTable getBodyTable();
+
+        public virtual void acceptHeaderChange(DataTable dtheader)
+        {
+            List<String> slist = new List<string>();
+            foreach (DataRow dr in dtheader.Rows)
+            {
+                slist.Add(String.Format("{0},{1}{2}", dr[0], dr[1],dr[2]));
+            }
+
+            String[] strs = slist.ToArray();
+            this.LoadHeaderFromCSV(strs,1);
+        }
+        public virtual void acceptBodyChange(DataTable dtbody)
+        {
+            List<String> slist = new List<string>();
+            foreach (DataRow dr in dtbody.Rows)
+            {
+                slist.Add(String.Format("{0},{1}", dr[0], dr[1]));
+            }
+
+            String[] strs = slist.ToArray();
+            this.LoadBodyFromCSV(strs,0);
+        }
+
+        protected abstract int  LoadHeaderFromCSV(String[] strs,int idx);
+        protected abstract int  LoadBodyFromCSV(String[] strs,int idx);
     }
 
     public class EditableItem
