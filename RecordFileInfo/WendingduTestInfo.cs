@@ -130,90 +130,6 @@ namespace RecordFileUtil
             throw new NotImplementedException();
         }
 
-        public override void LoadFromCSV(string[] strs)
-        {
-            this.initCharFormat();
-            int idx = 1;
-            String[] strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
-            //日期
-            DateTime dt = DateTime.Parse(strarr[1]);
-            this.year = dt.Year;
-            this.month = dt.Month;
-            this.day = dt.Day;
-            this.hour = dt.Hour;
-            this.minute = dt.Minute;
-            //编号
-            strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
-            this.no = Convert.ToInt32(strarr[1]);
-            this.MakeSendBuffer();
-            this.SetReadNo(no);
-            //试件宽度
-            strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
-            this.width = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("mm", "")) * 10);
-            //试件高度
-            strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
-            this.height = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("mm", "")) * 10);
-
-            //温度
-            strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
-            this.temp = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("℃", "")));
-
-            //速度
-            strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
-            if (strarr[0].Equals("加载速度"))
-            {
-                this.loadspeed = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("mm/min", "")));
-                //记录点数
-                strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
-            }
-            this.nodecnt = Convert.ToInt32(strarr[1]);
-
-            //试件跨度
-            strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
-            //this.sensor = Convert.ToInt32(Convert.ToInt32(strarr[1].Replace("KN", "")));
-            String[] bianhaostrarr = strarr[1].Split('-');
-            shiyanno1 = Convert.ToInt32(bianhaostrarr[0]);
-            if (bianhaostrarr.Length > 1)
-                shiyanno2 = Convert.ToInt32(bianhaostrarr[1]);
-            else
-                shiyanno2 = 1;
-            
-            //最大点压力
-            strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
-            this.maxwendingdu = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("KN", "")) * ydiv);
-
-            //最大点位移
-            strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
-            this.maxliuzhi = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("mm", "")) * xdiv);
-
-           
-   
-            idx++;
-            idx++;
-            nodes = new List<IXYNode>();
-            nodes.Add(new WendingduNodeInfo(0, 0));
-            for (; idx < strs.Length; idx++)
-            {
-                strarr = strs[idx].Split(AbstractRecordInfo.csvsepchar);
-                int kpa = Convert.ToInt32(Convert.ToDouble(strarr[0]) * ydiv);
-                int off = Convert.ToInt32(Convert.ToDouble(strarr[1]) * xdiv);
-                nodes.Add(new WendingduNodeInfo(off, kpa));
-                while(off>chartformat.Xmax*xdiv)
-                {
-                    chartformat.Xmax += chartformat.Xinterval;
-                }
-                while (kpa > chartformat.Ymax * ydiv)
-                {
-                    chartformat.Ymax += chartformat.Yinterval;
-                }
-            }
-
-            specialnodes = new List<IXYNode>();
-            specialnodes.Add(new WendingduNodeInfo(maxliuzhi, maxwendingdu));
-
-            thedate = String.Format("{0}年{1}月{2}日{3}时{4}分", year, month, day, hour, minute);
-
-        }
 
         public override DataTable getDispalyTable()
         {
@@ -267,70 +183,158 @@ namespace RecordFileUtil
             return dt;
         }
 
-        protected override int LoadBodyFromCSV(string[] strs, int idx)
+        protected override int LoadHeaderFromCSV(String[] strs, int index)
         {
-            throw new NotImplementedException();
+            int idx = 1;
+            String[] strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
+            //日期
+            DateTime dt = DateTime.Parse(strarr[1]);
+            this.year = dt.Year;
+            this.month = dt.Month;
+            this.day = dt.Day;
+            this.hour = dt.Hour;
+            this.minute = dt.Minute;
+            //编号
+            strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
+            this.no = Convert.ToInt32(strarr[1]);
+            this.MakeSendBuffer();
+            this.SetReadNo(no);
+            //试件宽度
+            strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
+            this.width = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("mm", "")) * 10);
+            //试件高度
+            strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
+            this.height = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("mm", "")) * 10);
+
+            //温度
+            strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
+            this.temp = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("℃", "")));
+
+            //速度
+            strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
+            if (strarr[0].Equals("加载速度"))
+            {
+                this.loadspeed = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("mm/min", "")));
+                //记录点数
+                strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
+            }
+            this.nodecnt = Convert.ToInt32(strarr[1]);
+
+            //试件跨度
+            strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
+            //this.sensor = Convert.ToInt32(Convert.ToInt32(strarr[1].Replace("KN", "")));
+            String[] bianhaostrarr = strarr[1].Split('-');
+            shiyanno1 = Convert.ToInt32(bianhaostrarr[0]);
+            if (bianhaostrarr.Length > 1)
+                shiyanno2 = Convert.ToInt32(bianhaostrarr[1]);
+            else
+                shiyanno2 = 1;
+
+            //最大点压力
+            strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
+            this.maxwendingdu = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("KN", "")) * ydiv);
+
+            //最大点位移
+            strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
+            this.maxliuzhi = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("mm", "")) * xdiv);
+
+            thedate = String.Format("{0}年{1}月{2}日{3}时{4}分", year, month, day, hour, minute);
+
+            return idx;
         }
 
-        protected override int LoadHeaderFromCSV(string[] strs, int idx)
+        protected override int LoadBodyFromCSV(String[] strs, int index)
         {
-            throw new NotImplementedException();
+            int idx = index;
+            String[] strarr;
+            nodes = new List<IXYNode>();
+            nodes.Add(new WendingduNodeInfo(0, 0));
+            for (; idx < strs.Length; idx++)
+            {
+                strarr = strs[idx].Split(AbstractRecordInfo.csvsepchar);
+                int kpa = Convert.ToInt32(Convert.ToDouble(strarr[0]) * ydiv);
+                int off = Convert.ToInt32(Convert.ToDouble(strarr[1]) * xdiv);
+                nodes.Add(new WendingduNodeInfo(off, kpa));
+                while (off > chartformat.Xmax * xdiv)
+                {
+                    chartformat.Xmax += chartformat.Xinterval;
+                }
+                while (kpa > chartformat.Ymax * ydiv)
+                {
+                    chartformat.Ymax += chartformat.Yinterval;
+                }
+            }
+
+            specialnodes = new List<IXYNode>();
+            specialnodes.Add(new WendingduNodeInfo(maxliuzhi, maxwendingdu));
+            return idx;
+        }
+
+        public override int NodeCntIdx
+        {
+            get
+            {
+                return 7;
+            }
         }
 
         public override DataTable getHeaderTable()
         {
-            throw new NotImplementedException();
-        }
-
-        public override DataTable getBodyTable()
-        {
-            throw new NotImplementedException();
-        }
-       
-
-        public override System.Data.DataTable getDataTable()
-        {
             DataTable dt = new DataTable();
             dt.Columns.Add();
             dt.Columns.Add();
+            dt.Columns.Add();//unit
+            dt.Columns.Add();//is readonly
             DataRow dr = dt.NewRow();
             dr[0] = "试验模式";
             dr[1] = this.recordname;
+            dr[3] = true;
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
             dr[0] = "试验日期";
             dr[1] = String.Format("{0}-{1}-{2} {3}:{4}", this.year, this.month, this.day, this.hour, this.minute);
+            dr[3] = true;
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
             dr[0] = "编号";
             dr[1] = this.no;
+            dr[3] = false;
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
             dr[0] = "试件直径";
-            dr[1] = String.Format("{0:f1}mm", this.Diameter / 10f);
+            dr[1] = String.Format("{0:f1}", this.Diameter / 10f);
+            dr[2] = "mm";
+            dr[3] = false;
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
             dr[0] = "试件高度";
-            dr[1] = String.Format("{0:f1}mm", this.Height / 10f);
+            dr[1] = String.Format("{0:f1}", this.Height / 10f);
+            dr[2] = "mm";
+            dr[3] = false;
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
             dr[0] = "温度";
-            dr[1] = String.Format("{0}℃", this.temp);
+            dr[1] = String.Format("{0}", this.temp);
+            dr[2] = "℃";
+            dr[3] = false;
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
             dr[0] = "加载速度";
-            dr[1] = String.Format("{0}mm/min", this.loadspeed);
+            dr[1] = String.Format("{0}", this.loadspeed);
+            dr[2] = "mm/min";
+            dr[3] = false;
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
             dr[0] = "记录点数";
             dr[1] = this.nodecnt;
+            dr[3] = true;
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
@@ -339,44 +343,51 @@ namespace RecordFileUtil
             //dt.Rows.Add(dr);
             dr[0] = "试验编号";
             dr[1] = String.Format("{0}-{1}", this.shiyanno1, this.shiyanno2);
+            dr[3] = false;
             dt.Rows.Add(dr);
 
-            
+
             dr = dt.NewRow();
             dr[0] = "最大点稳定度";
-            dr[1] = String.Format("{0:f2}KN",this.maxwendingdu/ydivf);// String.Format("{0:f3}MPa", this.rb / 1000f);
+            dr[1] = String.Format("{0:f2}", this.maxwendingdu / ydivf);// String.Format("{0:f3}MPa", this.rb / 1000f);
+            dr[2] = "KN";
+            dr[3] = false;
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
             dr[0] = "最大点流值";
-            dr[1] = String.Format("{0:f3}mm", this.maxliuzhi / xdivf);
+            dr[1] = String.Format("{0:f3}", this.maxliuzhi / xdivf);
+            dr[2] = "mm";
+            dr[3] = false;
             dt.Rows.Add(dr);
+            return dt;
 
+        }
 
-            dr = dt.NewRow();
-            dr[0] = "";
-            dr[1] = "";
-            dt.Rows.Add(dr);
+        public override DataTable getBodyTable()
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add();
+            dt.Columns.Add();
+            dt.Columns[0].ColumnName = "稳定度(KN)";
+            dt.Columns[1].ColumnName = "流值(mm)";
+            DataRow dr = null;
 
-            dr = dt.NewRow();
-            dr[0] = "稳定度(KN)";
-            dr[1] = "流值(mm)";
-            dt.Rows.Add(dr);
-
-
+            int idx = 0;
             foreach (IXYNode node in this.nodes)
             {
-                if (node.getX() != 0 && node.getY() != 0)
+                //if (node.getX() != 0 && node.getY() != 0)
+                if (idx++ > 0)
                 {
                     dr = dt.NewRow();
                     dr[0] = String.Format("{0:f2}", node.getNodeY());
                     dr[1] = String.Format("{0:f3}", node.getNodeX());
                     dt.Rows.Add(dr);
+
                 }
             }
             return dt;
         }
-
        
 
         public override void EditValue(string p, string newvalue)

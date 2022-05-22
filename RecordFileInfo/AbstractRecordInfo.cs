@@ -60,11 +60,51 @@ namespace RecordFileUtil
         public abstract List<IXYNode> getXYNodes();
         public abstract List<IXYNode> getSpecialNodes();
         public abstract List<String> getCSVLines();
-        public abstract void LoadFromCSV(String[] strs);
+        public virtual void LoadFromCSV(String[] strs)
+        {
+            this.initCharFormat();
+            int idx = LoadHeaderFromCSV(strs, 1);
+
+            idx++;
+            idx++;
+
+            LoadBodyFromCSV(strs, idx);
+        }
         public abstract void initCharFormat();
         public virtual DataTable getDataTable()
         {
-            return null;
+            DataTable dt = new DataTable();
+            dt.Columns.Add();
+            dt.Columns.Add();
+            DataTable dt_header = getHeaderTable();
+            DataRow dr;
+            foreach (DataRow dr_header in dt_header.Rows)
+            {
+                dr = dt.NewRow();
+                dr[0] = dr_header[0];
+                dr[1] = String.Format("{0}{1}", dr_header[1], dr_header[2]);
+                dt.Rows.Add(dr);
+            }
+
+            dr = dt.NewRow();
+            dr[0] = "";
+            dr[1] = "";
+            dt.Rows.Add(dr);
+
+            DataTable dt_body = getBodyTable();
+            dr = dt.NewRow();
+            dr[0] = dt_body.Columns[0].ColumnName;
+            dr[1] = dt_body.Columns[1].ColumnName;
+            dt.Rows.Add(dr);
+
+            foreach (DataRow dr_body in dt_body.Rows)
+            {
+                dr = dt.NewRow();
+                dr[0] = dr_body[0];
+                dr[1] = dr_body[1];
+                dt.Rows.Add(dr);
+            }
+            return dt;
         }
 
         public virtual DataTable getDispalyTable()

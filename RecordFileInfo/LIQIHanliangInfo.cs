@@ -114,6 +114,19 @@ namespace RecordFileUtil
         public override void LoadFromCSV(string[] strs)
         {
             this.initCharFormat();
+            int idx = this.LoadHeaderFromCSV(strs, 1);
+
+            
+            idx++;
+            idx++;
+            this.LoadBodyFromCSV(strs, idx);
+
+            
+
+        }
+
+        protected override int LoadHeaderFromCSV(String[] strs, int index)
+        {
             int idx = 1;
             String[] strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
             //日期
@@ -138,11 +151,11 @@ namespace RecordFileUtil
 
             //油石比补偿系数
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
-            this.youshibibuchang = Convert.ToInt32(Convert.ToDouble(strarr[1])*1000);
+            this.youshibibuchang = Convert.ToInt32(Convert.ToDouble(strarr[1]) * 1000);
 
             //含油比补偿系数
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
-            this.hanyoubibuchang = Convert.ToInt32(Convert.ToDouble(strarr[1])*1000);
+            this.hanyoubibuchang = Convert.ToInt32(Convert.ToDouble(strarr[1]) * 1000);
 
 
             //记录点数
@@ -151,8 +164,8 @@ namespace RecordFileUtil
 
             //油石比
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
-            this.youshibi = Convert.ToInt32(Convert.ToDouble(strarr[1])*1000);
-            
+            this.youshibi = Convert.ToInt32(Convert.ToDouble(strarr[1]) * 1000);
+
             //含油比
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
             this.hanyoubi = Convert.ToInt32(Convert.ToDouble(strarr[1]) * 1000);
@@ -167,11 +180,18 @@ namespace RecordFileUtil
 
             //试验结束时的质量
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
-            this.endzhiliang = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("g", "")) *10);
+            this.endzhiliang = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("g", "")) * 10);
 
-            
-            idx++;
-            idx++;
+
+            thedate = String.Format("{0}年{1}月{2}日{3}时{4}分{5}秒", year, month, day, hour, minute, second);
+            return idx;
+        }
+
+        protected override int LoadBodyFromCSV(String[] strs, int index)
+        {
+            int idx = index;
+            String[] strarr;
+
             nodes = new List<IXYNode>();
             nodes.Add(new LIQIHanNodeInfo(0, 0));
             int x = 0;
@@ -181,7 +201,7 @@ namespace RecordFileUtil
                 int y = Convert.ToInt32(Convert.ToDouble(strarr[0]) * 1000);
                 x += 15;
                 nodes.Add(new LIQIHanNodeInfo(x, y));
-                while(y>chartformat.Xmax*60)
+                while (y > chartformat.Xmax * 60)
                 {
                     chartformat.Xmax += chartformat.Xinterval;
                 }
@@ -190,33 +210,135 @@ namespace RecordFileUtil
                     chartformat.Ymax += chartformat.Yinterval;
                 }
             }
-
-            //specialnodes = new List<IXYNode>();
-            //specialnodes.Add(new LIQIHanNodeInfo(wendu, shijianzhiliang));
-
-            thedate = String.Format("{0}年{1}月{2}日{3}时{4}分{5}秒", year, month, day, hour, minute,second);
-
+            return idx;
         }
 
-        protected override int LoadHeaderFromCSV(string[] strs, int idx)
-        {
-            
-            throw new NotImplementedException();
-        }
 
-        protected override int LoadBodyFromCSV(string[] strs, int idx)
+        public override int NodeCntIdx
         {
-            throw new NotImplementedException();
+            get
+            {
+                return 7;
+            }
         }
 
         public override DataTable getHeaderTable()
         {
-            throw new NotImplementedException();
+            DataTable dt = new DataTable();
+            dt.Columns.Add();
+            dt.Columns.Add();
+            dt.Columns.Add();//unit
+            dt.Columns.Add();//is readonly
+            DataRow dr = dt.NewRow();
+            dr[0] = "试验模式";
+            dr[1] = this.recordname;
+            dr[3] = true;
+            dt.Rows.Add(dr);
+
+            dr = dt.NewRow();
+            dr[0] = "试验日期";
+            dr[1] = String.Format("{0}-{1}-{2} {3}:{4}:{5}", this.year, this.month, this.day, this.hour, this.minute, this.second);
+            dr[3] = true;
+            dt.Rows.Add(dr);
+
+            dr = dt.NewRow();
+            dr[0] = "编号";
+            dr[1] = this.no;
+            dr[3] = false;
+            dt.Rows.Add(dr);
+
+            dr = dt.NewRow();
+            dr[0] = "试验温度";
+            dr[1] = String.Format("{0}", this.wendu);
+            dr[2] = "℃";
+            dr[3] = false;
+            dt.Rows.Add(dr);
+
+            dr = dt.NewRow();
+            dr[0] = "试件质量";
+            dr[1] = String.Format("{0:f1}", this.shijianzhiliang / 10f);
+            dr[2] = "g";
+            dr[3] = false;
+            dt.Rows.Add(dr);
+
+            dr = dt.NewRow();
+            dr[0] = "油石比补偿系数";
+            dr[1] = String.Format("{0:f3}", this.youshibibuchang / 1000f);
+            dr[3] = false;
+            dt.Rows.Add(dr);
+
+            dr = dt.NewRow();
+            dr[0] = "含油比补偿系数";
+            dr[1] = String.Format("{0:f3} ", this.hanyoubibuchang / 1000f);
+            dr[3] = false;
+            dt.Rows.Add(dr);
+
+            dr = dt.NewRow();
+            dr[0] = "记录点数";
+            dr[1] = this.nodecnt;
+            dr[3] = true;
+            dt.Rows.Add(dr);
+
+            dr = dt.NewRow();
+            dr[0] = "油石比";
+            dr[1] = String.Format("{0:f3}", this.youshibi / 1000f);
+            dr[3] = false;
+            dt.Rows.Add(dr);
+
+            dr = dt.NewRow();
+            dr[0] = "含油比";
+            dr[1] = String.Format("{0:f3}", this.hanyoubi / 1000f);
+            dr[3] = false;
+            dt.Rows.Add(dr);
+
+            dr = dt.NewRow();
+            dr[0] = "试验用时";
+            dr[1] = String.Format("{0}", this.shiyantime);
+            dr[2] = "分";
+            dr[3] = false;
+            dt.Rows.Add(dr);
+
+            dr = dt.NewRow();
+            dr[0] = "结束温度";
+            dr[1] = String.Format("{0:f1}", this.endwedu / 10f);
+            dr[2] = "℃";
+            dr[3] = false;
+            dt.Rows.Add(dr);
+
+            dr = dt.NewRow();
+            dr[0] = "结束质量";
+            dr[1] = String.Format("{0:f1}", this.endzhiliang / 10f);
+            dr[2] = "g";
+            dr[3] = false;
+            dt.Rows.Add(dr);
+
+            
+            return dt;
+
         }
 
         public override DataTable getBodyTable()
         {
-            throw new NotImplementedException();
+            DataTable dt = new DataTable();
+            dt.Columns.Add();
+            dt.Columns.Add();
+            dt.Columns[0].ColumnName = "质量损失率";
+            dt.Columns[1].ColumnName = "";
+            DataRow dr = null;
+
+            int idx = 0;
+            foreach (IXYNode node in this.nodes)
+            {
+                //if (node.getX() != 0 && node.getY() != 0)
+                if (idx++ > 0)
+                {
+                    dr = dt.NewRow();
+                    dr[0] = String.Format("{0:f3}", node.getNodeY());
+                    dr[1] = "";//String.Format("{0:f2}", node.getNodeX());
+                    dt.Rows.Add(dr);
+                }
+            }
+            return dt;
         }
 
         public override System.Data.DataTable getDataTable()
@@ -224,91 +346,33 @@ namespace RecordFileUtil
             DataTable dt = new DataTable();
             dt.Columns.Add();
             dt.Columns.Add();
-            DataRow dr = dt.NewRow();
-            dr[0] = "试验模式";
-            dr[1] = this.recordname;
-            dt.Rows.Add(dr);
-
-            dr = dt.NewRow();
-            dr[0] = "试验日期";
-            dr[1] = String.Format("{0}-{1}-{2} {3}:{4}:{5}", this.year, this.month, this.day, this.hour, this.minute,this.second);
-            dt.Rows.Add(dr);
-
-            dr = dt.NewRow();
-            dr[0] = "编号";
-            dr[1] = this.no;
-            dt.Rows.Add(dr);
-
-            dr = dt.NewRow();
-            dr[0] = "试验温度";
-            dr[1] = String.Format("{0}℃", this.wendu);
-            dt.Rows.Add(dr);
-
-            dr = dt.NewRow();
-            dr[0] = "试件质量";
-            dr[1] = String.Format("{0:f1}g", this.shijianzhiliang / 10f);
-            dt.Rows.Add(dr);
-
-            dr = dt.NewRow();
-            dr[0] = "油石比补偿系数";
-            dr[1] = String.Format("{0:f3}", this.youshibibuchang/1000f);
-            dt.Rows.Add(dr);
-
-            dr = dt.NewRow();
-            dr[0] = "含油比补偿系数";
-            dr[1] = String.Format("{0:f3} ", this.hanyoubibuchang/1000f);
-            dt.Rows.Add(dr);
-
-            dr = dt.NewRow();
-            dr[0] = "记录点数";
-            dr[1] = this.nodecnt;
-            dt.Rows.Add(dr);
-
-            dr = dt.NewRow();
-            dr[0] = "油石比";
-            dr[1] = String.Format("{0:f3}", this.youshibi/1000f);
-            dt.Rows.Add(dr);
-
-            dr = dt.NewRow();
-            dr[0] = "含油比";
-            dr[1] = String.Format("{0:f3}", this.hanyoubi / 1000f);
-            dt.Rows.Add(dr);
-
-            dr = dt.NewRow();
-            dr[0] = "试验用时";
-            dr[1] = String.Format("{0}分", this.shiyantime);
-            dt.Rows.Add(dr);
-
-            dr = dt.NewRow();
-            dr[0] = "结束温度";
-            dr[1] = String.Format("{0:f1}℃", this.endwedu / 10f);
-            dt.Rows.Add(dr);
-
-            dr = dt.NewRow();
-            dr[0] = "结束质量";
-            dr[1] = String.Format("{0:f1}g", this.endzhiliang / 10f);
-            dt.Rows.Add(dr);
+            DataTable dt_header = getHeaderTable();
+            DataRow dr;
+            foreach (DataRow dr_header in dt_header.Rows)
+            {
+                dr = dt.NewRow();
+                dr[0] = dr_header[0];
+                dr[1] = String.Format("{0}{1}", dr_header[1], dr_header[2]);
+                dt.Rows.Add(dr);
+            }
 
             dr = dt.NewRow();
             dr[0] = "";
             dr[1] = "";
             dt.Rows.Add(dr);
 
+            DataTable dt_body = getBodyTable();
             dr = dt.NewRow();
-            dr[0] = "质量损失率";
-            dr[1] = "";
+            dr[0] = dt_body.Columns[0].ColumnName;
+            dr[1] = dt_body.Columns[1].ColumnName;
             dt.Rows.Add(dr);
 
-
-            foreach (IXYNode node in this.nodes)
+            foreach (DataRow dr_body in dt_body.Rows)
             {
-                if (node.getX() != 0 && node.getY() != 0)
-                {
-                    dr = dt.NewRow();
-                    dr[0] = String.Format("{0:f3}", node.getNodeY());
-                    dr[1] = "";//String.Format("{0:f2}", node.getNodeX());
-                    dt.Rows.Add(dr);
-                }
+                dr = dt.NewRow();
+                dr[0] = dr_body[0];
+                dr[1] = dr_body[1];
+                dt.Rows.Add(dr);
             }
             return dt;
         }

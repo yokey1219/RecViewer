@@ -82,8 +82,9 @@ namespace RecViewer
                 _info.acceptHeaderChange(dtheader);
                 _info.acceptBodyChange(dtbody);
 
+                dtbody.AcceptChanges();//body的更新会出发header中node的更新，这句必须在header的接受变更之前
                 dtheader.AcceptChanges();
-                dtbody.AcceptChanges();
+                
 
                 saveflag = true;
             }
