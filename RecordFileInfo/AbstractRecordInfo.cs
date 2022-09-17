@@ -50,6 +50,10 @@ namespace RecordFileUtil
 
         public abstract List<IXYNode> getXYNodes();
         public abstract List<IXYNode> getSpecialNodes();
+        public virtual List<ChartSeries> getChartSeries()
+        {
+            return null;
+        }
         public abstract List<String> getCSVLines();
         public abstract void LoadFromCSV(String[] strs);
         public abstract void initCharFormat();

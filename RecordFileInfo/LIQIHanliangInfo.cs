@@ -11,6 +11,7 @@ namespace RecordFileUtil
         
         protected List<IXYNode> nodes;
         protected List<IXYNode> specialnodes;
+        protected List<ChartSeries> chartseries;
         
         protected int shijianzhiliang;
         protected int wendu;
@@ -24,7 +25,8 @@ namespace RecordFileUtil
 
         public override List<IXYNode> getXYNodes()
         {
-            return nodes;
+            //return nodes;
+            return null;
         }
 
         public override void initCharFormat()
@@ -51,6 +53,15 @@ namespace RecordFileUtil
             if (bytes[0] == 0x10 && bytes[1] == 0x04)
             {
                 nodes = new List<IXYNode>();
+                specialnodes = new List<IXYNode>();
+                chartseries = new List<ChartSeries>();
+                ChartSeries series1 = new ChartSeries();
+                series1.Nodes = nodes;
+                ChartSeries series2 = ChartSeries.NewRedSeries();
+                series2.Nodes = specialnodes;
+                chartseries.Add(series1);
+                chartseries.Add(series2);
+
                 int idx = 2;
                 int length = (int)((bytes[idx++] << 8) | bytes[idx++]);
                 if (bytes.Length > (length + 6))
@@ -79,8 +90,9 @@ namespace RecordFileUtil
                 endzhiliang = (int)((bytes[idx++] << 8) | bytes[idx++]);
                 
                 //int stime = 0;
-                nodes.Add(new LIQIHanNodeInfo(0, 0));
+                //nodes.Add(new LIQIHanNodeInfo(0, 0));
                 int x = 0;
+                int cnt = 0;
                 while (idx < (bytes.Length - 2))
                 {
 
@@ -88,7 +100,11 @@ namespace RecordFileUtil
                     if (_percnt == 0) break;
                     //int offset = (int)((bytes[idx++] << 8) | bytes[idx++]);
                     x += 15;
-                    nodes.Add(new LIQIHanNodeInfo(x,_percnt));
+                    cnt = (++cnt) % 2;
+                    if (cnt == 0)
+                        specialnodes.Add(new LIQIHanNodeInfo(x, _percnt));
+                    else
+                        nodes.Add(new LIQIHanNodeInfo(x,_percnt));
                     while (x > chartformat.Xmax*60)
                     {
                         chartformat.Xmax += chartformat.Xinterval;
@@ -175,12 +191,19 @@ namespace RecordFileUtil
             nodes = new List<IXYNode>();
             nodes.Add(new LIQIHanNodeInfo(0, 0));
             int x = 0;
+            int cnt = 0;
             for (; idx < strs.Length; idx++)
             {
                 strarr = strs[idx].Split(AbstractRecordInfo.csvsepchar);
                 int y = Convert.ToInt32(Convert.ToDouble(strarr[0]) * 1000);
                 x += 15;
-                nodes.Add(new LIQIHanNodeInfo(x, y));
+
+
+                cnt = (++cnt) % 2;
+                if (cnt == 0)
+                    specialnodes.Add(new LIQIHanNodeInfo(x, y));
+                else
+                     nodes.Add(new LIQIHanNodeInfo(x, y));
                 while(y>chartformat.Xmax*60)
                 {
                     chartformat.Xmax += chartformat.Xinterval;
@@ -292,7 +315,10 @@ namespace RecordFileUtil
             return dt;
         }
 
-
+        public override List<ChartSeries> getChartSeries()
+        {
+            return chartseries;
+        }
 
         public override List<IXYNode> getSpecialNodes()
         {

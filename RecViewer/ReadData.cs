@@ -59,26 +59,35 @@ namespace RecViewer
                 serialPort1.Write(info.SendBuffer, 0, info.SendBuffer.Length);
                 bWaitread = true;
                 int count = 0;
+                int time_out_seconds = 60;
                 Boolean istimeout = false;
+
+                DateTime begin = DateTime.Now;
                 while (bWaitread)
                 {
-                    if (count > 200)
+
+                    TimeSpan timespan = DateTime.Now.Subtract(begin);// int timespan = DateTime.Now.Subtract(begin).Seconds;
+                    if (timespan.TotalSeconds > time_out_seconds)//if (count > 60)
                     {
                         istimeout = true;
                         break;
                     }
                     else
                     {
-                        Thread.Sleep(100);
+                        Thread.Sleep(10);
                         Application.DoEvents();
                     }
-                    count++;
                 }
                 serialPort1.DiscardInBuffer();
                 serialPort1.Close();
                 if (istimeout)
                 {
                     //MessageForm.Show("读取超时",new Exception());//MessageBox.Show("读取超时!");
+                    if (arInfo.DataBuffer != null)
+                    {
+                        foreach (byte b in arInfo.DataBuffer)
+                            tbread.AppendText(b.ToString("X2") + " ");
+                    }
                     this.Close();
                     throw new Exception("读取超时");
                 }
@@ -150,7 +159,7 @@ namespace RecViewer
         internal void SaveData()
         {
             String txt = tbread.Text;
-            String filename=String.Format("{0}\\{1}",AppDomain.CurrentDomain.BaseDirectory,DateTime.Now.ToString("yyyy_MM_dd_hh_mm_ss.txt"));
+            String filename = String.Format("{0}\\{1}.txt", AppDomain.CurrentDomain.BaseDirectory, DateTime.Now.ToString("yyyy_MM_dd_hh_mm_ss"));
             File.WriteAllText(filename,txt);
         }
     }

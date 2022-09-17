@@ -530,103 +530,110 @@ namespace RecViewer
             chart1.ChartAreas.Add(chartArea);
             #endregion
 
-
-            Series series1 = new Series();//chart1.Series.Add("CBR");
-            series1.ChartType = SeriesChartType.Line;
-            //线条宽度
-            series1.BorderWidth = 1;
-            //阴影宽度
-            series1.ShadowOffset = 0;
-            //是否显示在图例集合Legends
-            series1.IsVisibleInLegend = false;
-            //线条上数据点上是否有数据显示
-            series1.IsValueShownAsLabel = false;
-            //线条颜色
-            series1.Color = Color.Black;// Color.Yellow;
-            //设置曲线X轴的显示类型
-            series1.XValueType = info.Chartformat.Xtype == 0 ? ChartValueType.Int32 : ChartValueType.Double ;//ChartValueType.Int32;
-            //设置数据点的类型
-            series1.MarkerStyle = MarkerStyle.None;
-            //线条数据点的大小
-            series1.MarkerSize = 5;
-            series1.YValueType = info.Chartformat.Ytype == 0 ? ChartValueType.Int32 : ChartValueType.Double;// ChartValueType.Double;
-
-
-            //线条1：下限横线
-            /*Series series25 = new Series("cbr25");
-            series25.ChartType = SeriesChartType.Line;
-            series25.BorderWidth = 1;
-            series25.ShadowOffset = 0;
-            series25.IsVisibleInLegend = true;
-            series25.IsValueShownAsLabel = false;
-            series25.Color = Color.Red;
-            series25.XValueType = info.Chartformat.Xtype == 0 ? ChartValueType.Int32 : ChartValueType.Double;// ChartValueType.Int32;
-            series25.YValueType = info.Chartformat.Ytype == 0 ? ChartValueType.Int32 : ChartValueType.Double;// ChartValueType.Double;
-            series25.MarkerStyle = MarkerStyle.None;
-            chart1.Series.Add(series25);
-
-            //线条3：上限横线
-            Series series50 = new Series("cbr50");
-            series50.ChartType = SeriesChartType.Line;
-            series50.BorderWidth = 1;
-            series50.ShadowOffset = 0;
-            series50.IsVisibleInLegend = true;
-            series50.IsValueShownAsLabel = false;
-            series50.Color = Color.Red;
-            series50.XValueType = info.Chartformat.Xtype == 0 ? ChartValueType.Int32 : ChartValueType.Double;// ChartValueType.Int32;
-            series25.YValueType = info.Chartformat.Ytype == 0 ? ChartValueType.Int32 : ChartValueType.Double;// ChartValueType.Double;
-            series50.MarkerStyle = MarkerStyle.None;
-            chart1.Series.Add(series50);
-
-            series25.Points.AddXY(0, 2.5f);
-            series25.Points.AddXY(info.Kpa25, 2.5f);
-            series25.Points.AddXY(info.Kpa25, 0);
-
-            series50.Points.AddXY(0, 5.0f);
-            series50.Points.AddXY(info.Kpa50, 5.0f);
-            series50.Points.AddXY(info.Kpa50, 0);
-             * */
-
-            //foreach (CBRRecordNodeInfo ninfo in info.Nodes)
-            //{
-            //    float y = ninfo.Offset / 1000f;
-            //    series1.Points.AddXY(ninfo.KPa, y);
-            //}
-            double x = Double.MinValue;
-            
-            foreach (IXYNode ninfo in info.getXYNodes())
+            if (info.getChartSeries() == null)
             {
-                double nodex, nodey;
-                nodex = ninfo.getNodeX();
-                nodey = ninfo.getNodeY();
-                if (nodex < x) nodex = x;
-                else
-                    x = nodex;
-                series1.Points.AddXY(nodex,nodey);//series1.Points.AddXY(ninfo.getNodeX(), ninfo.getNodeY());
-            }
+                Series series1 = new Series();//chart1.Series.Add("CBR");
+                series1.ChartType = SeriesChartType.Line;
+                //线条宽度
+                series1.BorderWidth = 1;
+                //阴影宽度
+                series1.ShadowOffset = 0;
+                //是否显示在图例集合Legends
+                series1.IsVisibleInLegend = false;
+                //线条上数据点上是否有数据显示
+                series1.IsValueShownAsLabel = false;
+                //线条颜色
+                series1.Color = Color.Black;// Color.Yellow;
+                //设置曲线X轴的显示类型
+                series1.XValueType = info.Chartformat.Xtype == 0 ? ChartValueType.Int32 : ChartValueType.Double;//ChartValueType.Int32;
+                //设置数据点的类型
+                series1.MarkerStyle = MarkerStyle.None;
+                //线条数据点的大小
+                series1.MarkerSize = 5;
+                series1.YValueType = info.Chartformat.Ytype == 0 ? ChartValueType.Int32 : ChartValueType.Double;// ChartValueType.Double;
 
-            
-           
-            chart1.Series.Add(series1);
 
-            if (info.getSpecialNodes() != null)
-            {
-                foreach (IXYNode ninfo in info.getSpecialNodes())
+               
+                double x = Double.MinValue;
+
+                foreach (IXYNode ninfo in info.getXYNodes())
                 {
-                    Series series50 = new Series();
-                    series50.ChartType = SeriesChartType.Line;
-                    series50.BorderWidth = 1;
-                    series50.ShadowOffset = 0;
-                    series50.IsVisibleInLegend = true;
-                    series50.IsValueShownAsLabel = false;
-                    series50.Color = Color.Red;
-                    series50.XValueType = info.Chartformat.Xtype == 0 ? ChartValueType.Int32 : ChartValueType.Double;// ChartValueType.Int32;
-                    series50.YValueType = info.Chartformat.Ytype == 0 ? ChartValueType.Int32 : ChartValueType.Double;// ChartValueType.Double;
-                    series50.MarkerStyle = MarkerStyle.None;
-                    chart1.Series.Add(series50);
-                    series50.Points.AddXY(0, ninfo.getNodeY());
-                    series50.Points.AddXY(ninfo.getNodeX(), ninfo.getNodeY());
-                    series50.Points.AddXY(ninfo.getNodeX(), 0);
+                    double nodex, nodey;
+                    nodex = ninfo.getNodeX();
+                    nodey = ninfo.getNodeY();
+                    if (nodex < x) nodex = x;
+                    else
+                        x = nodex;
+                    series1.Points.AddXY(nodex, nodey);//series1.Points.AddXY(ninfo.getNodeX(), ninfo.getNodeY());
+                }
+
+
+
+                chart1.Series.Add(series1);
+
+                if (info.getSpecialNodes() != null)
+                {
+                    foreach (IXYNode ninfo in info.getSpecialNodes())
+                    {
+                        Series series50 = new Series();
+                        series50.ChartType = SeriesChartType.Line;
+                        series50.BorderWidth = 1;
+                        series50.ShadowOffset = 0;
+                        series50.IsVisibleInLegend = true;
+                        series50.IsValueShownAsLabel = false;
+                        series50.Color = Color.Red;
+                        series50.XValueType = info.Chartformat.Xtype == 0 ? ChartValueType.Int32 : ChartValueType.Double;// ChartValueType.Int32;
+                        series50.YValueType = info.Chartformat.Ytype == 0 ? ChartValueType.Int32 : ChartValueType.Double;// ChartValueType.Double;
+                        series50.MarkerStyle = MarkerStyle.None;
+                        chart1.Series.Add(series50);
+                        series50.Points.AddXY(0, ninfo.getNodeY());
+                        series50.Points.AddXY(ninfo.getNodeX(), ninfo.getNodeY());
+                        series50.Points.AddXY(ninfo.getNodeX(), 0);
+                    }
+                }
+            }
+            else
+            {
+                foreach (ChartSeries chartseries in info.getChartSeries())
+                {
+                    Series series1 = new Series();//chart1.Series.Add("CBR");
+                    series1.ChartType = SeriesChartType.Line;
+                    //线条宽度
+                    series1.BorderWidth = 1;
+                    //阴影宽度
+                    series1.ShadowOffset = 0;
+                    //是否显示在图例集合Legends
+                    series1.IsVisibleInLegend = false;
+                    //线条上数据点上是否有数据显示
+                    series1.IsValueShownAsLabel = false;
+                    //线条颜色
+                    series1.Color = chartseries.LineColor;// Color.Black;// Color.Yellow;
+                    //设置曲线X轴的显示类型
+                    series1.XValueType = info.Chartformat.Xtype == 0 ? ChartValueType.Int32 : ChartValueType.Double;//ChartValueType.Int32;
+                    //设置数据点的类型
+                    series1.MarkerStyle = MarkerStyle.None;
+                    //线条数据点的大小
+                    series1.MarkerSize = 5;
+                    series1.YValueType = info.Chartformat.Ytype == 0 ? ChartValueType.Int32 : ChartValueType.Double;// ChartValueType.Double;
+
+
+
+                    double x = Double.MinValue;
+
+                    foreach (IXYNode ninfo in chartseries.Nodes)
+                    {
+                        double nodex, nodey;
+                        nodex = ninfo.getNodeX();
+                        nodey = ninfo.getNodeY();
+                        if (nodex < x) nodex = x;
+                        else
+                            x = nodex;
+                        series1.Points.AddXY(nodex, nodey);//series1.Points.AddXY(ninfo.getNodeX(), ninfo.getNodeY());
+                    }
+
+
+
+                    chart1.Series.Add(series1);
                 }
             }
             currentx = 1;
