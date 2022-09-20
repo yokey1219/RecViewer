@@ -301,6 +301,35 @@ namespace RecordFileUtil
 
         protected abstract int  LoadHeaderFromCSV(String[] strs,int idx);
         protected abstract int  LoadBodyFromCSV(String[] strs,int idx);
+
+        protected void shuffer(IXYNode spec, List<IXYNode> nodes)
+        {
+            int index = 0;
+            for (; index < nodes.Count; index++)
+            {
+                if (nodes[index].getNodeX() < spec.getNodeX())
+                {
+                    if(nodes[index + 1].getNodeX() > spec.getNodeX())
+                    {
+                        nodes.Insert(index + 1, spec);
+                        break;
+                    }
+                }
+                else if (nodes[index].getNodeX() == spec.getNodeX())
+                {
+                    if (nodes[index].getNodeY() != spec.getNodeY())
+                    {
+                        nodes.Remove(nodes[index]);
+                        nodes.Insert(index, spec);
+                    }
+                    
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
     }
 
     public class EditableItem

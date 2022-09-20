@@ -120,8 +120,8 @@ namespace RecordFileUtil
 
                 specialnodes = new List<IXYNode>();
                 specialnodes.Add(new WanquNodeInfo(maxoffset, maxstrength));
-                
 
+                this.shuffer(specialnodes[0], nodes);
             }
         }
 
@@ -144,6 +144,7 @@ namespace RecordFileUtil
             idx++;
 
             LoadBodyFromCSV(strs, idx);
+            this.shuffer(specialnodes[0], nodes);
 
         }
 

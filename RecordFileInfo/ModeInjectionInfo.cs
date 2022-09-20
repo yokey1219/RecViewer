@@ -124,6 +124,7 @@ namespace RecordFileUtil
 
                 specialnodes = new List<IXYNode>();
                 specialnodes.Add(new ModeInjectionNodeInfo(maxstrength,maxoffset));
+                this.shuffer(specialnodes[0], nodes);
 
 
             }
@@ -351,6 +352,7 @@ namespace RecordFileUtil
 
             specialnodes = new List<IXYNode>();
             specialnodes.Add(new ModeInjectionNodeInfo(maxstrength, maxoffset));
+            this.shuffer(specialnodes[0], nodes);
             return idx;
         }
 

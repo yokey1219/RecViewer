@@ -116,7 +116,7 @@ namespace RecordFileUtil
 
                 specialnodes = new List<IXYNode>();
                 specialnodes.Add(new DongrongNodeInfo(maxliuzhi, maxwendingdu));
-                
+                this.shuffer(specialnodes[0], nodes);
 
             }
         }
@@ -288,6 +288,7 @@ namespace RecordFileUtil
 
             specialnodes = new List<IXYNode>();
             specialnodes.Add(new DongrongNodeInfo(maxliuzhi, maxwendingdu));
+            this.shuffer(specialnodes[0], nodes);
             return idx;
         }
 

@@ -159,6 +159,7 @@ namespace RecordFileUtil
 
                 specialnodes = new List<IXYNode>();
                 specialnodes.Add(new PilieNodeInfo(maxoffset, maxstrength));
+                this.shuffer(specialnodes[0], nodes);
 
 
             }
@@ -356,6 +357,7 @@ namespace RecordFileUtil
 
             specialnodes = new List<IXYNode>();
             specialnodes.Add(new PilieNodeInfo(maxoffset, maxstrength));
+            this.shuffer(specialnodes[0], nodes);
             return idx;
         }
 

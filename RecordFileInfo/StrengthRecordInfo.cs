@@ -91,6 +91,7 @@ namespace RecordFileUtil
 
                 specialnodes = new List<IXYNode>();
                 specialnodes.Add(new StrengthRecordNodeInfo(maxtime, maxstrength));
+                this.shuffer(specialnodes[0], nodes);
 
             }
         }
@@ -180,6 +181,7 @@ namespace RecordFileUtil
             }
             specialnodes = new List<IXYNode>();
             specialnodes.Add(new StrengthRecordNodeInfo(maxtime, maxstrength));
+            this.shuffer(specialnodes[0], nodes);
             thedate = String.Format("{0}年{1}月{2}日{3}时{4}分", year, month, day, hour, minute);
 
         }
