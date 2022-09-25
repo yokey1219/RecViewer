@@ -92,6 +92,7 @@
             this.printDialog1 = new System.Windows.Forms.PrintDialog();
             this.pageSetupDialog1 = new System.Windows.Forms.PageSetupDialog();
             this.printPreviewDialog1 = new System.Windows.Forms.PrintPreviewDialog();
+            this.tsmi_editinfo = new System.Windows.Forms.ToolStripMenuItem();
             this.pnltop.SuspendLayout();
             this.panel1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -209,6 +210,7 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsm_uploaddata,
             this.tsm_openfile,
+            this.tsmi_editinfo,
             this.tsm_saveinfo,
             this.tsmclear,
             this.tsmprint,
@@ -720,6 +722,14 @@
             this.printPreviewDialog1.Name = "printPreviewDialog1";
             this.printPreviewDialog1.Visible = false;
             // 
+            // tsmi_editinfo
+            // 
+            this.tsmi_editinfo.Font = new System.Drawing.Font("Microsoft YaHei UI", 12F);
+            this.tsmi_editinfo.Name = "tsmi_editinfo";
+            this.tsmi_editinfo.Size = new System.Drawing.Size(86, 25);
+            this.tsmi_editinfo.Text = "编辑数据";
+            this.tsmi_editinfo.Click += new System.EventHandler(this.tsmi_editinfo_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -812,6 +822,7 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripButton tbnaodu;
+        private System.Windows.Forms.ToolStripMenuItem tsmi_editinfo;
         
     }
 }

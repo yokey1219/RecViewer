@@ -163,6 +163,26 @@ namespace RecordFileUtil
 
         }
 
+        protected override int LoadHeaderFromCSV(string[] strs, int idx)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override int LoadBodyFromCSV(string[] strs, int idx)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override DataTable getHeaderTable()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override DataTable getBodyTable()
+        {
+            throw new NotImplementedException();
+        }
+
         public override System.Data.DataTable getDataTable()
         {
             DataTable dt = new DataTable();
