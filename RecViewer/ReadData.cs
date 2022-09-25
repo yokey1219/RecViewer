@@ -179,7 +179,8 @@ namespace RecViewer
                         byte[] tocrc = new byte[len - 2];
                         Array.Copy(arInfo.DataBuffer, tocrc, len - 2);
                         byte[] crc = UtilTools.CRCCalc(tocrc);
-                        if (true)//crc[0] == arInfo.DataBuffer[len - 2] && crc[1] == arInfo.DataBuffer[len - 1])
+                        if (arInfo.DataBuffer[0] == 0xff) arInfo.DataBuffer[0] = 0x10;
+                        if (arInfo.DataBuffer[0] == 0x10 && arInfo.DataBuffer[1] == 0x04)//crc[0] == arInfo.DataBuffer[len - 2] && crc[1] == arInfo.DataBuffer[len - 1])
                         {
                             info.ProcBufferWhenReadEnd(len);
                             info.ReadFinish();
@@ -189,8 +190,10 @@ namespace RecViewer
                         }
                         else
                         {
+                            
                             isReaded = false;
-                            MessageBox.Show("校验失败!");
+                            MessageBox.Show("校验失败!不是以10 04开头");
+                            SaveData();
                         }
                     }
                     else
@@ -231,6 +234,8 @@ namespace RecViewer
             GerneralConfig.setUserData("timeout", tbTimeout.Text);
         }
 
+        bool readingdataflag = false;
+
         private void serialPort1_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             if (e.EventType.Equals(SerialData.Eof)) return;
@@ -238,19 +243,29 @@ namespace RecViewer
             int len = serialPort1.Read(buf, 0, 1024);
             if (len > 0)
             {
-                arInfo.ReadDataToBuffer(buf, 0, len);
-                if (arInfo.DataBuffer.Length > 4)
+                if(serialPort_ReadData_Check(buf,len))
                 {
-                    int toread = Convert.ToInt32((arInfo.DataBuffer[2]<<8)+arInfo.DataBuffer[3]);
-                    if (arInfo is ModulusYuanInfo)
+                    arInfo.ReadDataToBuffer(buf, 0, len);
+                    readingdataflag = true;
+                    if (arInfo.DataBuffer.Length > 4)
                     {
-                        if (arInfo.DataBuffer.Length >= (toread+6))
-                            bWaitread = false;
-                    }
-                    else
-                    {
-                        if (arInfo.DataBuffer.Length >= (toread + 6) )//&& arInfo.DataBuffer.Length >= 2048)
-                            bWaitread = false;
+                        int toread = Convert.ToInt32((arInfo.DataBuffer[2]<<8)+arInfo.DataBuffer[3]);
+                        if (arInfo is ModulusYuanInfo)
+                        {
+                            if (arInfo.DataBuffer.Length >= (toread + 6))
+                            {
+                                bWaitread = false;
+                                readingdataflag = false;
+                            }
+                        }
+                        else
+                        {
+                            if (arInfo.DataBuffer.Length >= (toread + 6))//&& arInfo.DataBuffer.Length >= 2048)
+                            {
+                                bWaitread = false;
+                                readingdataflag = false;
+                            }
+                        }
                     }
                 }
             }
@@ -261,12 +276,28 @@ namespace RecViewer
             
         }
 
+        private bool serialPort_ReadData_Check(byte[] buf,int len)
+        {
+            if (readingdataflag) return true;
+            if (len < 2 || (buf[0] != 0x10&&buf[0]!=0xff) || buf[1] != 0x04)
+            {
+                //Console.WriteLine("receive error data,len:{0}", len);
+                //for (int i = 0; i < len; i++)
+                //    Console.Write("{0:X2} ", buf[i]);
+                //Console.WriteLine();
+                //Console.WriteLine("print error data end");
+                return false;
+            }
+            else
+                return true;
+        }
+
 
 
         internal void SaveData()
         {
             String txt = tbread.Text;
-            String filename=String.Format("{0}\\{1}",AppDomain.CurrentDomain.BaseDirectory,DateTime.Now.ToString("yyyy_MM_dd_hh_mm_ss.txt"));
+            String filename=String.Format("{0}\\{1}.txt",AppDomain.CurrentDomain.BaseDirectory,DateTime.Now.ToString("yyyy_MM_dd_hh_mm_ss"));
             File.WriteAllText(filename,txt);
         }
 
