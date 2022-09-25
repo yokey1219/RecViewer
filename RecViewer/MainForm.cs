@@ -1194,7 +1194,7 @@ namespace RecViewer
                 RectangleF imgrect = new RectangleF(x * 100 / e.Graphics.DpiX, y * 100 / e.Graphics.DpiY, width, height);
                 e.Graphics.DrawImage(_newbitmap, imgrect);
                 RectangleF txtrect = new RectangleF(imgrect.X, imgrect.Y + imgrect.Height + 40, imgrect.Width, 40);
-                e.Graphics.DrawString("试验员__________________________________", new Font(Font.SystemFontName, 10), Brushes.Black, txtrect);
+                e.Graphics.DrawString("试验者________________________________________   校核者_______________________________________", new Font(Font.SystemFontName, 10), Brushes.Black, txtrect);
 
 
                
