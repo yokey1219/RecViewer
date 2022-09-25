@@ -54,15 +54,57 @@ namespace RecordFileUtil
         public ChartFormat Chartformat { get { return chartformat; } }
 
         public byte[] DataBuffer { get { return buffer; } }
+        public virtual int NodeCntIdx { get { return 6; } }
+
 
         public abstract List<IXYNode> getXYNodes();
         public abstract List<IXYNode> getSpecialNodes();
         public abstract List<String> getCSVLines();
-        public abstract void LoadFromCSV(String[] strs);
+        public virtual void LoadFromCSV(String[] strs)
+        {
+            this.initCharFormat();
+            int idx = LoadHeaderFromCSV(strs, 1);
+
+            idx++;
+            idx++;
+
+            LoadBodyFromCSV(strs, idx);
+        }
         public abstract void initCharFormat();
         public virtual DataTable getDataTable()
         {
-            return null;
+            DataTable dt = new DataTable();
+            dt.Columns.Add();
+            dt.Columns.Add();
+            DataTable dt_header = getHeaderTable();
+            DataRow dr;
+            foreach (DataRow dr_header in dt_header.Rows)
+            {
+                dr = dt.NewRow();
+                dr[0] = dr_header[0];
+                dr[1] = String.Format("{0}{1}", dr_header[1], dr_header[2]);
+                dt.Rows.Add(dr);
+            }
+
+            dr = dt.NewRow();
+            dr[0] = "";
+            dr[1] = "";
+            dt.Rows.Add(dr);
+
+            DataTable dt_body = getBodyTable();
+            dr = dt.NewRow();
+            dr[0] = dt_body.Columns[0].ColumnName;
+            dr[1] = dt_body.Columns[1].ColumnName;
+            dt.Rows.Add(dr);
+
+            foreach (DataRow dr_body in dt_body.Rows)
+            {
+                dr = dt.NewRow();
+                dr[0] = dr_body[0];
+                dr[1] = dr_body[1];
+                dt.Rows.Add(dr);
+            }
+            return dt;
         }
 
         public virtual DataTable getDispalyTable()
@@ -229,6 +271,64 @@ namespace RecordFileUtil
         public virtual String GetEditableValuStr(String valuename)
         {
             return String.Empty;
+        }
+
+        public abstract DataTable getHeaderTable();
+        public abstract DataTable getBodyTable();
+
+        public virtual void acceptHeaderChange(DataTable dtheader)
+        {
+            List<String> slist = new List<string>();
+            foreach (DataRow dr in dtheader.Rows)
+            {
+                slist.Add(String.Format("{0},{1}{2}", dr[0], dr[1],dr[2]));
+            }
+
+            String[] strs = slist.ToArray();
+            this.LoadHeaderFromCSV(strs,1);
+        }
+        public virtual void acceptBodyChange(DataTable dtbody)
+        {
+            List<String> slist = new List<string>();
+            foreach (DataRow dr in dtbody.Rows)
+            {
+                slist.Add(String.Format("{0},{1}", dr[0], dr[1]));
+            }
+
+            String[] strs = slist.ToArray();
+            this.LoadBodyFromCSV(strs,0);
+        }
+
+        protected abstract int  LoadHeaderFromCSV(String[] strs,int idx);
+        protected abstract int  LoadBodyFromCSV(String[] strs,int idx);
+
+        protected void shuffer(IXYNode spec, List<IXYNode> nodes)
+        {
+            int index = 0;
+            for (; index < nodes.Count; index++)
+            {
+                if (nodes[index].getNodeX() < spec.getNodeX())
+                {
+                    if(nodes[index + 1].getNodeX() > spec.getNodeX())
+                    {
+                        nodes.Insert(index + 1, spec);
+                        break;
+                    }
+                }
+                else if (nodes[index].getNodeX() == spec.getNodeX())
+                {
+                    if (nodes[index].getNodeY() != spec.getNodeY())
+                    {
+                        nodes.Remove(nodes[index]);
+                        nodes.Insert(index, spec);
+                    }
+                    
+                }
+                else
+                {
+                    break;
+                }
+            }
         }
     }
 
