@@ -208,6 +208,26 @@ namespace RecordFileUtil
             base.LoadFromCSV(strs);
         }
 
+        protected override int LoadHeaderFromCSV(string[] strs, int idx)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override int LoadBodyFromCSV(string[] strs, int idx)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override DataTable getHeaderTable()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override DataTable getBodyTable()
+        {
+            throw new NotImplementedException();
+        }
+
         public override DataTable getDataTable()
         {
             DataTable dt = new DataTable();

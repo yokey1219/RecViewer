@@ -8,7 +8,7 @@ namespace RecordFileUtil
 {
     public class LengzhutiInfo : AbstractRecordInfo
     {
-        
+
         protected List<IXYNode> nodes;
         protected List<IXYNode> specialnodes;
         protected int maxwendingdu;
@@ -26,9 +26,9 @@ namespace RecordFileUtil
 
         public int MaxWendingdu { get { return maxwendingdu; } }
         public int MaxLiuzhi { get { return maxliuzhi; } }
-        
 
-    
+
+
 
         public override List<IXYNode> getXYNodes()
         {
@@ -37,7 +37,7 @@ namespace RecordFileUtil
 
         public override List<IXYNode> getSpecialNodes()
         {
-            return  specialnodes;;
+            return specialnodes; ;
         }
 
         public override void initCharFormat()
@@ -89,7 +89,7 @@ namespace RecordFileUtil
                 //maxoffset = (int)((bytes[idx++] << 8) | bytes[idx++]);
                 //eb = (int)((bytes[idx++] << 8) | bytes[idx++]);
                 //sb = (int)((bytes[idx++] << 8) | bytes[idx++]);
-                
+
                 //int stime = 0;
                 nodes.Add(new LengzhutiNodeInfo(0, 0));
                 while (idx < (bytes.Length - 2))
@@ -100,11 +100,11 @@ namespace RecordFileUtil
                     if (kn < 0) kn = 0;
                     if (offset < 0) offset = 0;
                     nodes.Add(new LengzhutiNodeInfo(offset, kn));
-                    while (offset > chartformat.Xmax*xdiv)
+                    while (offset > chartformat.Xmax * xdiv)
                     {
                         chartformat.Xmax += chartformat.Xinterval;
                     }
-                    while (kn > chartformat.Ymax*ydiv)
+                    while (kn > chartformat.Ymax * ydiv)
                     {
                         chartformat.Ymax += chartformat.Yinterval;
                     }
@@ -115,7 +115,7 @@ namespace RecordFileUtil
 
                 specialnodes = new List<IXYNode>();
                 specialnodes.Add(new LengzhutiNodeInfo(maxliuzhi, maxwendingdu));
-                
+                this.shuffer(specialnodes[0], nodes);
 
             }
             base.LoadInternalData(bytes);
@@ -134,6 +134,20 @@ namespace RecordFileUtil
         public override void LoadFromCSV(string[] strs)
         {
             this.initCharFormat();
+
+            int idx = this.LoadHeaderFromCSV(strs, 1);
+
+            idx++;
+            idx++;
+
+            this.LoadBodyFromCSV(strs, idx);
+
+
+        }
+
+
+        protected override int LoadHeaderFromCSV(String[] strs, int index)
+        {
             int idx = 1;
             String[] strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
             //日期
@@ -177,7 +191,7 @@ namespace RecordFileUtil
             //    shiyanno2 = Convert.ToInt32(bianhaostrarr[1]);
             //else
             //    shiyanno2 = 1;
-            
+
             //最大点压力
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
             this.maxwendingdu = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("KN", "")) * ydiv);
@@ -189,19 +203,28 @@ namespace RecordFileUtil
             //抗压强度
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
             this.rt = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("Mpa", "")) * 1000);
-            
+
 
             //压缩应变
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
-            this.et = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("", "")) * 100000);
-            
+            this.et = Convert.ToInt32(Convert.ToDouble(strarr[1]) * 100000);
+
 
             //劲度模量
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
             this.st = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("Mpa", "")) * 10);
-   
-            idx++;
-            idx++;
+
+
+            thedate = String.Format("{0}年{1}月{2}日{3}时{4}分", year, month, day, hour, minute);
+            this.shuffer(specialnodes[0], nodes);
+            return idx;
+        }
+
+        protected override int LoadBodyFromCSV(String[] strs, int index)
+        {
+            int idx = index;
+            String[] strarr;
+
             nodes = new List<IXYNode>();
             nodes.Add(new LengzhutiNodeInfo(0, 0));
             for (; idx < strs.Length; idx++)
@@ -210,7 +233,7 @@ namespace RecordFileUtil
                 int kpa = Convert.ToInt32(Convert.ToDouble(strarr[0]) * ydiv);
                 int off = Convert.ToInt32(Convert.ToDouble(strarr[1]) * xdiv);
                 nodes.Add(new LengzhutiNodeInfo(off, kpa));
-                while(off>chartformat.Xmax*xdiv)
+                while (off > chartformat.Xmax * xdiv)
                 {
                     chartformat.Xmax += chartformat.Xinterval;
                 }
@@ -222,14 +245,22 @@ namespace RecordFileUtil
 
             specialnodes = new List<IXYNode>();
             specialnodes.Add(new LengzhutiNodeInfo(maxliuzhi, maxwendingdu));
+            return idx;
+        }
 
-            thedate = String.Format("{0}年{1}月{2}日{3}时{4}分", year, month, day, hour, minute);
 
-            base.LoadFromCSV(strs);
+        public override int NodeCntIdx
+        {
+            get
+            {
+                return 7;
+            }
+            //base.LoadFromCSV(strs);
         }
 
         public override DataTable getDispalyTable()
         {
+
             DataTable dt = new DataTable();
             dt.Columns.Add();
             dt.Columns.Add();
@@ -299,49 +330,63 @@ namespace RecordFileUtil
             return dt;
         }
 
-        public override System.Data.DataTable getDataTable()
+        public override DataTable getHeaderTable()
         {
             DataTable dt = new DataTable();
             dt.Columns.Add();
             dt.Columns.Add();
+            dt.Columns.Add();//unit
+            dt.Columns.Add();//is readonly
             DataRow dr = dt.NewRow();
             dr[0] = "试验模式";
             dr[1] = this.recordname;
+            dr[3] = true;
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
             dr[0] = "试验日期";
             dr[1] = String.Format("{0}-{1}-{2} {3}:{4}", this.year, this.month, this.day, this.hour, this.minute);
+            dr[3] = true;
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
             dr[0] = "编号";
             dr[1] = this.no;
+            dr[3] = false;
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
             dr[0] = "试件长度";
-            dr[1] = String.Format("{0:f1}mm", this.Diameter / 10f);
+            dr[1] = String.Format("{0:f1}", this.Diameter / 10f);
+            dr[2] = "mm";
+            dr[3] = false;
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
             dr[0] = "试件高度";
-            dr[1] = String.Format("{0:f1}mm", this.Height / 10f);
+            dr[1] = String.Format("{0:f1}", this.Height / 10f);
+            dr[2] = "mm";
+            dr[3] = false;
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
             dr[0] = "温度";
-            dr[1] = String.Format("{0}℃", this.temp);
+            dr[1] = String.Format("{0}", this.temp);
+            dr[2] = "℃";
+            dr[3] = false;
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
             dr[0] = "加载速度";
-            dr[1] = String.Format("{0}mm/min", this.loadspeed);
+            dr[1] = String.Format("{0}", this.loadspeed);
+            dr[2] = "mm/min";
+            dr[3] = false;
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
             dr[0] = "记录点数";
             dr[1] = this.nodecnt;
+            dr[3] = true;
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
@@ -353,49 +398,61 @@ namespace RecordFileUtil
             //dt.Rows.Add(dr);
             dr[0] = "传感器";
             dr[1] = String.Format("{0:f1}KN", this.sensor / 10f);
+            dr[3] = false;
             dt.Rows.Add(dr);
 
-            
+
             dr = dt.NewRow();
             dr[0] = "最大点压力";
-            dr[1] = String.Format("{0:f2}KN",this.maxwendingdu/ydivf);// String.Format("{0:f3}MPa", this.rb / 1000f);
+            dr[1] = String.Format("{0:f2}", this.maxwendingdu / ydivf);// String.Format("{0:f3}MPa", this.rb / 1000f);
+            dr[2] = "KN";
+            dr[3] = false;
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
             dr[0] = "最大点位移";
-            dr[1] = String.Format("{0:f3}mm", this.maxliuzhi / xdivf);
+            dr[1] = String.Format("{0:f3}", this.maxliuzhi / xdivf);
+            dr[2] = "mm";
+            dr[3] = false;
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
             dr[0] = "抗压强度";
-            dr[1] = String.Format("{0:f3}Mpa", this.rt / 1000f);
+            dr[1] = String.Format("{0:f3}", this.rt / 1000f);
+            dr[2] = "Mpa";
+            dr[3] = false;
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
             dr[0] = "压缩应变";
             dr[1] = String.Format("{0:f5}", this.et / 100000f);
+            dr[3] = false;
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
             dr[0] = "劲度模量";
-            dr[1] = String.Format("{0:f1}Mpa", this.st / 10f);
+            dr[1] = String.Format("{0:f1}", this.st / 10f);
+            dr[2] = "Mpa";
+            dr[3] = false;
             dt.Rows.Add(dr);
+            return dt;
 
+        }
 
-            dr = dt.NewRow();
-            dr[0] = "";
-            dr[1] = "";
-            dt.Rows.Add(dr);
+        public override DataTable getBodyTable()
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add();
+            dt.Columns.Add();
+            dt.Columns[0].ColumnName = "压力(KN)";
+            dt.Columns[1].ColumnName = "位移(mm)";
+            DataRow dr = null;
 
-            dr = dt.NewRow();
-            dr[0] = "压力(KN)";
-            dr[1] = "位移(mm)";
-            dt.Rows.Add(dr);
-
-
+            int idx = 0;
             foreach (IXYNode node in this.nodes)
             {
-                if (node.getX() != 0 && node.getY() != 0)
+                //if (node.getX() != 0 && node.getY() != 0)
+                if (idx++ > 0)
                 {
                     dr = dt.NewRow();
                     dr[0] = String.Format("{0:f2}", node.getNodeY());
@@ -405,8 +462,43 @@ namespace RecordFileUtil
             }
             return dt;
         }
+        public override System.Data.DataTable getDataTable()
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add();
+            dt.Columns.Add();
+            DataTable dt_header = getHeaderTable();
+            DataRow dr;
+            foreach (DataRow dr_header in dt_header.Rows)
+            {
+                dr = dt.NewRow();
+                dr[0] = dr_header[0];
+                dr[1] = String.Format("{0}{1}", dr_header[1], dr_header[2]);
+                dt.Rows.Add(dr);
+            }
 
-        
+            dr = dt.NewRow();
+            dr[0] = "";
+            dr[1] = "";
+            dt.Rows.Add(dr);
+
+            DataTable dt_body = getBodyTable();
+            dr = dt.NewRow();
+            dr[0] = dt_body.Columns[0].ColumnName;
+            dr[1] = dt_body.Columns[1].ColumnName;
+            dt.Rows.Add(dr);
+
+            foreach (DataRow dr_body in dt_body.Rows)
+            {
+                dr = dt.NewRow();
+                dr[0] = dr_body[0];
+                dr[1] = dr_body[1];
+                dt.Rows.Add(dr);
+            }
+            return dt;
+        }
+
+
 
         /*public override List<EditableItem> GetEditableList()
         {
@@ -415,15 +507,15 @@ namespace RecordFileUtil
             return list;
         }*/
 
-       /* public override string GetEditableValuStr(string valuename)
-        {
-            if (valuename.Equals(KUAZHONGNAODU))
-            {
-                return String.Format("{0:f2}mm", this.maxoffset / 100f);
-            }
-            else
-                return base.GetEditableValuStr(valuename);
-        }*/
+        /* public override string GetEditableValuStr(string valuename)
+         {
+             if (valuename.Equals(KUAZHONGNAODU))
+             {
+                 return String.Format("{0:f2}mm", this.maxoffset / 100f);
+             }
+             else
+                 return base.GetEditableValuStr(valuename);
+         }*/
     }
 
     public class LengzhutiNodeInfo : IXYNode

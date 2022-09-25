@@ -91,6 +91,7 @@ namespace RecordFileUtil
 
                 specialnodes = new List<IXYNode>();
                 specialnodes.Add(new StrengthRecordNodeInfo(maxtime, maxstrength));
+                this.shuffer(specialnodes[0], nodes);
 
             }
             base.LoadInternalData(bytes);
@@ -181,9 +182,30 @@ namespace RecordFileUtil
             }
             specialnodes = new List<IXYNode>();
             specialnodes.Add(new StrengthRecordNodeInfo(maxtime, maxstrength));
+            this.shuffer(specialnodes[0], nodes);
             thedate = String.Format("{0}年{1}月{2}日{3}时{4}分", year, month, day, hour, minute);
 
             base.LoadFromCSV(strs);
+        }
+
+        protected override int LoadHeaderFromCSV(string[] strs, int idx)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override int LoadBodyFromCSV(string[] strs, int idx)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override DataTable getHeaderTable()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override DataTable getBodyTable()
+        {
+            throw new NotImplementedException();
         }
 
         public override DataTable getDataTable()

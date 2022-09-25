@@ -92,6 +92,7 @@
             this.printDialog1 = new System.Windows.Forms.PrintDialog();
             this.pageSetupDialog1 = new System.Windows.Forms.PageSetupDialog();
             this.printPreviewDialog1 = new System.Windows.Forms.PrintPreviewDialog();
+            this.tsmi_editinfo = new System.Windows.Forms.ToolStripMenuItem();
             this.lblinfo8 = new System.Windows.Forms.Label();
             this.lbldis8 = new System.Windows.Forms.Label();
             this.pnltop.SuspendLayout();
@@ -211,6 +212,7 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsm_uploaddata,
             this.tsm_openfile,
+            this.tsmi_editinfo,
             this.tsm_saveinfo,
             this.tsmclear,
             this.tsmprint,
@@ -725,6 +727,14 @@
             this.printPreviewDialog1.Name = "printPreviewDialog1";
             this.printPreviewDialog1.Visible = false;
             // 
+            // tsmi_editinfo
+            // 
+            this.tsmi_editinfo.Font = new System.Drawing.Font("Microsoft YaHei UI", 12F);
+            this.tsmi_editinfo.Name = "tsmi_editinfo";
+            this.tsmi_editinfo.Size = new System.Drawing.Size(86, 25);
+            this.tsmi_editinfo.Text = "编辑数据";
+            this.tsmi_editinfo.Click += new System.EventHandler(this.tsmi_editinfo_Click);
+            // 
             // lblinfo8
             // 
             this.lblinfo8.Anchor = System.Windows.Forms.AnchorStyles.None;
@@ -758,6 +768,7 @@
             this.Name = "MainForm";
             this.Text = "试验记录读取工具";
             this.Load += new System.EventHandler(this.MainForm_Load);
+            this.Activated += new System.EventHandler(this.MainForm_Activated);
             this.pnltop.ResumeLayout(false);
             this.pnltop.PerformLayout();
             this.panel1.ResumeLayout(false);
@@ -838,6 +849,7 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripButton tbnaodu;
+        private System.Windows.Forms.ToolStripMenuItem tsmi_editinfo;
         private System.Windows.Forms.Label lbldis8;
         private System.Windows.Forms.Label lblinfo8;
         

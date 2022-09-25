@@ -132,9 +132,76 @@ namespace RecordFileUtil
             throw new NotImplementedException();
         }
 
-        public override void LoadFromCSV(string[] strs)
+       
+        //public override DataTable getDispalyTable()
+        //{
+        //    DataTable dt = new DataTable();
+        //    dt.Columns.Add();
+        //    dt.Columns.Add();
+        //    DataRow dr = dt.NewRow();
+        //    dr[0] = "试验日期";
+        //    dr[1] = String.Format("{0}-{1}-{2} {3}:{4}", this.year, this.month, this.day, this.hour, this.minute);
+        //    dt.Rows.Add(dr);
+
+        //    /*dr = dt.NewRow();
+        //    dr[0] = "试件高度";
+        //    dr[1] = String.Format("{0:f1}mm", this.Height / 10f);
+        //    dt.Rows.Add(dr);
+
+        //    dr = dt.NewRow();
+        //    dr[0] = "试件直径";
+        //    dr[1] = String.Format("{0:f1}mm", this.Diameter / 10f);
+        //    dt.Rows.Add(dr);
+        //    */
+        //    dr = dt.NewRow();
+        //    //dr[0] = "编号";
+        //    //dr[1] = this.no;
+        //    //dt.Rows.Add(dr);
+        //    dr[0] = "试验编号";
+        //    dr[1] = String.Format("{0}-{1}", shiyanno1, shiyanno2);
+        //    dt.Rows.Add(dr);
+
+        //    dr = dt.NewRow();
+        //    dr[0] = "温度";
+        //    dr[1] = String.Format("{0}℃", this.temp);
+        //    dt.Rows.Add(dr);
+
+        //    //dr = dt.NewRow();
+        //    //dr[0] = "记录点数";
+        //    //dr[1] = this.nodecnt;
+        //    //dt.Rows.Add(dr);
+
+
+        //    dr = dt.NewRow();
+        //    dr[0] = "回弹模量";
+        //    dr[1] = String.Format("{0:f1}Mpa", this.modulus / 10f);// String.Format("{0:f3}MPa", this.rb / 1000f);
+        //    dt.Rows.Add(dr);
+
+        //    /*dr = dt.NewRow();
+        //    dr[0] = "最大变形";
+        //    dr[1] = String.Format("{0:f2}mm", this.maxoffset / 100f);
+        //    dt.Rows.Add(dr);
+        //    */
+        //    int cnt = 0;
+        //    foreach (IXYNode node in this.nodes)
+        //    {
+        //        cnt++;
+        //        //if (node.getX() != 0 && node.getY() != 0)
+        //        if (cnt % 2 == 0)
+        //        {
+        //            dr = dt.NewRow();
+        //            dr[0] = String.Format("{0:f3}Mpa", node.getNodeX());
+        //            dr[1] = String.Format("{0:f3}mm", node.getNodeY());
+        //            dt.Rows.Add(dr);
+        //        }
+        //    }
+
+        //    displaymaxidx = dt.Rows.Count - 1;
+        //    return dt;
+        //}
+
+        protected override int LoadHeaderFromCSV(String[] strs, int index)
         {
-            this.initCharFormat();
             int idx = 1;
             String[] strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
             //日期
@@ -178,7 +245,7 @@ namespace RecordFileUtil
             //    shiyanno2 = Convert.ToInt32(bianhaostrarr[1]);
             //else
             //    shiyanno2 = 1;
-            
+
             //最大点压力
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
             this.maxstrength = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("KN", "")) * 100);
@@ -191,10 +258,16 @@ namespace RecordFileUtil
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
             this.maxoffset = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("mm", "")) * ydiv);
 
-           
-   
-            idx++;
-            idx++;
+
+            thedate = String.Format("{0}年{1}月{2}日{3}时{4}分", year, month, day, hour, minute);
+            return idx;
+        }
+
+        protected override int LoadBodyFromCSV(String[] strs, int index)
+        {
+            int idx = index;
+            String[] strarr;
+
             nodes = new List<IXYNode>();
             //nodes.Add(new ModulusYuanNodeInfo(0, 0));
             int lastx = 0;
@@ -203,10 +276,10 @@ namespace RecordFileUtil
                 strarr = strs[idx].Split(AbstractRecordInfo.csvsepchar);
                 int kpa = Convert.ToInt32(Convert.ToDouble(strarr[0]) * xdiv);
                 int off = Convert.ToInt32(Convert.ToDouble(strarr[1]) * ydiv);
-                nodes.Add(new ModulusYuanNodeInfo(lastx,off));
+                nodes.Add(new ModulusYuanNodeInfo(lastx, off));
                 nodes.Add(new ModulusYuanNodeInfo(kpa, off));
                 lastx = kpa;
-                while(kpa>chartformat.Xmax*xdiv)
+                while (kpa > chartformat.Xmax * xdiv)
                 {
                     chartformat.Xmax += chartformat.Xinterval;
                 }
@@ -215,17 +288,23 @@ namespace RecordFileUtil
                     chartformat.Ymax += chartformat.Yinterval;
                 }
             }
+            return idx;
+        }
 
-            //specialnodes = new List<IXYNode>();
-            //specialnodes.Add(new WendingduNodeInfo(maxoffset, maxstrength));
 
-            thedate = String.Format("{0}年{1}月{2}日{3}时{4}分", year, month, day, hour, minute);
+        public override int NodeCntIdx{
+            //thedate = String.Format("{0}年{1}月{2}日{3}时{4}分", year, month, day, hour, minute);
 
-            base.LoadFromCSV(strs);
+            //base.LoadFromCSV(strs);
+            get
+            {
+                return 7;
+            }
         }
 
         public override DataTable getDispalyTable()
         {
+            
             DataTable dt = new DataTable();
             dt.Columns.Add();
             dt.Columns.Add();
@@ -290,53 +369,67 @@ namespace RecordFileUtil
                 }
             }
 
-            displaymaxidx = dt.Rows.Count - 1;
-            return dt;
+                displaymaxidx = dt.Rows.Count - 1;
+                return dt;
         }
 
-        public override System.Data.DataTable getDataTable()
+        public override DataTable getHeaderTable()
         {
             DataTable dt = new DataTable();
             dt.Columns.Add();
             dt.Columns.Add();
+            dt.Columns.Add();//unit
+            dt.Columns.Add();//is readonly
             DataRow dr = dt.NewRow();
             dr[0] = "试验模式";
             dr[1] = this.recordname;
+            dr[3] = true;
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
             dr[0] = "试验日期";
             dr[1] = String.Format("{0}-{1}-{2} {3}:{4}", this.year, this.month, this.day, this.hour, this.minute);
+            dr[3] = true;
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
             dr[0] = "编号";
             dr[1] = this.no;
+            dr[3] = false;
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
             dr[0] = "试件直径";
-            dr[1] = String.Format("{0:f1}mm", this.Diameter / 10f);
+            dr[1] = String.Format("{0:f1}", this.Diameter / 10f);
+            dr[2] = "mm";
+            dr[3] = false;
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
             dr[0] = "试件高度";
-            dr[1] = String.Format("{0:f1}mm", this.Height / 10f);
+            dr[1] = String.Format("{0:f1}", this.Height / 10f);
+            dr[2] = "mm";
+            dr[3] = false;
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
             dr[0] = "温度";
-            dr[1] = String.Format("{0}℃", this.temp);
+            dr[1] = String.Format("{0}", this.temp);
+            dr[2] = "℃";
+            dr[3] = false;
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
             dr[0] = "加载速度";
-            dr[1] = String.Format("{0}mm/min", this.loadspeed);
+            dr[1] = String.Format("{0}", this.loadspeed);
+            dr[2] = "mm/min";
+            dr[3] = false;
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
             dr[0] = "记录点数";
             dr[1] = this.nodecnt;
+            dr[3] = true;
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
@@ -348,48 +441,60 @@ namespace RecordFileUtil
             //dt.Rows.Add(dr);
             dr[0] = "传感器";
             dr[1] = String.Format("{0:f1}KN", this.sensor / 10f);
+            dr[3] = false;
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
             dr[0] = "最大压力";
-            dr[1] = String.Format("{0:f2}KN", this.maxstrength / 100);// String.Format("{0:f3}MPa", this.rb / 1000f);
+            dr[1] = String.Format("{0:f2}", this.maxstrength / 100);// String.Format("{0:f3}MPa", this.rb / 1000f);
+            dr[2] = "KN";
+            dr[3] = false;
             dt.Rows.Add(dr);
-            
+
             dr = dt.NewRow();
             dr[0] = "回弹模量";
-            dr[1] = String.Format("{0:f1}Mpa",this.modulus/10f);// String.Format("{0:f3}MPa", this.rb / 1000f);
+            dr[1] = String.Format("{0:f1}", this.modulus / 10f);// String.Format("{0:f3}MPa", this.rb / 1000f);
+            dr[2] = "Mpa";
+            dr[3] = false;
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
             dr[0] = "最大变形";
-            dr[1] = String.Format("{0:f3}mm", this.maxoffset / ydivf);
+            dr[1] = String.Format("{0:f3}", this.maxoffset / ydivf);
+            dr[2] = "mm";
+            dr[3] = false;
             dt.Rows.Add(dr);
+            return dt;
 
-            dr = dt.NewRow();
-            dr[0] = "";
-            dr[1] = "";
-            dt.Rows.Add(dr);
+        }
 
-            dr = dt.NewRow();
-            dr[0] = "压强(Mpa)";
-            dr[1] = "回弹(mm)";
-            dt.Rows.Add(dr);
+        public override DataTable getBodyTable()
+        {
+            DataTable dt = new DataTable();
+            dt.Columns.Add();
+            dt.Columns.Add();
+            dt.Columns[0].ColumnName = "压强(Mpa)";
+            dt.Columns[1].ColumnName = "回弹(mm)";
+            DataRow dr = null;
 
             int cnt = 0;
             foreach (IXYNode node in this.nodes)
             {
-                cnt++;
                 //if (node.getX() != 0 && node.getY() != 0)
-                if(cnt%2==0)
-                {
-                    dr = dt.NewRow();
-                    dr[0] = String.Format("{0:f3}", node.getNodeX());
-                    dr[1] = String.Format("{0:f3}", node.getNodeY());
-                    dt.Rows.Add(dr);
-                }
+                    cnt++;
+                    //if (node.getX() != 0 && node.getY() != 0)
+                    if (cnt % 2 == 0)
+                    {
+                        dr = dt.NewRow();
+                        dr[0] = String.Format("{0:f3}", node.getNodeX());
+                        dr[1] = String.Format("{0:f3}", node.getNodeY());
+                        dt.Rows.Add(dr);
+                    }
             }
             return dt;
         }
+
+       
 
         
 

@@ -40,6 +40,8 @@ namespace RecordFileUtil
 
         protected int displaymaxidx=0;//
 
+        protected static bool is999 = false;
+
         public String RecordName { get { return recordname; } }
         public String TheDate { get { return thedate; } }
         public int Diameter { get { return width; } }
@@ -52,13 +54,23 @@ namespace RecordFileUtil
         public ChartFormat Chartformat { get { return chartformat; } }
 
         public byte[] DataBuffer { get { return buffer; } }
+        public virtual int NodeCntIdx { get { return 6; } }
+
 
         public abstract List<IXYNode> getXYNodes();
         public abstract List<IXYNode> getSpecialNodes();
         public abstract List<String> getCSVLines();
         public virtual void LoadFromCSV(String[] strs)
         {
+            this.initCharFormat();
+            int idx = LoadHeaderFromCSV(strs, 1);
+
+            idx++;
+            idx++;
+
+            LoadBodyFromCSV(strs, idx);
             this.reFomart();
+        
         }
         public abstract void initCharFormat();
 
@@ -93,7 +105,38 @@ namespace RecordFileUtil
 
         public virtual DataTable getDataTable()
         {
-            return null;
+            DataTable dt = new DataTable();
+            dt.Columns.Add();
+            dt.Columns.Add();
+            DataTable dt_header = getHeaderTable();
+            DataRow dr;
+            foreach (DataRow dr_header in dt_header.Rows)
+            {
+                dr = dt.NewRow();
+                dr[0] = dr_header[0];
+                dr[1] = String.Format("{0}{1}", dr_header[1], dr_header[2]);
+                dt.Rows.Add(dr);
+            }
+
+            dr = dt.NewRow();
+            dr[0] = "";
+            dr[1] = "";
+            dt.Rows.Add(dr);
+
+            DataTable dt_body = getBodyTable();
+            dr = dt.NewRow();
+            dr[0] = dt_body.Columns[0].ColumnName;
+            dr[1] = dt_body.Columns[1].ColumnName;
+            dt.Rows.Add(dr);
+
+            foreach (DataRow dr_body in dt_body.Rows)
+            {
+                dr = dt.NewRow();
+                dr[0] = dr_body[0];
+                dr[1] = dr_body[1];
+                dt.Rows.Add(dr);
+            }
+            return dt;
         }
 
         public virtual DataTable getDispalyTable()
@@ -106,7 +149,20 @@ namespace RecordFileUtil
 
         public void SetReadNo(int no)
         {
-            sendbuffer[3] = Convert.ToByte(no);
+            if (no < 0) throw new Exception("编号必须大于0");
+            if (no <= 255)
+                sendbuffer[3] = Convert.ToByte(no);
+            else
+            {
+                if (is999)
+                {
+                    if (no > 999) throw new Exception("编号必须小于1000");
+                    sendbuffer[2] = Convert.ToByte(sendbuffer[2] | Convert.ToByte((int)(no >> 8)));
+                    sendbuffer[3] = Convert.ToByte(no & 0xff);
+                }
+                else
+                    throw new Exception("编号必须小于256");
+            }
             this.dosendCRC();
         }
 
@@ -116,9 +172,16 @@ namespace RecordFileUtil
             sendbuffer[0] = 0x10;
             sendbuffer[1] = 0x04;
             sendbuffer[4] = 0xff;
-            sendbuffer[5] = 0xff;
+            sendbuffer[5] = 0xff; 
             this.makeSendBufferInternal();
+            if (is999)
+                this.sendbuffer[2] = Convert.ToByte(this.sendbuffer[2] << 4);
             this.dosendCRC();
+        }
+
+        public static void set999(bool flag)
+        {
+            is999 = flag;
         }
 
         protected void dosendCRC()
@@ -200,26 +263,16 @@ namespace RecordFileUtil
 
         protected void ParseSendBuffer()
         {
-            this.recordname = RecordInfoFactory.GetRecordName(sendbuffer[2]);
-            //switch (sendbuffer[2])
-            //{
-            //    case 0:
-            //        this.recordname = "承载比(CBR)";
-            //        break;
-            //    case 1:
-            //        this.recordname = "回弹模量-强度仪法";
-            //        break;
-            //    case 2:
-            //        this.recordname = "无侧限抗压强度";
-            //        break;
-            //    case 3:
-            //        this.recordname = "回弹模量-顶面法";
-            //        break;
-            //    default:
-            //        this.recordname = "unkown";
-            //        break;
-            //}
-            this.no = Convert.ToInt32(sendbuffer[3]);
+            if (is999)
+            {
+                this.recordname=RecordInfoFactory.GetRecordName(Convert.ToInt32((sendbuffer[2]&0xf0)>>4));
+                this.no = Convert.ToInt32(sendbuffer[2] & 0x0f) * 256 + Convert.ToInt32(sendbuffer[3]);
+            }
+            else
+            {
+                this.recordname = RecordInfoFactory.GetRecordName(sendbuffer[2]);
+                this.no = Convert.ToInt32(sendbuffer[3]);
+            }
         }
 
         public Boolean CheckCRC()
@@ -253,6 +306,64 @@ namespace RecordFileUtil
         public virtual String GetEditableValuStr(String valuename)
         {
             return String.Empty;
+        }
+
+        public abstract DataTable getHeaderTable();
+        public abstract DataTable getBodyTable();
+
+        public virtual void acceptHeaderChange(DataTable dtheader)
+        {
+            List<String> slist = new List<string>();
+            foreach (DataRow dr in dtheader.Rows)
+            {
+                slist.Add(String.Format("{0},{1}{2}", dr[0], dr[1],dr[2]));
+            }
+
+            String[] strs = slist.ToArray();
+            this.LoadHeaderFromCSV(strs,1);
+        }
+        public virtual void acceptBodyChange(DataTable dtbody)
+        {
+            List<String> slist = new List<string>();
+            foreach (DataRow dr in dtbody.Rows)
+            {
+                slist.Add(String.Format("{0},{1}", dr[0], dr[1]));
+            }
+
+            String[] strs = slist.ToArray();
+            this.LoadBodyFromCSV(strs,0);
+        }
+
+        protected abstract int  LoadHeaderFromCSV(String[] strs,int idx);
+        protected abstract int  LoadBodyFromCSV(String[] strs,int idx);
+
+        protected void shuffer(IXYNode spec, List<IXYNode> nodes)
+        {
+            int index = 0;
+            for (; index < nodes.Count; index++)
+            {
+                if (nodes[index].getNodeX() < spec.getNodeX())
+                {
+                    if(nodes[index + 1].getNodeX() > spec.getNodeX())
+                    {
+                        nodes.Insert(index + 1, spec);
+                        break;
+                    }
+                }
+                else if (nodes[index].getNodeX() == spec.getNodeX())
+                {
+                    if (nodes[index].getNodeY() != spec.getNodeY())
+                    {
+                        nodes.Remove(nodes[index]);
+                        nodes.Insert(index, spec);
+                    }
+                    
+                }
+                else
+                {
+                    break;
+                }
+            }
         }
     }
 

@@ -17,6 +17,7 @@ namespace RecViewer
         public MainForm()
         {
             InitializeComponent();
+            AbstractRecordInfo.set999(GerneralConfig.Is999);
         }
 
         private void tsm_openfile_Click(object sender, EventArgs e)
@@ -1208,7 +1209,7 @@ namespace RecViewer
                 RectangleF imgrect = new RectangleF(x * 100 / e.Graphics.DpiX, y * 100 / e.Graphics.DpiY, width, height);
                 e.Graphics.DrawImage(_newbitmap, imgrect);
                 RectangleF txtrect = new RectangleF(imgrect.X, imgrect.Y + imgrect.Height + 40, imgrect.Width, 40);
-                e.Graphics.DrawString("试验员__________________________________", new Font(Font.SystemFontName, 10), Brushes.Black, txtrect);
+                e.Graphics.DrawString("试验者________________________________________   校核者_______________________________________", new Font(Font.SystemFontName, 10), Brushes.Black, txtrect);
 
 
                
@@ -1456,6 +1457,28 @@ namespace RecViewer
             FillData(currentInfo);
             ReRenderChart(currentInfo);
             ef.Close();
+        }
+
+        private void MainForm_Activated(object sender, EventArgs e)
+        {
+            if (GerneralConfig.Is999)
+            {
+                this.Text = String.Format("{0}[编号范围0 ~ {1}]", "试验记录读取工具", "999");
+            }
+            else
+            {
+                this.Text = String.Format("{0}[编号范围0 ~ {1}]", "试验记录读取工具", "255");
+            }
+        }
+
+        private void tsmi_editinfo_Click(object sender, EventArgs e)
+        {
+            if (currentInfo != null)
+            {
+                new DataEditForm().EditData(currentInfo);
+                FillData(currentInfo);
+                ReRenderChart(currentInfo);
+            }
         }
        
     }
