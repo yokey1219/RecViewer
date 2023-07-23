@@ -13,9 +13,9 @@ namespace RecordFileUtil
         protected List<IXYNode> specialnodes;
         protected int maxwendingdu;
         protected int maxliuzhi;
-        internal int xdiv = 1000;//位移改3位小数 xidv=100;
+        internal int xdiv = 100;//位移改2位小数
         internal int ydiv = 100;
-        internal static float xdivf = 1000f;//位移改3位小数 xidvf=100;
+        internal static float xdivf = 100f;//位移改2位小数
         internal static float ydivf = 100f;
         //protected int maxoffset;
         //protected int eb;
@@ -44,10 +44,10 @@ namespace RecordFileUtil
             chartformat.Yname = "KN";
             chartformat.Xmin = 0;
             chartformat.Ymin = 0;
-            chartformat.Xmax = 10;
-            chartformat.Ymax = 80;
-            chartformat.Xinterval = 2;
-            chartformat.Yinterval = 16;
+            chartformat.Xmax = 16;
+            chartformat.Ymax = 200;
+            chartformat.Xinterval = 4;
+            chartformat.Yinterval = 40;
             chartformat.Xtype = 1;
             chartformat.Ytype = 1;
             chartformat.Xreverse = false;
@@ -178,7 +178,7 @@ namespace RecordFileUtil
 
             dr = dt.NewRow();
             dr[0] = "最大点流值";
-            dr[1] = String.Format("{0:f3}mm", this.maxliuzhi / xdivf);
+            dr[1] = String.Format("{0:f2}mm", this.maxliuzhi / xdivf);
             dt.Rows.Add(dr);
             displaymaxidx = dt.Rows.Count - 1;
             return dt;
@@ -358,7 +358,7 @@ namespace RecordFileUtil
 
             dr = dt.NewRow();
             dr[0] = "最大点流值";
-            dr[1] = String.Format("{0:f3}", this.maxliuzhi / xdivf);
+            dr[1] = String.Format("{0:f2}", this.maxliuzhi / xdivf);
             dr[2] = "mm";
             dr[3] = false;
             dt.Rows.Add(dr);
@@ -383,7 +383,7 @@ namespace RecordFileUtil
                 {
                     dr = dt.NewRow();
                     dr[0] = String.Format("{0:f2}", node.getNodeY());
-                    dr[1] = String.Format("{0:f3}", node.getNodeX());
+                    dr[1] = String.Format("{0:f2}", node.getNodeX());
                     dt.Rows.Add(dr);
 
                 }
@@ -436,7 +436,7 @@ namespace RecordFileUtil
         {
             if (valuename.Equals(MAXFLUEVALUE))
             {
-                return String.Format("{0:f3}mm", this.maxliuzhi / xdivf);
+                return String.Format("{0:f2}mm", this.maxliuzhi / xdivf);
             }
             else
                 return base.GetEditableValuStr(valuename);

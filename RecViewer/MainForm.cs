@@ -1448,11 +1448,11 @@ namespace RecViewer
         {
             if (GerneralConfig.Is999)
             {
-                this.Text = String.Format("{0}[编号范围0 ~ {1}]", "试验记录读取工具", "999");
+                this.Text = String.Format("{0}[编号范围0 ~ {1}]", "稳定度试验记录读取工具", "999");
             }
             else
             {
-                this.Text = String.Format("{0}[编号范围0 ~ {1}]", "试验记录读取工具", "255");
+                this.Text = String.Format("{0}[编号范围0 ~ {1}]", "稳定度试验记录读取工具", "255");
             }
         }
 

@@ -13,12 +13,12 @@ namespace RecordFileUtil
         {
             Infos = new List<RecordInfoItem>();
             Infos.Add(new RecordInfoItem(GetRecordName(0), 0));
-            Infos.Add(new RecordInfoItem(GetRecordName(1), 1));
-            Infos.Add(new RecordInfoItem(GetRecordName(2), 2));//Infos.Add(new RecordInfoItem("承载比(CBR)", 0));
-            Infos.Add(new RecordInfoItem(GetRecordName(3), 3)); //Infos.Add(new RecordInfoItem("回弹模量-强度仪法", 1));
-            Infos.Add(new RecordInfoItem(GetRecordName(4), 4)); //Infos.Add(new RecordInfoItem("回弹模量-强度仪法", 1));
-            Infos.Add(new RecordInfoItem(GetRecordName(5), 5));
-            Infos.Add(new RecordInfoItem(GetRecordName(6), 6));
+            //Infos.Add(new RecordInfoItem(GetRecordName(1), 1));
+            //Infos.Add(new RecordInfoItem(GetRecordName(2), 2));//Infos.Add(new RecordInfoItem("承载比(CBR)", 0));
+            //Infos.Add(new RecordInfoItem(GetRecordName(3), 3)); //Infos.Add(new RecordInfoItem("回弹模量-强度仪法", 1));
+            //Infos.Add(new RecordInfoItem(GetRecordName(4), 4)); //Infos.Add(new RecordInfoItem("回弹模量-强度仪法", 1));
+            //Infos.Add(new RecordInfoItem(GetRecordName(5), 5));
+            //Infos.Add(new RecordInfoItem(GetRecordName(6), 6));
             //Infos.Add(new RecordInfoItem(GetRecordName(2), 2)); //Infos.Add(new RecordInfoItem("无侧限抗压强度", 2));
             //Infos.Add(new RecordInfoItem(GetRecordName(3), 3)); //Infos.Add(new RecordInfoItem("回弹模量-顶面法", 3));
         }
