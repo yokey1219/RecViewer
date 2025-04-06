@@ -223,7 +223,8 @@ namespace RecordFileUtil
             dr = dt.NewRow();
             dr[0] = "εB";//"EB";
             //dr[1] = String.Format("{0:d} ×10\u207b\u2076 με", this.eb *1000);
-            dr[1] = String.Format("{0:f1} ×10\u207b\u2076 με", this.eb /10f); //String.Format("{0:f1} ×10\u207b\u2076 με", _eb * 1000000);// String.Format("{0:d} με", this.eb * 100);
+            //dr[1] = String.Format("{0:f1} ×10\u207b\u2076 με", this.eb /10f); //String.Format("{0:f1} ×10\u207b\u2076 με", _eb * 1000000);// String.Format("{0:d} με", this.eb * 100);
+            dr[1] = String.Format("{0:f1} με", this.eb / 10f);//20250406 去掉10的负6次方显示
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
@@ -450,7 +451,8 @@ namespace RecordFileUtil
             dr[0] = "εB";//"EB";
             //dr[1] = String.Format("{0:d} ×10\u207b\u2076 με", this.eb *1000);
             dr[1] = String.Format("{0:f1} ", this.eb / 10f);// String.Format("{0:f1} ×10\u207b\u2076 με", _eb * 1000000);// 
-            dr[2] = "×10\u207b\u2076 με";
+            //dr[2] = "×10\u207b\u2076 με";
+            dr[2] = " με";//20250406 去掉10的负6次方显示
             dr[3] = true;
             dt.Rows.Add(dr);
 
