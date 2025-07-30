@@ -13,15 +13,16 @@ namespace RecordFileUtil
         protected List<IXYNode> specialnodes;
         protected List<ChartSeries> chartseries;
         
-        protected int shijianzhiliang;
-        protected int wendu;
-        protected int youshibibuchang;
-        protected int hanyoubibuchang;
-        protected int youshibi;
-        protected int hanyoubi;
-        protected int shiyantime;
-        protected int endwedu;
-        protected int endzhiliang;   
+        protected int shijianzhiliang;//初始质量
+        protected int wendu;//温度
+        protected int youshibibuchang;//油石比步长
+        protected int hanyoubibuchang;//含油比步长
+        protected int youshibi;//油石比
+        protected int hanyoubi;//含油比
+        protected int shiyantime;//试验时间
+        protected int endwedu;//结束温度
+        protected int endzhiliang;   //结束质量
+        protected int mode;//试验模式
 
         public override List<IXYNode> getXYNodes()
         {
@@ -75,19 +76,23 @@ namespace RecordFileUtil
                 day = (int)((bytes[idx++] << 8) | bytes[idx++]);
                 hour = (int)((bytes[idx++] << 8) | bytes[idx++]);
                 minute = (int)((bytes[idx++] << 8) | bytes[idx++]);
-                second = (int)((bytes[idx++] << 8) | bytes[idx++]);
-                thedate = String.Format("{0}年{1}月{2}日{3}时{4}分{5}秒", year, month, day, hour, minute,second);
+                //second = (int)((bytes[idx++] << 8) | bytes[idx++]);
+                thedate = String.Format("{0}年{1}月{2}日{3}时{4}分", year, month, day, hour, minute);
+                mode = (int)((bytes[idx++] << 8) | bytes[idx++]);
                 nodecnt = (int)((bytes[idx++] << 8) | bytes[idx++]);
                 wendu = (int)((bytes[idx++] << 8) | bytes[idx++]);
                 //temp = Convert.ToInt32(Convert.ToInt16(String.Format("{0:X}{1:X}", bytes[idx++], bytes[idx++]), 16));//Convert.ToInt32((int)((bytes[idx++] << 8) | bytes[idx++]));
-                shijianzhiliang = (int)((bytes[idx++] << 8) | bytes[idx++]);
+                shijianzhiliang = (int)((bytes[idx++] << 8) | bytes[idx++]);//无用，一会儿还需要赋值
                 youshibibuchang = (int)((bytes[idx++] << 8) | bytes[idx++]);
                 hanyoubibuchang = (int)((bytes[idx++] << 8) | bytes[idx++]);
                 youshibi = (int)((bytes[idx++] << 8) | bytes[idx++]);
                 hanyoubi = (int)((bytes[idx++] << 8) | bytes[idx++]);
                 shiyantime = (int)((bytes[idx++] << 8) | bytes[idx++]);
                 endwedu = (int)((bytes[idx++] << 8) | bytes[idx++]);
-                endzhiliang = (int)((bytes[idx++] << 8) | bytes[idx++]);
+                endzhiliang = (int)((bytes[idx++] << 8) | bytes[idx++]);//无用，一会儿还需要赋值
+                shijianzhiliang = Convert.ToInt32(String.Format("{0:X2}{1:X2}{2:X2}{3:X2}", bytes[idx++], bytes[idx++], bytes[idx++], bytes[idx++]), 16);
+                endzhiliang = Convert.ToInt32(String.Format("{0:X2}{1:X2}{2:X2}{3:X2}", bytes[idx++], bytes[idx++], bytes[idx++], bytes[idx++]), 16);
+
                 
                 //int stime = 0;
                 //nodes.Add(new LIQIHanNodeInfo(0, 0));
@@ -139,7 +144,7 @@ namespace RecordFileUtil
             this.day = dt.Day;
             this.hour = dt.Hour;
             this.minute = dt.Minute;
-            this.second = dt.Second;
+            //this.second = dt.Second;
             //编号
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
             this.no = Convert.ToInt32(strarr[1]);
@@ -150,7 +155,7 @@ namespace RecordFileUtil
             this.wendu = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("℃", "")));
             //试件质量
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
-            this.shijianzhiliang = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("g", "")) * 10);
+            this.shijianzhiliang = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("g", "")) * 100);
 
             //油石比补偿系数
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
@@ -183,7 +188,7 @@ namespace RecordFileUtil
 
             //试验结束时的质量
             strarr = strs[idx++].Split(AbstractRecordInfo.csvsepchar);
-            this.endzhiliang = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("g", "")) *10);
+            this.endzhiliang = Convert.ToInt32(Convert.ToDouble(strarr[1].Replace("g", "")) *100);
 
             
             idx++;
@@ -233,7 +238,7 @@ namespace RecordFileUtil
 
             dr = dt.NewRow();
             dr[0] = "试验日期";
-            dr[1] = String.Format("{0}-{1}-{2} {3}:{4}:{5}", this.year, this.month, this.day, this.hour, this.minute,this.second);
+            dr[1] = String.Format("{0}-{1}-{2} {3}:{4}", this.year, this.month, this.day, this.hour, this.minute);
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
@@ -248,7 +253,7 @@ namespace RecordFileUtil
 
             dr = dt.NewRow();
             dr[0] = "试件质量";
-            dr[1] = String.Format("{0:f1}g", this.shijianzhiliang / 10f);
+            dr[1] = String.Format("{0:f2}g", this.shijianzhiliang / 100f);
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
@@ -288,7 +293,7 @@ namespace RecordFileUtil
 
             dr = dt.NewRow();
             dr[0] = "结束质量";
-            dr[1] = String.Format("{0:f1}g", this.endzhiliang / 10f);
+            dr[1] = String.Format("{0:f2}g", this.endzhiliang / 100f);
             dt.Rows.Add(dr);
 
             dr = dt.NewRow();
